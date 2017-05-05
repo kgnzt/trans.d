@@ -1,0 +1,21 @@
+{
+  "name": "transducers",
+  "version": "0.0.0",
+  "description": "transducers for javascript",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "author": "nicolas feigenbaum",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^3.3.0",
+    "should": "^11.2.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}
