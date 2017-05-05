@@ -22,6 +22,7 @@ module.exports = {
    * @param {mixed}
    */
   Map (accumulator, [key, value]) {
+    console.log(key);
     accumulator.set(key, value);
 
     return accumulator;

@@ -4,6 +4,17 @@ const type = require('./type'),
       helper = require('./helper');
 
 const IteratorMapping = {
+  Map (map) {
+    return {
+      // think about ordering here.
+      // maybe enforece alphabetical?
+      [Symbol.iterator]: function* () { 
+        for (let [key, value] in map) {
+          yield [value, key];
+        }
+      }
+    };
+  },
   Object (object) {
     return {
       // think about ordering here.
@@ -32,6 +43,15 @@ const iteratorFactory = helper.createFactory(IteratorMapping, {
   }
 });
 
+// todo: test
+function shouldOverride (type) {
+  if (type === 'Map') {
+    return true;
+  }
+
+  return false;
+};
+
 /**
  * Returns an iterable form of object.
  *
@@ -42,7 +62,7 @@ const iteratorFactory = helper.createFactory(IteratorMapping, {
  * @return {Iterable}
  */
 function iterator(object) {
-  if (isIterable(object)) {
+  if (isIterable(object) && !shouldOverride(type.string(object))) {
     return object;
   }
 

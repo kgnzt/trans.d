@@ -30,6 +30,30 @@ describe('iterable', () => {
         iteration++;
       }
     });
+
+    it('produces an inverted argument order iteration for Map', () => {
+      const map = new Map();
+      map.set('alpha', 1);
+      map.set('beta', 2);
+
+      const result = iterator(map);
+
+      let iteration = 0;
+      for (let value of result) {
+        switch (iteration) {
+          case 2:
+            value.should.eql([1, 'alpha']);
+            break;
+          case 1:
+            value.should.eql([2, 'beta']);
+            break;
+          default:
+            break;
+        };
+
+        iteration++;
+      }
+    });
   });
 
   describe('isIterable', () => {
