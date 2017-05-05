@@ -1,7 +1,7 @@
 'use strict';
 
 const functional = require('./functional'),
-      { transducer } = require('./transduce');
+      { transducer } = require('./trd');
 
 /**
  * Includes the first N inputs.
@@ -41,7 +41,13 @@ function drop(count) {
  * @return {function}
  */
 const filter = transducer((predicate, build, accumulator, ...inputs) => {
-  return predicate(...inputs) ? build(accumulator, ...inputs) : accumulator;
+  let value = null;
+  if (Array.isArray(inputs[0])) {
+    value = predicate(inputs[0][1], inputs[0][0]);
+    return value ? build(accumulator, inputs[0]) : accumulator;
+  } else {
+    return predicate(...inputs) ? build(accumulator, ...inputs) : accumulator;
+  }
 });
 
 /**
@@ -50,7 +56,14 @@ const filter = transducer((predicate, build, accumulator, ...inputs) => {
  * @return {function}
  */
 const map = transducer((iteratee, build, accumulator, ...inputs) => {
-  return build(accumulator, iteratee(...inputs));
+  let value = null;
+  if (Array.isArray(inputs[0])) {
+    value = iteratee(...inputs[0]);
+    return build(accumulator, [inputs[0][1], value]);
+  } else {
+    value = iteratee(...inputs);
+    return build(accumulator, value);
+  }
 });
 
 /**

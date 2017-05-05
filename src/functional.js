@@ -1,6 +1,16 @@
 'use strict';
 
-const reducing = require('./reducing');
+const reducer = require('./reducer');
+
+/**
+ * Generates a function that returns the complement of predicate..
+ *
+ * @param {mixed} input
+ * @return {mixed}
+ */
+function call(func) {
+  return func();
+}
 
 /**
  * Generates a function that returns the complement of predicate..
@@ -55,7 +65,7 @@ function _reduceRight(iteratee, collection, accumulator) {
  * @return {function}
  */
 function compose(...transforms) {
-  return initial => _reduceRight(reducing.func, transforms, initial);
+  return initial => _reduceRight(reducer.func, transforms, initial);
 }
 
 /**
@@ -78,5 +88,6 @@ module.exports = {
   counter,
   identity,
   negate,
+  call,
   compose
 };

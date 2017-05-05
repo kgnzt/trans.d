@@ -3,7 +3,7 @@
 const should = require('should');
 
 describe('reducing', () => {
-  const reducing = require('../../src/reducing');
+  const reducing = require('../../../src/reducer');
 
   describe('identity', () => {
     const { identity } = reducing;
@@ -15,19 +15,6 @@ describe('reducing', () => {
       const result = identity(accumulator, input);
 
       result.should.eql(input);
-    });
-  });
-
-  describe('array', () => {
-    const { array } = reducing;
-
-    it('pushes the input onto the accumulator', () => {
-      const accumulator = [],
-            input = 'alpha';
-
-      const result = array(accumulator, input);
-
-      result.should.eql([ input ]);
     });
   });
 

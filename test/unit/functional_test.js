@@ -1,9 +1,33 @@
 'use strict';
 
-const should = require('should');
+const should = require('should'),
+      sinon = require('sinon');
 
 describe('functional', () => {
   const functional = require('../../src/functional');
+
+  describe('call', () => {
+    const { call } = functional;
+
+    it('calls the passed input', () => {
+      const func = sinon.spy();
+
+      call(func);
+
+      func.called.should.eql(true);
+    });
+
+    it('returns the result of called func', () => {
+      const func = sinon.stub(),
+            resultDouble = sinon.stub();
+
+      func.returns(resultDouble);
+
+      const result = call(func);
+
+      result.should.equal(resultDouble);
+    });
+  });
 
   describe('negate', () => {
     const { negate } = functional;
@@ -131,4 +155,3 @@ describe('functional', () => {
     });
   });
 });
-

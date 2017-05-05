@@ -2,6 +2,12 @@
 
 const _toString = ({}).toString;
 
+/**
+ * Given an object its type is returned.
+ *
+ * @param {mixed} object
+ * @return {string} object - the type of object
+ */
 function string(object) {
   const type = _toString.call(object).slice(8, -1);
 
@@ -16,7 +22,7 @@ function string(object) {
   } else {
     return type;
   }
-};
+}
 
 module.exports = {
   string
