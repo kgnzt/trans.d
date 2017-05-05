@@ -1,7 +1,7 @@
 {
-  "name": "transducers",
+  "name": "trd",
   "version": "0.0.0",
-  "description": "transducers for javascript",
+  "description": "simple transducers for javascript",
   "main": "index.js",
   "directories": {
     "test": "test"

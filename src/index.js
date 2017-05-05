@@ -12,7 +12,6 @@ const transform = functional.compose(
   transducer.map(x => x * 3), 
   transducer.filter(x => (x % 2) === 0),
   transducer.map(functional.counter((iteration, value) => {
-    console.log(value);
     return [iteration, value];
   }))); 
 
