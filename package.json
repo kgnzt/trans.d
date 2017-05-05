@@ -1,5 +1,5 @@
 {
-  "name": "trd",
+  "name": "transd",
   "version": "0.0.0",
   "description": "simple transducers for javascript",
   "main": "index.js",

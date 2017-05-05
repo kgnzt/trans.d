@@ -10,7 +10,7 @@
 
 To install inside a project, run:
 
-    npm install trd --save
+    npm install transd --save
 
 ## Example
 
@@ -20,7 +20,7 @@ Be sure to check the examples in /example.
 
 Example:
 
-    const trd = require('trd');
+    const transd = require('transd');
 
     const transform = functional.compose(
       transducer.identity,
