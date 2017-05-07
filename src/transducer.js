@@ -73,6 +73,9 @@ const map = transducer((iteratee, build, accumulator, ...inputs) => {
     value = iteratee(...inputs[0]);
     return build(accumulator, [inputs[0][1], value]);
   } else {
+    //console.log(inputs);
+    //console.log(accumulator);
+    //console.log(build);
     value = iteratee(...inputs);
     return build(accumulator, value);
   }

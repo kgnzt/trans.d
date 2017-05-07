@@ -10,9 +10,10 @@ const type = require('./type'),
  * through the reducer passing the current initial as the accumulator and 
  * the transformed element as input.
  *
- * @param {function}
- * @param {Iterable}
- * @param {Iterable}
+ * @param {function} transform
+ * @param {function} reducer
+ * @param {Iterable} initial
+ * @param {Iterable} iterable
  * @return {Iterable}
  */
 function transduce(transform, reducer, initial, iterable) {
@@ -21,23 +22,24 @@ function transduce(transform, reducer, initial, iterable) {
 
 /**
  * Applies transform to each each element in iterable and appends it
- * to a collection.
+ * to initial (collection).
  *
- * @param {function}
- * @param {Iterable}
- * @param {Iterable}
+ * @param {function} transform
+ * @param {Iterable} initial
+ * @param {Iterable} iterable
  * @return {Iterable}
  */
-function into(transform, collection, iterable) {
-  return transduce(transform, build.for(collection), collection, iterable);
+function into(transform, initial, iterable) {
+  // TODO: Automatically map differing input types to output types
+  return transduce(transform, build.for(initial), initial, iterable);
 }
 
 /**
  * Applies transform to each each element in iterable and appends it
  * to a new iterable of the same kind as iterable.
  *
- * @param {function}
- * @param {Iterable}
+ * @param {function} transform
+ * @param {Iterable} iterable
  * @return {Iterable}
  */
 function sequence(transform, iterable) {
