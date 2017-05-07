@@ -69,14 +69,14 @@ function compose(...transforms) {
 }
 
 /**
- * Iterates using an iterator updating state with each result.
+ * Iterates using an iterable updating state with each result.
  *
  * @param {function} reducer
  * @param {mixed} accumulator
- * @param {Iterable} iterator
+ * @param {Iterable} iterable
  */
-function accumulate(reducer, accumulator, iterator) {
-  for (let value of iterator) {
+function accumulate(reducer, accumulator, iterable) {
+  for (let value of iterable) {
     accumulator = reducer(accumulator, value);
   }
 

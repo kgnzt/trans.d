@@ -3,11 +3,11 @@
 const lodash = require('lodash'),
       type = require('./type'),
       build = require('./build'),
-      iterable = require('./iterable'),
+      Iterable = require('./iterable'),
       functional = require('./functional');
 
 /**
- * Applies transform to each each element in iterator and runs the result
+ * Applies transform to each each element in iterable and runs the result
  * through the reducer passing the current initial as the accumulator and 
  * the transformed element as input.
  *
@@ -16,14 +16,12 @@ const lodash = require('lodash'),
  * @param {Iterable}
  * @return {Iterable}
  */
-function transduce(transform, reducer, initial, iterator) {
-  iterator = iterable.iterator(iterator); // adds additional iterator support
-
-  return functional.accumulate(transform(reducer), initial, iterator);
+function transduce(transform, reducer, initial, iterable) {
+  return functional.accumulate(transform(reducer), initial, Iterable.iterator(iterable));
 }
 
 /**
- * Applies transform to each each element in iterator and appends it
+ * Applies transform to each each element in iterable and appends it
  * to a collection.
  *
  * @param {function}
@@ -31,20 +29,20 @@ function transduce(transform, reducer, initial, iterator) {
  * @param {Iterable}
  * @return {Iterable}
  */
-function into(transform, collection, iterator) {
-  return transduce(transform, build.for(collection), collection, iterator);
+function into(transform, collection, iterable) {
+  return transduce(transform, build.for(collection), collection, iterable);
 }
 
 /**
- * Applies transform to each each element in iterator and appends it
- * to a new iterable of the same kind as iterator.
+ * Applies transform to each each element in iterable and appends it
+ * to a new iterable of the same kind as iterable.
  *
  * @param {function}
  * @param {Iterable}
  * @return {Iterable}
  */
-function sequence(transform, iterator) {
-  return into(transform, iterable.from(iterator), iterator);
+function sequence(transform, iterable) {
+  return into(transform, Iterable.from(iterable), iterable);
 }
 
 /**

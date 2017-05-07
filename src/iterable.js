@@ -9,12 +9,13 @@ const IteratorMapping = {
       // think about ordering here.
       // maybe enforece alphabetical?
       [Symbol.iterator]: function* () { 
-        for (let [key, value] in map) {
+        for (let [key, value] of map) {
           yield [value, key];
         }
       }
     };
   },
+
   Object (object) {
     return {
       // think about ordering here.

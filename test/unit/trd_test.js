@@ -9,14 +9,8 @@ describe('functional', () => {
   const functional = require('../../src/functional');
 
   const addOneRemoveOdd = functional.compose(
-    transducer.map(x => {
-      //console.log(x);
-      return (x + 1);
-    }), 
-    transducer.filter(x => {
-      console.log(x);
-      return (x % 2) === 0;
-    })
+    transducer.map(x => x + 1), 
+    transducer.filter(x => (x % 2) === 0)
   ); 
 
   describe('transduce', () => {
@@ -37,33 +31,46 @@ describe('functional', () => {
     const { sequence } = trd;
 
     it('supports arrays', () => {
-      const iterator = [1, 2, 5];
+      const iterable = [1, 2, 5];
 
-      const result = sequence(addOneRemoveOdd, iterator);
+      const result = sequence(addOneRemoveOdd, iterable);
 
       result.should.eql([2, 6]);
     });
 
     it('supports objects', () => {
-      const iterator = { a: 1, b: 2, c: 5 };
+      const iterable = { a: 1, b: 2, c: 5 };
 
-      const result = sequence(addOneRemoveOdd, iterator);
+      const result = sequence(addOneRemoveOdd, iterable);
 
       result.should.eql({ a: 2, c: 6 });
     });
 
     it('supports Maps', () => {
-      const iterator = new Map();
-      iterator.set('a', 1);
-      iterator.set('b', 2);
-      iterator.set('c', 5);
-      console.log(iterator);
+      const iterable = new Map();
+      iterable.set('a', 1);
+      iterable.set('b', 2);
+      iterable.set('c', 5);
 
-      const result = sequence(addOneRemoveOdd, iterator);
+      const result = sequence(addOneRemoveOdd, iterable);
 
-      console.log(result);
+      result.get('a').should.eql(2);
+      result.get('c').should.eql(6);
+      result.has('b').should.eql(false);
+      result.size.should.eql(2);
+    });
 
-      //result.should.eql({ a: 2, c: 6 });
+    it('supports Sets', () => {
+      const iterable = new Set();
+      iterable.add(1);
+      iterable.add(2);
+      iterable.add(5);
+
+      const result = sequence(addOneRemoveOdd, iterable);
+
+      result.has(2).should.eql(true);
+      result.has(6).should.eql(true);
+      result.size.should.eql(2);
     });
   });
 });

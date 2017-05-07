@@ -15,7 +15,7 @@ describe('reducer/build', () => {
 
       build.Array(accumulator, input);
 
-      accumulator.push.calledWithExactly(input);
+      accumulator.push.calledWithExactly(input).should.eql(true);
     });
 
     it('returns the accumulator', () => {
@@ -52,7 +52,31 @@ describe('reducer/build', () => {
 
       build.Map(accumulator, input);
 
-      accumulator.set.calledWithExactly('a', 'b');
+      accumulator.set.calledWithExactly('a', 'b').should.eql(true);
+    });
+
+    it('returns the accumulator', () => {
+      const accumulator = {
+              set: sinon.stub()
+            },
+            input = [1, 2];
+
+      const result = build.Map(accumulator, input);
+
+      result.should.eql(accumulator);
+    });
+  });
+
+  describe('Set', () => {
+    it('calls set on accumulator with input key and value', () => {
+      const accumulator = {
+              add: sinon.stub()
+            },
+            input = 1;
+
+      build.Set(accumulator, input);
+
+      accumulator.add.calledWithExactly(1).should.eql(true);
     });
 
     it('returns the accumulator', () => {

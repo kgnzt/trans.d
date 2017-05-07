@@ -22,8 +22,19 @@ module.exports = {
    * @param {mixed}
    */
   Map (accumulator, [key, value]) {
-    console.log(key);
     accumulator.set(key, value);
+
+    return accumulator;
+  },
+
+  /**
+   * Adds input to accumulator.
+   *
+   * @param {mixed}
+   * @param {mixed}
+   */
+  Set (accumulator, input) {
+    accumulator.add(value);
 
     return accumulator;
   },
@@ -34,7 +45,7 @@ module.exports = {
    * @param {mixed}
    * @param {mixed}
    */
-  'Object': function (accumulator, [key, value]) {
+  Object (accumulator, [key, value]) {
     accumulator[key] = value;
 
     return accumulator;

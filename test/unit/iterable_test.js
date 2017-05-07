@@ -29,6 +29,8 @@ describe('iterable', () => {
 
         iteration++;
       }
+
+      iteration.should.eql(2);
     });
 
     it('produces an inverted argument order iteration for Map', () => {
@@ -53,6 +55,8 @@ describe('iterable', () => {
 
         iteration++;
       }
+
+      iteration.should.eql(2);
     });
   });
 
