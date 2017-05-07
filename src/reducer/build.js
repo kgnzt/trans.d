@@ -8,7 +8,7 @@ module.exports = {
    *
    * @param {Array}
    * @param {mixed}
-   * @param {Array}
+   * @return {Array}
    */
   Array (accumulator, input) {
     accumulator.push(input);
@@ -20,10 +20,11 @@ module.exports = {
    * Sets input key and value on accumulator.
    *
    * @param {Map}
-   * @param {array[string, mixed]}
-   * @param {Map}
+   * @param {mixed}
+   * @param {string}
+   * @return {Map}
    */
-  Map (accumulator, [key, value]) {
+  Map (accumulator, value, key) {
     accumulator.set(key, value);
 
     return accumulator;
@@ -34,7 +35,7 @@ module.exports = {
    *
    * @param {Set}
    * @param {mixed}
-   * @param {Set}
+   * @return {Set}
    */
   Set (accumulator, input) {
     accumulator.add(input);
@@ -46,10 +47,11 @@ module.exports = {
    * Sets the input key to equal value on accumulator.
    *
    * @param {Object}
-   * @param {array[string, mixed]}
-   * @param {Object}
+   * @param {mixed}
+   * @param {string}
+   * @return {Object}
    */
-  Object (accumulator, [key, value]) {
+  Object (accumulator, value, key) {
     accumulator[key] = value;
 
     return accumulator;

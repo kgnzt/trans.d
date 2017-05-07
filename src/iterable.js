@@ -1,6 +1,7 @@
 'use strict';
 
 const type = require('./type'),
+      argument = require('./argument'),
       helper = require('./helper');
 
 const IteratorMapping = {
@@ -10,7 +11,7 @@ const IteratorMapping = {
       // maybe enforece alphabetical?
       [Symbol.iterator]: function* () { 
         for (let [key, value] of map) {
-          yield [value, key];
+          yield new argument.Tuple([value, key]);
         }
       }
     };
@@ -22,7 +23,7 @@ const IteratorMapping = {
       // maybe enforece alphabetical?
       [Symbol.iterator]: function* () { 
         for (let key in object) { 
-          yield [object[key], key];
+          yield new argument.Tuple([object[key], key]);
         } 
       }
     };

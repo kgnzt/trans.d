@@ -1,6 +1,7 @@
 'use strict';
 
 const lodash = require('lodash'),
+      argument = require('./argument'),
       functional = require('./functional');
 
 /**
@@ -52,13 +53,14 @@ function drop(count) {
  * @param {function} build
  * @return {function}
  */
-const filter = transducer((predicate, build, accumulator, ...inputs) => {
-  let value = null;
-  if (Array.isArray(inputs[0])) {
-    value = predicate(inputs[0][1], inputs[0][0]);
-    return value ? build(accumulator, inputs[0]) : accumulator;
+const filter = transducer((predicate, build, accumulator, input) => {
+  console.log(accumulator);
+  if (argument.isTuple(input)) {
+    console.log(input);
+    value = predicate(...input);
+    return value ? build(accumulator, value, ...input.rest) : accumulator;
   } else {
-    return predicate(...inputs) ? build(accumulator, ...inputs) : accumulator;
+    return predicate(input) ? build(accumulator, input) : accumulator;
   }
 });
 
@@ -67,17 +69,12 @@ const filter = transducer((predicate, build, accumulator, ...inputs) => {
  * @param {function} build
  * @return {function}
  */
-const map = transducer((iteratee, build, accumulator, ...inputs) => {
-  let value = null;
-  if (Array.isArray(inputs[0])) {
-    value = iteratee(...inputs[0]);
-    return build(accumulator, [inputs[0][1], value]);
+const map = transducer((iteratee, build, accumulator, input) => {
+  console.log(accumulator);
+  if (argument.isTuple(input)) {
+    return build(accumulator, iteratee(...input), ...input.rest);
   } else {
-    //console.log(inputs);
-    //console.log(accumulator);
-    //console.log(build);
-    value = iteratee(...inputs);
-    return build(accumulator, value);
+    return build(accumulator, iteratee(...input));
   }
 });
 

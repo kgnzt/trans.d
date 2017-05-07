@@ -33,9 +33,10 @@ describe('reducer/build', () => {
   describe('Object', () => {
     it('sets the key to equal value on accumulator', () => {
       const accumulator = {},
-            input = ['a', 1];
+            value = 1,
+            key = 'a';
 
-      build.Object(accumulator, input);
+      build.Object(accumulator, value, key);
 
       accumulator.should.eql({
         a: 1
@@ -48,9 +49,10 @@ describe('reducer/build', () => {
       const accumulator = {
               set: sinon.stub()
             },
-            input = ['a', 'b'];
+            value = 'b',
+            key = 'a';
 
-      build.Map(accumulator, input);
+      build.Map(accumulator, value, key);
 
       accumulator.set.calledWithExactly('a', 'b').should.eql(true);
     });
