@@ -27,7 +27,7 @@ function createFactory(
     }
   
     return options.create(object[key], ...args);
-  }
+  };
 }
 
 module.exports = {

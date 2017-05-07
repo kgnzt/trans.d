@@ -42,7 +42,7 @@ function counter(func) {
   let iteration = 0;
 
   return (...args) => func(iteration++, ...args);
-};
+}
 
 /**
  * @param {function} iteratee

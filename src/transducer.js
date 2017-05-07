@@ -1,7 +1,19 @@
 'use strict';
 
-const functional = require('./functional'),
-      { transducer } = require('./trd');
+const lodash = require('lodash'),
+      functional = require('./functional');
+
+/**
+ * Create a transducer.
+ *
+ * @param {function}
+ * @param {function} 
+ */
+function _transducer(transduction, transform, reducer, accumulator, ...inputs) {
+  return transduction(transform, reducer, accumulator, ...inputs);
+}
+
+const transducer = lodash.curry(_transducer);
 
 /**
  * Includes the first N inputs.

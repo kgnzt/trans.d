@@ -51,7 +51,7 @@ function shouldOverride (type) {
   }
 
   return false;
-};
+}
 
 /**
  * Returns an iterable form of object.
@@ -78,7 +78,7 @@ function iterator(object) {
  * @return {string}
  */
 function isIterable(object) {
-  if (object == null) {
+  if (object === null) {
     return false;
   }
 
@@ -116,16 +116,6 @@ const factory = helper.createFactory(Mapping, {
 });
 
 /**
- * Given an  object an iterator for it is returned.
- *
- * @param {Iterable}
- * @return {Iterable}
- */
-function _for(object) {
-  return makeIterator(object);
-}
-
-/**
  * Given an Iterable a new empty Iterable of the same kind is returned.
  *
  * @param {Iterable}
@@ -136,7 +126,6 @@ function from(iterator) {
 }
 
 module.exports = {
-  for: _for,
   from,
   isIterable,
   iterator

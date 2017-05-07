@@ -8,7 +8,7 @@ describe('iterable', () => {
 
   describe('for', () => {
     it('throws with unknown type', () => {
-      class ZooZoo {};
+      class ZooZoo {}
 
       (function () {
         build.for(new ZooZoo());

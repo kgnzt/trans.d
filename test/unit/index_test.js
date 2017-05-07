@@ -3,7 +3,7 @@
 const should = require('should');
 
 describe('functional', () => {
-  const trd = require('../../src/trd');
+  const trd = require('../../src');
 
   const transducer = require('../../src/transducer');
   const functional = require('../../src/functional');

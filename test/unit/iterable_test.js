@@ -25,7 +25,7 @@ describe('iterable', () => {
             break;
           default:
             break;
-        };
+        }
 
         iteration++;
       }
@@ -51,7 +51,7 @@ describe('iterable', () => {
             break;
           default:
             break;
-        };
+        }
 
         iteration++;
       }
@@ -74,7 +74,7 @@ describe('iterable', () => {
     it('works with custom iterable objects', () => {
       const iterable = {
         [Symbol.iterator]: function* () {
-          yield 2
+          yield 2;
         }
       };
 
@@ -96,7 +96,7 @@ describe('iterable', () => {
     const { from } = iterable;
 
     it('throws with unknown type', () => {
-      class ZooZoo {};
+      class ZooZoo {}
 
       (function () {
         from(new ZooZoo());
@@ -121,7 +121,7 @@ describe('iterable', () => {
     });
 
     it('handles a Map', () => {
-      const iterable = new Map()
+      const iterable = new Map();
 
       const result = from(iterable);
 
@@ -129,7 +129,7 @@ describe('iterable', () => {
     });
 
     it('handles a Set', () => {
-      const iterable = new Set()
+      const iterable = new Set();
 
       const result = from(iterable);
 
