@@ -3,9 +3,8 @@
 const should = require('should');
 
 describe('functional', () => {
-  const transd = require('../../src');
-
-  const transducer = require('../../src/transducer'),
+  const transduce = require('../../src/transduce'),
+        transducer = require('../../src/transducer'),
         functional = require('../../src/functional');
 
   /**
@@ -16,46 +15,7 @@ describe('functional', () => {
     transducer.filter(x => (x % 2) === 0)
   ); 
 
-  describe('exports', () => {
-    it('exports transducers at root of package', () => {
-      [
-       'take',
-       'drop',
-       'map',
-       'filter'
-      ].forEach(property => {
-        transd.should.have.property(property);
-      });
-    });
-
-    it('exports compose at root of package', () => {
-      transd.should.have.property('compose');
-    });
-
-    it('exports transform at root of package', () => {
-      transd.should.have.property('transform');
-    });
-
-    describe('transform', () => {
-      const { transform } = transd;
-
-      it('exports transforms at root.transform package level', () => {
-        [
-         'square',
-         'removeEven',
-         'removeOdd',
-         'log',
-         'pow'
-        ].forEach(property => {
-          transform.should.have.property(property);
-        });
-      });
-    });
-  });
-
   describe('transduce', () => {
-    const { transduce } = transd;
-
     const transform = addOneRemoveOdd;
 
     it('correctly transforms and builds new initial', () => {
@@ -66,14 +26,14 @@ describe('functional', () => {
             },
             initial = [];
 
-      const result = transduce(transform, reducer, initial, iterable);
+      const result = transduce.transduce(transform, reducer, initial, iterable);
 
       result.should.eql([2, 6]);
     });
   });
 
   describe('into', () => {
-    const { into } = transd;
+    const { into } = transduce;
 
     const transform = addOneRemoveOdd;
 
@@ -271,7 +231,7 @@ describe('functional', () => {
   });
 
   describe('sequence', () => {
-    const { sequence } = transd;
+    const { sequence } = transduce;
 
     const transform = addOneRemoveOdd;
 
