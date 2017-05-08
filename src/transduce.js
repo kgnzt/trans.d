@@ -22,39 +22,39 @@ function _accumulate(reducer, accumulator, iterable) {
 
 /**
  * Applies transform to each each element in iterable and runs the result
- * through the reducer passing the current initial as the accumulator and 
+ * through the reducer passing the current state as the accumulator and 
  * the transformed element as input.
  *
  * @param {function} transform
  * @param {function} reducer
- * @param {Iterable} initial
+ * @param {Iterable} state
  * @param {Iterable} iterable
  * @return {Iterable}
  */
-function transduce(transform, reducer, initial, iterable) {
-  return _accumulate(transform(reducer), initial, Iterable.iterator(iterable));
+function transduce(transform, reducer, state, iterable) {
+  return _accumulate(transform(reducer), state, Iterable.iterator(iterable));
 }
 
 /**
  * Applies transform to each each element in iterable and appends it
- * to initial (collection).
+ * to state (collection).
  *
  * @param {function} transform
- * @param {Iterable} initial
+ * @param {Iterable} state
  * @param {Iterable} iterable
  * @return {Iterable}
  */
-function into(transform, initial, iterable) {
+function into(transform, state, iterable) {
   // TODO: reduce this into a single call.
-  let step = build.for(initial);
+  let step = build.for(state);
 
-  if (Type.differ(initial, iterable)) {
-    if (remap.exists(iterable, initial)) {
-      step = remap.between(iterable, initial);
+  if (Type.differ(state, iterable)) {
+    if (remap.exists(iterable, state)) {
+      step = remap.between(iterable, state);
     }
   }
 
-  return transduce(transform, step, initial, iterable);
+  return transduce(transform, step, state, iterable);
 }
 
 /**

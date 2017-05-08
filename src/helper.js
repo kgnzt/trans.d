@@ -12,7 +12,7 @@ const functional = require('./functional'),
  * @param {object}
  * @return {string}
  */
-function createFactory(
+function factoryFor(
   object,
   options = {}
 ) {
@@ -34,5 +34,5 @@ function createFactory(
 }
 
 module.exports = {
-  createFactory
+  factoryFor
 };

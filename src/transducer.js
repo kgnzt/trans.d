@@ -3,6 +3,9 @@
 const lodash = require('lodash'),
       functional = require('./functional');
 
+// TODO: consider NOT exporting forward or importing it from another module.
+// TODO: it is not a transducer, its a helper.
+
 /**
  * Correctly forwards inputs with any updated values in a transducer ->
  * transducer chain.

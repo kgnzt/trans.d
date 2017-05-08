@@ -86,7 +86,7 @@ const IteratorMapping = {
  * @param {string}
  * @return {Iterable}
  */
-const iteratorFactory = helper.createFactory(IteratorMapping, {
+const iteratorFactory = helper.factoryFor(IteratorMapping, {
   create (create, object) {
     return create(object);
   },
@@ -161,7 +161,7 @@ const Mapping = {
  * @param {string}
  * @return {Iterable}
  */
-const factory = helper.createFactory(Mapping, {
+const factory = helper.factoryFor(Mapping, {
   error (key) {
     return `Cannot determine the iterator to create for type ${key}.`;
   }

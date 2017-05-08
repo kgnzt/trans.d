@@ -10,7 +10,7 @@ const buildReducer = require('./reducer/build'),
  * @param {string}
  * @return {Iterable}
  */
-const factory = helper.createFactory(buildReducer, {
+const factory = helper.factoryFor(buildReducer, {
   create (build) {
     return build;
   },

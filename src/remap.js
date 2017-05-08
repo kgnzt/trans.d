@@ -11,7 +11,7 @@ const reducer = require('./reducer/remap'),
  * @param {string}
  * @return {Iterable}
  */
-const factory = helper.createFactory(reducer, {
+const factory = helper.factoryFor(reducer, {
   error (key) {
     return `Cannot determine the remap reducer to use for ${key}.`;
   }

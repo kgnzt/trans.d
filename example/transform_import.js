@@ -1,7 +1,9 @@
 'use strict';
 
-const transd = require('../'),
-      transform = require('./transform_exports');
+/**
+ * Import your transforms.
+ */
+const transform = require('./transform_exports');
 
 /**
  * Sample data 1.
@@ -40,7 +42,7 @@ const s3 = {
   susan: 93.2,
   danny: 93,
   alice: 12,
-  joe: 12
+  mark: 12
 };
 
 const s3Map = transform.into(new Map()).complex(s3),
