@@ -1,5 +1,7 @@
 'use strict';
 
+const functional = require('./functional');
+
 const _toString = ({}).toString;
 
 /**
@@ -25,18 +27,24 @@ function string(object) {
 }
 
 /**
- * Given an object its type is returned.
+ * Determine if two objects have the same type.
  *
- * @param {mixed} object
- * @return {string} object - the type of object
+ * @param {mixed} left
+ * @param {mixed} right
+ * @return {boolean}
  */
 function areSame(left, right) {
   return (string(left) === string(right));
 }
 
-const differ = function (...inputs) {
-  return ! areSame(...inputs);
-};
+/**
+ * Determine if two objects have different types.
+ *
+ * @param {mixed} left
+ * @param {mixed} right
+ * @return {boolean}
+ */
+const differ = functional.negate(areSame);
 
 module.exports = {
   string,

@@ -21,8 +21,10 @@ const removeEven = transducer.filter(functional.isOdd);
  */
 const square = transducer.map(x => x - x);
 
-const dork = lodash.reduce(math, (acc, func, key) => {
+// Create math based transforms for exporting.
+const mathTransforms = lodash.reduce(math, (acc, func, key) => {
   acc[key] = transducer.map(func);
+
   return acc;
 }, {});
 
@@ -30,4 +32,4 @@ module.exports = Object.assign({
   square,
   removeOdd,
   removeEven
-}, dork);
+}, mathTransforms);

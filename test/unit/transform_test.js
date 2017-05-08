@@ -48,4 +48,46 @@ describe('transform', () => {
       result.should.eql([25]);
     });
   });
+
+  describe('math exports', () => {
+    it('exports math transforms', () => {
+      [
+        'abs',
+        'acos',
+        'acosh',
+        'asin',
+        'asinh',
+        'atan',
+        'atanh',
+        'atan2',
+        'cbrt',
+        'ceil',
+        'clz32',
+        'cos',
+        'cosh',
+        'exp',
+        'expm1',
+        'floor',
+        'fround',
+        'hypot',
+        'imul',
+        'log',
+        'log1p',
+        'log10',
+        'max',
+        'min',
+        'pow',
+        'random',
+        'round',
+        'sign',
+        'sin',
+        'sinh',
+        'sqrt',
+        'tanh',
+        'trunc'
+      ].forEach(property => {
+        transform.should.have.property(property);
+      });
+    });
+  });
 });
