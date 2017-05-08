@@ -38,4 +38,14 @@ describe('transform', () => {
       result.should.eql([]);
     });
   });
+
+  describe('sqaure', () => {
+    const { square } = transform;
+
+    it('correctly squares the input', () => {
+      const result = square(build)(accumulator, 5);
+
+      result.should.eql([25]);
+    });
+  });
 });

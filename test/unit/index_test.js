@@ -32,6 +32,26 @@ describe('functional', () => {
     it('exports compose at root of package', () => {
       transd.should.have.property('compose');
     });
+
+    it('exports transform at root of package', () => {
+      transd.should.have.property('transform');
+    });
+
+    describe('transform', () => {
+      const { transform } = transd;
+
+      it('exports transforms at root.transform package level', () => {
+        [
+         'square',
+         'removeEven',
+         'removeOdd',
+         'log',
+         'pow'
+        ].forEach(property => {
+          transform.should.have.property(property);
+        });
+      });
+    });
   });
 
   describe('transduce', () => {

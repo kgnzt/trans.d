@@ -91,6 +91,7 @@ function map(iteratee) {
       if (argument.isTuple(input)) {
         let value = new argument.Tuple([iteratee(...input), ...input.rest]);
         if (iteration === count) {
+          console.log('sfd');
           value = value._iteration[0];
         }
         return build(accumulator, value, ...input.rest);

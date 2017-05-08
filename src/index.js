@@ -3,6 +3,7 @@
 const Type = require('./type'),
       remap = require('./remap'),
       build = require('./build'),
+      transform = require('./transform'),
       Transducer = require('./transducer'),
       Iterable = require('./iterable'),
       functional = require('./functional');
@@ -62,5 +63,6 @@ module.exports = Object.assign({
   into,
   sequence,
   transduce,
+  transform,
   compose: functional.compose
 }, Transducer);

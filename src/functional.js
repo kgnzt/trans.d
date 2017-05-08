@@ -3,9 +3,27 @@
 const reducer = require('./reducer');
 
 /**
- * Generates a function that returns the complement of predicate..
+ * Determine if the input is even.
  *
- * @param {mixed} input
+ * @param {number} input
+ * @return {boolean}
+ */
+function isEven (x) { return (x % 2) === 0; }
+
+/**
+ * Determine if the input is odd.
+ *
+ * @param {number} input
+ * @return {boolean}
+ */
+const isOdd = negate(isEven);
+
+/**
+ * Calls the passed function returning the result.
+ *
+ * TODO: consider forwarding rest args
+ *
+ * @param {function} func
  * @return {mixed}
  */
 function call(func) {
@@ -13,7 +31,7 @@ function call(func) {
 }
 
 /**
- * Generates a function that returns the complement of predicate..
+ * Generates a function that returns the complement of predicate.
  *
  * @param {mixed} input
  * @return {mixed}
@@ -85,6 +103,8 @@ function accumulate(reducer, accumulator, iterable) {
 }
 
 module.exports = {
+  isEven,
+  isOdd,
   accumulate,
   counter,
   identity,
