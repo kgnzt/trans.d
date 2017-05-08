@@ -5,10 +5,14 @@ const type = require('./type'),
       helper = require('./helper');
 
 const IteratorMapping = {
+  /**
+   * Generates an iterable Map.
+   *
+   * @param {object} map
+   * @return {object}
+   */
   Map (map) {
     return {
-      // think about ordering here.
-      // maybe enforece alphabetical?
       [Symbol.iterator]: function* () { 
         for (let [key, value] of map) {
           yield new argument.Tuple([value, key]);
@@ -17,10 +21,14 @@ const IteratorMapping = {
     };
   },
 
+  /**
+   * Generates an iterable object.
+   *
+   * @param {object} object
+   * @return {object}
+   */
   Object (object) {
     return {
-      // think about ordering here.
-      // maybe enforece alphabetical?
       [Symbol.iterator]: function* () { 
         for (let key in object) { 
           yield new argument.Tuple([object[key], key]);
