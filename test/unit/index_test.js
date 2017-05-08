@@ -89,7 +89,6 @@ describe('functional', () => {
 
     describe('when iterable and initial differ in type', () => {
       describe('initial array', () => {
-        /*
         let iterable = null;
         beforeEach(() => {
           iterable = [1, 2, 5];
@@ -100,10 +99,9 @@ describe('functional', () => {
 
           const xform = transducer.map(x => x + 1)
 
-          //const result = into(xform, initial, iterable);
-          //console.log(result);
+          const result = into(xform, initial, iterable);
+          console.log(result);
         });
-        */
       });
     });
   });
