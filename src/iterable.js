@@ -1,8 +1,50 @@
 'use strict';
 
-const type = require('./type'),
-      argument = require('./argument'),
+const Type = require('./type'),
       helper = require('./helper');
+
+/**
+ * An iterable tuple is returned from an Iterable when the current iteration
+ * value should be spread across as inputs into a reducing function.
+ */
+class InputTuple {
+  /**
+   * @param {...object} inputs
+   */
+  constructor(...inputs) {
+    this._inputs = inputs;
+  }
+
+  * [Symbol.iterator]() {
+    for (let value of this._inputs) {
+      yield value;
+    }
+  }
+}
+
+/**
+ * Determine if an object is a Tuple.
+ *
+ * @param {mixed}
+ * @return {boolean}
+ */
+function isInputTuple(object) {
+  return (object instanceof InputTuple);
+}
+
+/**
+ * Ensure that an iterable value is spreadable.
+ *
+ * @param {mixed}
+ * @return {[]...spreadable}
+ */
+function spreadable(input) {
+  if (!isInputTuple(input)) {
+    return [input];
+  }
+
+  return input;
+}
 
 const IteratorMapping = {
   /**
@@ -15,7 +57,7 @@ const IteratorMapping = {
     return {
       [Symbol.iterator]: function* () { 
         for (let [key, value] of map) {
-          yield new argument.Tuple([value, key]);
+          yield new InputTuple(value, key);
         }
       }
     };
@@ -31,7 +73,7 @@ const IteratorMapping = {
     return {
       [Symbol.iterator]: function* () { 
         for (let key in object) { 
-          yield new argument.Tuple([object[key], key]);
+          yield new InputTuple(object[key], key);
         } 
       }
     };
@@ -72,11 +114,11 @@ function shouldOverride (type) {
  * @return {Iterable}
  */
 function iterator(object) {
-  if (isIterable(object) && !shouldOverride(type.string(object))) {
+  if (isIterable(object) && !shouldOverride(Type.string(object))) {
     return object;
   }
 
-  return iteratorFactory(type.string(object), object);
+  return iteratorFactory(Type.string(object), object);
 }
 
 /**
@@ -131,10 +173,13 @@ const factory = helper.createFactory(Mapping, {
  * @return {Iterable}
  */
 function from(iterator) {
-  return factory(type.string(iterator));
+  return factory(Type.string(iterator));
 }
 
 module.exports = {
+  InputTuple,
+  spreadable,
+  isInputTuple,
   from,
   isIterable,
   iterator

@@ -16,7 +16,7 @@ module.exports = {
        * @param {number}
        * @return {object}
        */
-      return functional.counter((accumulator, value, iteration) => {
+      return functional.counter((iteration, accumulator, value) => {
         accumulator[iteration] = value;
 
         return accumulator;
@@ -35,7 +35,7 @@ module.exports = {
        * @param {number}
        * @return {object}
        */
-      return functional.counter((accumulator, value, iteration) => {
+      return functional.counter((iteration, accumulator, value) => {
         accumulator.set(iteration, value);
 
         return accumulator;
@@ -56,7 +56,7 @@ module.exports = {
        * @param {number}
        * @return {object}
        */
-      return functional.counter((accumulator, value, iteration) => {
+      return functional.counter((iteration, accumulator, value) => {
         accumulator[iteration] = value;
 
         return accumulator;
@@ -75,7 +75,7 @@ module.exports = {
        * @param {number}
        * @return {object}
        */
-      return functional.counter((accumulator, value, iteration) => {
+      return functional.counter((iteration, accumulator, value) => {
         accumulator.set(iteration, value);
 
         return accumulator;

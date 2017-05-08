@@ -22,8 +22,7 @@ describe('functional', () => {
        'take',
        'drop',
        'map',
-       'filter',
-       'remove'
+       'filter'
       ].forEach(property => {
         transd.should.have.property(property);
       });

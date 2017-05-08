@@ -1,33 +1,33 @@
 'use strict';
 
 const lodash = require('lodash'),
-      argument = require('./argument'),
       functional = require('./functional');
 
 /**
- * Create a transducer.
+ * Correctly forwards inputs with any updated values in a transducer ->
+ * transducer chain.
  *
- * @param {function}
- * @param {function} 
+ * @param {array[mixed]} inputs
+ * @param {mixed} value - new initial input (output) for next transducer
  */
-function _transducer(transduction, transform, reducer, accumulator, ...inputs) {
-  return transduction(transform, reducer, accumulator, ...inputs);
-}
+function forward(inputs, value) {
+  if (inputs.length > 1) {
+    return [value, ...inputs.slice(1, inputs.length)];
+  }
 
-const transducer = lodash.curry(_transducer);
+  return [value];
+}
 
 /**
  * Includes the first N inputs.
- *
- * TODO: curry?
  *
  * @param {number} count
  * @return {function}
  */
 function take(count) {
   return build => {
-    return functional.counter((accumulator, input, iteration) => {
-      return (iteration >= count) ? accumulator : build(accumulator, input);
+    return functional.counter((iteration, state, ...inputs) => {
+      return (iteration >= count) ? state : build(state, ...inputs);
     });
   };
 }
@@ -35,111 +35,51 @@ function take(count) {
 /**
  * Removes the first N inputs.
  *
- * TODO: curry?
- *
  * @param {number} count
  * @return {function}
  */
 function drop(count) {
   return build => {
-    return functional.counter((accumulator, input, iteration) => {
-      return (iteration < count) ? accumulator : build(accumulator, input);
+    return functional.counter((iteration, state, ...inputs) => {
+      return (iteration < count) ? state : build(state, ...inputs);
     });
   };
 }
 
 /**
- * @param {function} predicate
- * @param {function} build
- * @return {function}
- */
-/*
-const filter = transducer((predicate, build, accumulator, input) => {
-  if (argument.isTuple(input)) {
-    const value = predicate(...input);
-    return value ? build(accumulator, ...input) : accumulator;
-  } else {
-    return predicate(input) ? build(accumulator, input) : accumulator;
-  }
-});
-*/
-
-/**
+ * Evaluates iteratee with the initial input.
+ *
  * @param {function} iteratee
- * @param {function} build
- * @return {function}
- */
-/*
-const map = transducer((iteratee, build, accumulator, input, test) => {
-  if (argument.isTuple(input)) {
-    const value = new argument.Tuple([iteratee(...input), ...input.rest]);
-    return build(accumulator, value, ...input.rest);
-    return result;
-  } else {
-    return build(accumulator, iteratee(...input));
-  }
-});
-*/
-/**
- * @param {function} iteratee
- * @param {function} build
  * @return {function}
  */
 function map(iteratee) {
-  return (build, iteration, count) => {
-    return (accumulator, input) => {
-      if (argument.isTuple(input)) {
-        let value = new argument.Tuple([iteratee(...input), ...input.rest]);
-        if (iteration === count) {
-          console.log('sfd');
-          value = value._iteration[0];
-        }
-        return build(accumulator, value, ...input.rest);
-      } else {
-        // here
-        return build(accumulator, iteratee(input));
-      }
-    }
+  return build => {
+    return (state, ...inputs) => {
+      return build(state, ...(forward(inputs, iteratee(...inputs))));
+    };
   };
 }
 
 /**
- * @param {function} iteratee
- * @param {function} build
+ * Includes inputs where the predicate returns true.
+ *
+ * @param {function} predicate
  * @return {function}
  */
 function filter(predicate) {
-  return (build, iteration, count) => {
-    return (accumulator, input) => {
-      if (argument.isTuple(input)) {
-        let should = predicate(...input);
-        let result = input;
-        if (iteration === count) {
-          result = input._iteration;
-        }
-        return should ? build(accumulator, ...result) : accumulator;
-      } else {
-        return predicate(input) ? build(accumulator, input) : accumulator;
-      }
-    }
+  return build => {
+    return (state, ...inputs) => {
+      return predicate(...inputs) ? build(state, ...inputs) : state;
+    };
   };
 }
 
-/**
- * @param {function} predicate
- * @param {function} build
- * @return {function}
- */
-const remove = transducer((predicate, build, accumulator, ...inputs) => {
-  return predicate(...inputs) ? accumulator : build(accumulator, ...inputs);
-});
-
 module.exports = {
+  forward,
   drop,
   filter,
   identity: functional.identity,
   map,
   negate: functional.negate,
-  remove,
   take
 };

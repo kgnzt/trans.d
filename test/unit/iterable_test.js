@@ -6,10 +6,88 @@ const should = require('should'),
 describe('iterable', () => {
   const iterable = require('../../src/iterable');
 
+  describe('InputTuple', () => {
+    const { InputTuple } = iterable;
+
+    it('can construct', () => {
+      (function () {
+        new InputTuple('a', 1);
+      }).should.not.throw();
+    });
+
+    it('can be spread', () => {
+      function test(one, two) {
+        return (one + two);
+      }
+
+      const tuple = new InputTuple(3, 10);
+
+      const result = test(...tuple);
+
+      result.should.eql(13);
+    });
+
+    it('will default to an empty array', () => {
+      function test(input) {
+        return input;
+      }
+
+      const tuple = new InputTuple();
+
+      tuple._inputs.should.eql([]);
+    });
+  });
+
+  describe('spreadable', () => {
+    const { spreadable } = iterable;
+
+    it('returns an array of passed object when not InputTuple', () => {
+      const input = 'alpha';
+
+      const result = spreadable(input);
+
+      result.should.eql(['alpha']);
+    });
+
+    it('simply returns the input when already an InputTuple', () => {
+      const input = new iterable.InputTuple([1, 2]);
+
+      const result = spreadable(input);
+
+      result.should.equal(input);
+    });
+  });
+
+  describe('isInputTuple', () => {
+    const { isInputTuple } = iterable;
+
+    it('returns true when tuple instance passed', () => {
+      const object = new iterable.InputTuple([1, 2]);
+
+      const result = isInputTuple(object);
+
+      result.should.eql(true);
+    });
+
+    it('returns false when non tuple instance passed', () => {
+      const object = {foo: 'bar'};
+
+      const result = isInputTuple(object);
+
+      result.should.eql(false);
+    });
+  });
+
   describe('iterator', () => {
     const { iterator } = iterable;
 
-    it('works with an object', () => {
+    function assertInputs (expected, ...inputs) {
+      expected.forEach((input, index) => {
+        input.should.eql(inputs[index]);
+      });
+    }
+
+    it('produces an inverted input order iteratin for object', () => {
       const object = { alpha: 1, beta: 2 };
 
       const result = iterator(object);
@@ -18,10 +96,12 @@ describe('iterable', () => {
       for (let value of result) {
         switch (iteration) {
           case 2:
-            value.should.eql([1, 'alpha']);
+            value.should.be.an.instanceOf(iterable.InputTuple);
+            assertInputs([1, 'alpha'], ...value);
             break;
           case 1:
-            value.should.eql([2, 'beta']);
+            value.should.be.an.instanceOf(iterable.InputTuple);
+            assertInputs([2, 'beta'], ...value);
             break;
           default:
             break;
@@ -44,10 +124,12 @@ describe('iterable', () => {
       for (let value of result) {
         switch (iteration) {
           case 2:
-            value.should.eql([1, 'alpha']);
+            value.should.be.an.instanceOf(iterable.InputTuple);
+            assertInputs([1, 'alpha'], ...value);
             break;
           case 1:
-            value.should.eql([2, 'beta']);
+            value.should.be.an.instanceOf(iterable.InputTuple);
+            assertInputs([2, 'beta'], ...value);
             break;
           default:
             break;

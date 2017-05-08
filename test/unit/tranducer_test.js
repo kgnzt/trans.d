@@ -19,6 +19,28 @@ describe('transducer', () => {
     });
   });
 
+  describe('forward', () => {
+    const { forward } = transducer;
+
+    it('returns the new value as an array when input length was 1', () => {
+      const inputs = [10],
+            value = 20;
+
+      const result = forward(inputs, value);
+
+      result.should.eql([20]);
+    });
+
+    it('returns new array of spreadable inputs if length was greater than 1', () => {
+      const inputs = [10, 'alpha', 'beta', 22],
+            value = 20;
+
+      const result = forward(inputs, value);
+
+      result.should.eql([20, 'alpha', 'beta', 22]);
+    });
+  });
+
   describe('take', () => {
     const { take } = transducer;
 
@@ -95,32 +117,6 @@ describe('transducer', () => {
     });
   });
 
-  describe('remove', () => {
-    const { remove } = transducer;
-
-    it('returns the input if the predicate evaluates to false', () => {
-      const predicate = (x) => x === 5,
-            accumulator = [],
-            input = 10;
-
-      const transform = remove(predicate, pickInput);
-      const result = transform(accumulator, input);
-
-      result.should.eql(input);
-    });
-
-    it('returns the accumulator if the predicate evaluates to true', () => {
-      const predicate = (x) => x === 5,
-            accumulator = [],
-            input = 5;
-
-      const transform = remove(predicate, pickInput);
-      const result = transform(accumulator, input);
-
-      result.should.eql(accumulator);
-    });
-  });
-
   describe('filter', () => {
     const { filter } = transducer;
 
@@ -129,7 +125,7 @@ describe('transducer', () => {
             accumulator = [],
             input = 10;
 
-      const transform = filter(predicate, pickInput);
+      const transform = filter(predicate)(pickInput);
       const result = transform(accumulator, input);
 
       result.should.eql(accumulator);
@@ -140,7 +136,7 @@ describe('transducer', () => {
             accumulator = [],
             input = 5;
 
-      const transform = filter(predicate, pickInput);
+      const transform = filter(predicate)(pickInput);
       const result = transform(accumulator, input);
 
       result.should.eql(input);
@@ -155,7 +151,7 @@ describe('transducer', () => {
             accumulator = [],
             input = 10;
 
-      const transform = map(iteratee, pickInput);
+      const transform = map(iteratee)(pickInput);
       const result = transform(accumulator, input);
 
       result.should.eql(13);

@@ -1,7 +1,5 @@
 'use strict';
 
-const functional = require('./functional');
-
 const _toString = ({}).toString;
 
 /**
@@ -36,7 +34,9 @@ function areSame(left, right) {
   return (string(left) === string(right));
 }
 
-const differ = functional.negate(areSame);
+const differ = function (...inputs) {
+  return ! areSame(...inputs);
+};
 
 module.exports = {
   string,

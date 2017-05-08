@@ -9,6 +9,21 @@ const Type = require('./type'),
       functional = require('./functional');
 
 /**
+ * Iterates using an iterable updating state with each result.
+ *
+ * @param {function} reducer
+ * @param {mixed} accumulator
+ * @param {Iterable} iterable
+ */
+function _accumulate(reducer, accumulator, iterable) {
+  for (let value of iterable) {
+    accumulator = reducer(accumulator, ...(Iterable.spreadable(value)));
+  }
+
+  return accumulator;
+}
+
+/**
  * Applies transform to each each element in iterable and runs the result
  * through the reducer passing the current initial as the accumulator and 
  * the transformed element as input.
@@ -20,7 +35,7 @@ const Type = require('./type'),
  * @return {Iterable}
  */
 function transduce(transform, reducer, initial, iterable) {
-  return functional.accumulate(transform(reducer), initial, Iterable.iterator(iterable));
+  return _accumulate(transform(reducer), initial, Iterable.iterator(iterable));
 }
 
 /**
