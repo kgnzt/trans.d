@@ -20,14 +20,14 @@ Be sure to check the examples in /example.
 
 Example:
 
-    const trd = require('trd');
+    const transd = require('transd');
 
     const transform = functional.compose(
-      transducer.identity,
-      transducer.map(x => x + 1),
-      transducer.map(x => x * 3),
-      transducer.filter(x => (x % 2) === ),
-      transducer.map(functional.counter((iteration, value) => {
+      transd.identity,
+      transd.map(x => x + 1),
+      transd.map(x => x * 3),
+      transd.filter(x => (x % 2) === 0),
+      transd.map(functional.counter((iteration, value) => {
         return [iteration, value];
       }))
     );
@@ -39,8 +39,8 @@ Example:
 
     console.log(result); // Map { 0 => 30, 1 => 126, 2 => 12 }
 
-const result = transduce.into(transform, map, iterator);
 
+Trans.d supports out of box least suprise remapping.
 
     const iterable = {
             alpha: 1,
