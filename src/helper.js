@@ -1,6 +1,9 @@
 'use strict';
 
-const functional = require('./functional');
+const functional = require('./functional'),
+      lodash = require('lodash');
+
+// TODO: remove lodash dep
 
 /**
  * Generates an object / key based factory.
@@ -22,11 +25,11 @@ function createFactory(
 
   // tODO: unit-test arg forwarding
   return (key, ...args) => {
-    if (!(key in object)) {
+    if (!(lodash.has(object, key))) {
       throw new TypeError(options.error(key, object));
     }
   
-    return options.create(object[key], ...args);
+    return options.create(lodash.get(object, key), ...args);
   };
 }
 

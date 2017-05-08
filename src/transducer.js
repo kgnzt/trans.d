@@ -26,7 +26,7 @@ const transducer = lodash.curry(_transducer);
  */
 function take(count) {
   return build => {
-    return functional.counter((iteration, accumulator, input) => {
+    return functional.counter((accumulator, input, iteration) => {
       return (iteration >= count) ? accumulator : build(accumulator, input);
     });
   };
@@ -42,7 +42,7 @@ function take(count) {
  */
 function drop(count) {
   return build => {
-    return functional.counter((iteration, accumulator, input) => {
+    return functional.counter((accumulator, input, iteration) => {
       return (iteration < count) ? accumulator : build(accumulator, input);
     });
   };

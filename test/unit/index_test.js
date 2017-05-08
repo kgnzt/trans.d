@@ -88,19 +88,140 @@ describe('functional', () => {
     });
 
     describe('when iterable and initial differ in type', () => {
-      describe('initial array', () => {
+      describe('iterable array', () => {
         let iterable = null;
         beforeEach(() => {
           iterable = [1, 2, 5];
         });
 
-        it('', () => {
+        it('correctly appends into an object', () => {
           const initial = {};
 
-          const xform = transducer.map(x => x + 1)
+          const result = into(transform, initial, iterable);
 
-          const result = into(xform, initial, iterable);
-          console.log(result);
+          result.should.have.property('0');
+          result.should.have.property('1');
+          result['0'].should.eql(2);
+          result['1'].should.eql(6);
+        });
+
+        it('correctly appends into a Map', () => {
+          const initial = new Map();
+
+          const result = into(transform, initial, iterable);
+
+          result.has(0).should.eql(true);
+          result.get(0).should.eql(2);
+          result.has(1).should.eql(true);
+          result.get(1).should.eql(6);
+        });
+
+        it('correctly appends into a Set', () => {
+          const initial = new Set();
+
+          const result = into(transform, initial, iterable);
+
+          result.has(2).should.eql(true);
+          result.has(6).should.eql(true);
+          result.size.should.eql(2);
+        });
+
+        it('correctly appends into a Set when duplicate value', () => {
+          const initial = new Set();
+
+          const result = into(transform, initial, [1, 1, 2, 5]); // extra 2
+
+          result.has(2).should.eql(true);
+          result.has(6).should.eql(true);
+          result.size.should.eql(2);
+        });
+      });
+
+      describe('iterable object', () => {
+        let iterable = null;
+        beforeEach(() => {
+          iterable = {a: 1, b: 2, c: 5};
+        });
+
+        it('correctly appends into an array', () => {
+          const initial = [];
+
+          const result = into(transform, initial, iterable);
+
+          result.should.eql([2, 6]);
+        });
+
+        it('correctly appends into a Map', () => {
+          const initial = new Map();
+
+          const result = into(transform, initial, iterable);
+
+          result.has('a').should.eql(true);
+          result.get('a').should.eql(2);
+          result.has('c').should.eql(true);
+          result.get('c').should.eql(6);
+          result.size.should.eql(2);
+        });
+
+        it('correctly appends into a Set', () => {
+          const initial = new Set();
+
+          const result = into(transform, initial, iterable);
+
+          result.has(2).should.eql(true);
+          result.has(6).should.eql(true);
+          result.size.should.eql(2);
+        });
+
+        it('correctly appends into a Set when duplicate value', () => {
+          const initial = new Set();
+
+          const result = into(transform, initial, [1, 1, 2, 5]); // extra 2
+
+          result.has(2).should.eql(true);
+          result.has(6).should.eql(true);
+          result.size.should.eql(2);
+        });
+      });
+
+      describe('iterable set', () => {
+        let iterable = null;
+        beforeEach(() => {
+          iterable = new Set();
+          iterable.add(1);
+          iterable.add(2);
+          iterable.add(5);
+        });
+
+        it('correctly appends into an array', () => {
+          const initial = [];
+
+          const result = into(transform, initial, iterable);
+
+          result.should.eql([2, 6]);
+        });
+
+        it('correctly appends into an object', () => {
+          const initial = {};
+
+          const result = into(transform, initial, iterable);
+
+          result.should.have.property('0');
+          result.should.have.property('1');
+          result['0'].should.eql(2);
+          result['1'].should.eql(6);
+        });
+
+        it('correctly appends into an Map', () => {
+          const initial = new Map();
+
+          const result = into(transform, initial, iterable);
+
+          result.has(0).should.eql(true);
+          result.get(0).should.eql(2);
+          result.has(1).should.eql(true);
+          result.get(1).should.eql(6);
+          result.size.should.eql(2);
         });
       });
     });

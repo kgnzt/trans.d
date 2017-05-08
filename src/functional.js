@@ -41,7 +41,7 @@ function identity(input) {
 function counter(func) {
   let iteration = 0;
 
-  return (...args) => func(iteration++, ...args);
+  return (...args) => func(...args, iteration++);
 }
 
 /**

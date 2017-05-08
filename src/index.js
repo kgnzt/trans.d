@@ -1,6 +1,7 @@
 'use strict';
 
-const type = require('./type'),
+const Type = require('./type'),
+      remap = require('./remap'),
       build = require('./build'),
       Iterable = require('./iterable'),
       functional = require('./functional');
@@ -30,8 +31,16 @@ function transduce(transform, reducer, initial, iterable) {
  * @return {Iterable}
  */
 function into(transform, initial, iterable) {
+  let step = build.for(initial);
+
+  if (Type.differ(initial, iterable)) {
+    if (remap.exists(iterable, initial)) {
+      step = remap.between(iterable, initial);
+    }
+  }
+
   // TODO: Automatically map differing input types to output types
-  return transduce(transform, build.for(initial), initial, iterable);
+  return transduce(transform, step, initial, iterable);
 }
 
 /**
