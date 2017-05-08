@@ -32,12 +32,18 @@ To install inside a project, run:
 ### transducer
 
   * transd.transducer
-    * `.take(count)`
-    * `.drop(count)`
-    * `.map(iteratee)`
-    * `.filter(predicate)`
-    * `.identity(input)`
-    * `.negate(input)`
+    * `.take(count)` keep the first count inputs
+      * `count (number)` number of inputs to keep
+    * `.drop(count)` remove the first count inputs
+      * `count (number)` number of inputs to remove
+    * `.map(iteratee)` evaluate the current value through iteratee
+      * `iteratee (function)`
+    * `.filter(predicate)` keep the current value if predicate evaluates to true
+      * `predicate (function)` 
+    * `.identity(input)` given input, input is returned
+      * `input (mixed)`
+    * `.negate(input)` take the complement of the input
+      * `input (boolean)`
 
 ### transform
 
@@ -45,10 +51,15 @@ Also exports all global Math functions as map transforms.
 
   * transd.transform
     * `.compose(transducers)`
+      * `transducers (array[function])`
     * `.export(transforms)`
+      * `transforms (object)`
     * `.removeOdd(input)`
+      * `input (number)`
     * `.removeEven(input)`
+      * `input (number)`
     * `.square(input)`
+      * `input (number)`
 
 ## Example
 
