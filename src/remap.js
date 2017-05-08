@@ -17,23 +17,39 @@ const factory = helper.createFactory(reducer, {
   }
 });
 
-// TODO: unit-test
+/**
+ * Given two objects, a remap lookup key is returned.
+ *
+ * @param {mixed} from
+ * @param {mixed} into
+ * @return {string}
+ */
 function keyBetween(from, into) {
   return `${type.string(from)}.${type.string(into)}`;
 }
 
-// TODO: unit-test
 /**
  * Given a collection a build reducer for that type is returned.
  *
- * @param {mixed}
- * @return {mixed}
+ * TODO: unit-test
+ *
+ * @param {mixed} from
+ * @param {mixed} into
+ * @return {function}
  */
 function between(from, into) {
   return factory(keyBetween(from, into));
 }
 
-// TODO: unit-test
+/**
+ * Determine if a remap reducer between two types exists.
+ *
+ * TODO: unit-test
+ *
+ * @param {mixed} from
+ * @param {mixed} into
+ * @return {boolean}
+ */
 function exists(from, into) {
   return lodash.has(reducer, keyBetween(from, into));
 }

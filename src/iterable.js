@@ -95,8 +95,11 @@ const iteratorFactory = helper.createFactory(IteratorMapping, {
   }
 });
 
-// todo: test
-function shouldOverride (type) {
+/**
+ * Determine if an iterable object should be overridden with a new
+ * iterable object.
+ */
+function _shouldOverride (type) {
   if (type === 'Map') {
     return true;
   }
@@ -107,14 +110,12 @@ function shouldOverride (type) {
 /**
  * Returns an iterable form of object.
  *
- * TODO: unit-test
- *
  * @param {mixed}
- * @throw {TypeError} // TODO:
+ * @throw {TypeError}
  * @return {Iterable}
  */
 function iterator(object) {
-  if (isIterable(object) && !shouldOverride(Type.string(object))) {
+  if (isIterable(object) && !_shouldOverride(Type.string(object))) {
     return object;
   }
 

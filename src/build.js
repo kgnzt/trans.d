@@ -19,6 +19,7 @@ const factory = helper.createFactory(buildReducer, {
   }
 });
 
+// TODO: unit-test each type
 /**
  * Given a collection a build reducer for that type is returned.
  *

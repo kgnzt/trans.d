@@ -140,6 +140,16 @@ describe('iterable', () => {
 
       iteration.should.eql(2);
     });
+
+    it('throws with a non iterable type', () => {
+      class ZooZoo {}
+
+      const instance = new ZooZoo();
+
+      (function () {
+        iterator(instance);
+      }).should.throw('Cannot create the iterator for collection type ZooZoo.');
+    });
   });
 
   describe('isIterable', () => {
