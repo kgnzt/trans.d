@@ -41,6 +41,29 @@ Example:
 
 const result = transduce.into(transform, map, iterator);
 
+
+    const iterable = {
+            alpha: 1,
+            beta: 2,
+            gamma: 5,
+            delta: 5
+          },
+          initial = [],
+          transform = transd.compose(
+            transd.map(x => x + 1),
+            transd.filter(x => x % 2 === 0),
+          );
+    
+    const array = transd.into(transform, [], iterable);
+          object = transd.into(transform, {}, iterable);
+          map = transd.into(transform, new Map(), iterable);
+          set = transd.into(transform, new Set(), iterable);
+
+    console.log(array);  // [2, 6]
+    console.log(object); // { alpha: 2, gamma: 6 }
+    console.log(map);    // Map { alpha => 2, gamma => 6 }
+    console.log(set);    // Set { 2, 6 }
+
 ## Design
 
 ## Contributing

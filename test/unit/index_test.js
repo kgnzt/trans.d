@@ -16,6 +16,24 @@ describe('functional', () => {
     transducer.filter(x => (x % 2) === 0)
   ); 
 
+  describe('exports', () => {
+    it('exports transducers at root of package', () => {
+      [
+       'take',
+       'drop',
+       'map',
+       'filter',
+       'remove'
+      ].forEach(property => {
+        transd.should.have.property(property);
+      });
+    });
+
+    it('exports compose at root of package', () => {
+      transd.should.have.property('compose');
+    });
+  });
+
   describe('transduce', () => {
     const { transduce } = transd;
 

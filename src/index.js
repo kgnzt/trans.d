@@ -3,6 +3,7 @@
 const Type = require('./type'),
       remap = require('./remap'),
       build = require('./build'),
+      Transducer = require('./transducer'),
       Iterable = require('./iterable'),
       functional = require('./functional');
 
@@ -55,8 +56,11 @@ function sequence(transform, iterable) {
   return into(transform, Iterable.from(iterable), iterable);
 }
 
-module.exports = {
+// TODO: write a helper function to ENSURE no overriding
+
+module.exports = Object.assign({
   into,
   sequence,
-  transduce
-};
+  transduce,
+  compose: functional.compose
+}, Transducer);
