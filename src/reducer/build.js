@@ -22,7 +22,7 @@ module.exports = {
    * @param {string}
    * @return {Map}
    */
-  Map (accumulator, value, key, index) {
+  Map (accumulator, value, key) {
     accumulator.set(key, value);
 
     return accumulator;

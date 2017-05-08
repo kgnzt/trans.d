@@ -119,6 +119,28 @@ describe('functional', () => {
 
       value.should.eql(6);
     });
+
+    it('passes the current iteration as the second to last argument', () => {
+      const f = (x, iteration) => x + iteration,
+            g = (x, iteration) => x * iteration;
+
+      const result = compose(f, g);
+
+      const value = result(10);
+
+      value.should.eql(1);
+    });
+
+    it('passes the number of functions composed as the last argument', () => {
+      const f = (x, _, count) => x + count,
+            g = (x, _, count) => x * count;
+
+      const result = compose(f, g);
+
+      const value = result(10);
+
+      value.should.eql(22);
+    });
   });
 
   describe('accumulate', () => {
