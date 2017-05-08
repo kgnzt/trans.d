@@ -113,10 +113,6 @@ Trans.d supports out of box least suprise remapping.
     console.log(map);    // Map { alpha => 2, gamma => 6 }
     console.log(set);    // Set { 2, 6 }
 
-## Contributing
-
-Always welcome to add, just open a PR.
-
 ## Testing
 
 Testing requires:
