@@ -51,8 +51,10 @@ function counter(func) {
  * @return {function}
  */
 function _reduceRight(iteratee, collection, accumulator) {
+  let iteration = 0;
   for (let i = (collection.length - 1); i >= 0; i--) {
-    accumulator = iteratee(accumulator, collection[i]);
+    const dork = i + 1;
+    accumulator = iteratee(accumulator, collection[i], dork, collection.length);
   }
 
   return accumulator;

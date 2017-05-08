@@ -16,8 +16,8 @@ function identity(accumulator, input) {
  * @param {mixed}
  * @param {mixed}
  */
-function func(accumulator, input) {
-  return input(accumulator);
+function func(accumulator, input, ...rest) {
+  return input(accumulator, ...rest);
 }
 
 module.exports = {

@@ -49,21 +49,22 @@ describe('reducer/build', () => {
       const accumulator = {
               set: sinon.stub()
             },
-            value = 'b',
+            value = 10,
             key = 'a';
 
       build.Map(accumulator, value, key);
 
-      accumulator.set.calledWithExactly('a', 'b').should.eql(true);
+      accumulator.set.calledWithExactly('a', 10).should.eql(true);
     });
 
     it('returns the accumulator', () => {
       const accumulator = {
               set: sinon.stub()
             },
-            input = [1, 2];
+            value = 10,
+            key = 'a';
 
-      const result = build.Map(accumulator, input);
+      const result = build.Map(accumulator, value, key);
 
       result.should.eql(accumulator);
     });
@@ -83,11 +84,11 @@ describe('reducer/build', () => {
 
     it('returns the accumulator', () => {
       const accumulator = {
-              set: sinon.stub()
+              add: sinon.stub()
             },
             input = [1, 2];
 
-      const result = build.Map(accumulator, input);
+      const result = build.Set(accumulator, input);
 
       result.should.eql(accumulator);
     });

@@ -1,7 +1,5 @@
 'use strict';
 
-const iterable = require('../iterable');
-
 module.exports = {
   /**
    * Pushes input into accumulator.
@@ -24,7 +22,7 @@ module.exports = {
    * @param {string}
    * @return {Map}
    */
-  Map (accumulator, value, key) {
+  Map (accumulator, value, key, index) {
     accumulator.set(key, value);
 
     return accumulator;

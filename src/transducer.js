@@ -53,30 +53,76 @@ function drop(count) {
  * @param {function} build
  * @return {function}
  */
+/*
 const filter = transducer((predicate, build, accumulator, input) => {
-  console.log(accumulator);
   if (argument.isTuple(input)) {
-    console.log(input);
-    value = predicate(...input);
-    return value ? build(accumulator, value, ...input.rest) : accumulator;
+    const value = predicate(...input);
+    return value ? build(accumulator, ...input) : accumulator;
   } else {
     return predicate(input) ? build(accumulator, input) : accumulator;
   }
 });
+*/
 
 /**
  * @param {function} iteratee
  * @param {function} build
  * @return {function}
  */
-const map = transducer((iteratee, build, accumulator, input) => {
-  console.log(accumulator);
+/*
+const map = transducer((iteratee, build, accumulator, input, test) => {
   if (argument.isTuple(input)) {
-    return build(accumulator, iteratee(...input), ...input.rest);
+    const value = new argument.Tuple([iteratee(...input), ...input.rest]);
+    return build(accumulator, value, ...input.rest);
+    return result;
   } else {
     return build(accumulator, iteratee(...input));
   }
 });
+*/
+/**
+ * @param {function} iteratee
+ * @param {function} build
+ * @return {function}
+ */
+function map(iteratee) {
+  return (build, iteration, count) => {
+    return (accumulator, input) => {
+      if (argument.isTuple(input)) {
+        let value = new argument.Tuple([iteratee(...input), ...input.rest]);
+        if (iteration === count) {
+          value = value._iteration[0];
+        }
+        return build(accumulator, value, ...input.rest);
+      } else {
+        // here
+        return build(accumulator, iteratee(input));
+      }
+    }
+  };
+}
+
+/**
+ * @param {function} iteratee
+ * @param {function} build
+ * @return {function}
+ */
+function filter(predicate) {
+  return (build, iteration, count) => {
+    return (accumulator, input) => {
+      if (argument.isTuple(input)) {
+        let should = predicate(...input);
+        let result = input;
+        if (iteration === count) {
+          result = input._iteration;
+        }
+        return should ? build(accumulator, ...result) : accumulator;
+      } else {
+        return predicate(input) ? build(accumulator, input) : accumulator;
+      }
+    }
+  };
+}
 
 /**
  * @param {function} predicate
