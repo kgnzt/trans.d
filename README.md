@@ -71,6 +71,7 @@ Example:
 
     const { transform,
             transducer,
+            sequence,
             into } = require('transd');
 
     const xform = transform.compose(
@@ -80,12 +81,9 @@ Example:
       transducer.filter(x => (x % 2) === 0)
     );
 
-    const state = new Map(),
-          iterable = [10, 9, 41, 3, 8];
+    const result = sequence(xform, [10, 9, 41, 3, 8]);
 
-    const result = into(xform, state, iterable);
-
-    console.log(result); // Map { 0 => 30, 1 => 126, 2 => 12 }
+    console.log(result); // [30, 126, 12]
 
 
 Trans.d supports out of box least suprise remapping.
@@ -98,10 +96,10 @@ Trans.d supports out of box least suprise remapping.
             delta: 5
           };
     
-    const array = transd.into(xform, [], iterable);
-          object = transd.into(xform, {}, iterable);
-          map = transd.into(xform, new Map(), iterable);
-          set = transd.into(xform, new Set(), iterable);
+    const array = into(xform, [], iterable);
+          object = into(xform, {}, iterable);
+          map = into(xform, new Map(), iterable);
+          set = into(xform, new Set(), iterable);
 
     console.log(array);  // [2, 6]
     console.log(object); // { alpha: 2, gamma: 6 }
@@ -110,13 +108,17 @@ Trans.d supports out of box least suprise remapping.
 
 If you export your custom transforms via transform.export(transforms):
 
-    const transforms = require('./my-transforms');
+    const transform = require('./my-transforms'); // see ./example/transform_exports.js
 
-    const result = transform.sequence.myTransform(iterable);
+    const resultArray = transform.sequence.example(iterable);
+          resultObject = transform.into({}).example(iterable),
+          resultMap = transform.into(new Map()).example(iterable),
+          resultSet = transform.into(new Set()).example(iterable);
 
-    const resultMap = transform.into(new Map()).myTransform(iterable),
-          resultArray = transform.into([]).myTransform(iterable),
-          resultSet = transform.into(new Set()).myTransform(iterable);
+    console.log(resultArray);  // [2, 6]
+    console.log(resultObject); // { '0': 2, '1': 6 }
+    console.log(resultMap);    // Map { 0 => 2, 1 => 6 }
+    console.log(resultSet);    // Set { 2, 6 }
 
 ## Testing
 
