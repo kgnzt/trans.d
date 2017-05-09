@@ -6,6 +6,7 @@ describe('functional', () => {
   const transd = require('../../src');
 
   const transducer = require('../../src/transducer'),
+        iterable = require('../../src/iterable'),
         functional = require('../../src/functional');
 
   /**
@@ -56,7 +57,8 @@ describe('functional', () => {
   describe('transduce', () => {
     const { transduce } = transd;
 
-    const transform = addOneRemoveOdd;
+    const transform = addOneRemoveOdd,
+          { InputTuple } = iterable;
 
     it('correctly transforms and builds new initial', () => {
       const iterable = [1, 2, 5],
@@ -69,6 +71,24 @@ describe('functional', () => {
       const result = transduce(transform, reducer, initial, iterable);
 
       result.should.eql([2, 6]);
+    });
+
+    it('supports n-ary transformations via InputTuple', () => {
+      const iterable = {
+              large: 5,
+              cute: 10
+            },
+            xform = transducer.map((value, key) => new InputTuple(value + 1, `${key}r`)), 
+            reducer = (accumulator, value, key) => {
+              accumulator[key] = value;
+
+              return accumulator;
+            },
+            initial = {};
+
+      const result = transduce(xform, reducer, initial, iterable);
+
+      result.should.eql({ larger: 6, cuter: 11 });
     });
   });
 
@@ -93,6 +113,15 @@ describe('functional', () => {
       const result = into(transform, initial, iterable);
 
       result.should.eql({ a: 2, c: 6 });
+    });
+
+    it('supports strings', () => {
+      const xform = transducer.map(x => `${x}o`),
+            iterable = 'nn';
+
+      const result = into(xform, '', iterable);
+
+      result.should.eql('nono');
     });
 
     it('supports Maps', () => {

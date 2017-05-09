@@ -22,6 +22,8 @@ describe('transducer', () => {
   describe('forward', () => {
     const { forward } = transducer;
 
+    const { InputTuple } = require('../../src/iterable');
+
     it('returns the new value as an array when input length was 1', () => {
       const inputs = [10],
             value = 20;
@@ -38,6 +40,15 @@ describe('transducer', () => {
       const result = forward(inputs, value);
 
       result.should.eql([20, 'alpha', 'beta', 22]);
+    });
+
+    it('when the value is an InputTuple, the input tuple will be forwarded', () => {
+      const inputs = [1, 'foo'],
+            value = new InputTuple(2, 'fooer');
+
+      const result = forward(inputs, value);
+
+      result.should.equal(value);
     });
   });
 
@@ -155,6 +166,23 @@ describe('transducer', () => {
       const result = transform(accumulator, input);
 
       result.should.eql(13);
+    });
+  });
+
+  describe('cat', () => {
+    const { cat } = transducer;
+
+    it('correctly reduces', () => {
+      const step = (state, input) => {
+              state.push(input);
+              return state;
+            },
+            state = [],
+            iterable = [[1], [2]];
+
+      const result = cat(step)(state, iterable);
+
+      result.should.eql([1, 2]);
     });
   });
 });

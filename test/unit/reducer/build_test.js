@@ -70,6 +70,17 @@ describe('reducer/build', () => {
     });
   });
 
+  describe('String', () => {
+    it('concats the accumulator to the input value', () => {
+      const accumulator = 'hello ',
+            input = 'world';
+
+      const result = build.String(accumulator, input);
+
+      result.should.eql('hello world');
+    });
+  });
+
   describe('Set', () => {
     it('calls set on accumulator with input key and value', () => {
       const accumulator = {

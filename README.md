@@ -7,6 +7,13 @@
   * Container remapping.
   * Transform export shorthands.
   * Transform library.
+  * Support for n-ary input transforms.
+  * Support for:
+    - Array
+    - Object
+    - String
+    - Map
+    - Set
 
 ## Requirements
   - Node.js

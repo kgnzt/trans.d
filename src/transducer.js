@@ -1,6 +1,7 @@
 'use strict';
 
 const lodash = require('lodash'),
+      Iterable = require('./iterable'),
       functional = require('./functional');
 
 // TODO: consider NOT exporting forward or importing it from another module.
@@ -10,11 +11,15 @@ const lodash = require('lodash'),
  * Correctly forwards inputs with any updated values in a transducer ->
  * transducer chain.
  *
+ * TODO: unit-test the Iterable.isInputTuple return.
+ *
  * @param {array[mixed]} inputs
  * @param {mixed} value - new initial input (output) for next transducer
  */
 function forward(inputs, value) {
-  if (inputs.length > 1) {
+  if (Iterable.isInputTuple(value)) {
+    return value;
+  } else if (inputs.length > 1) {
     return [value, ...inputs.slice(1, inputs.length)];
   }
 
@@ -28,9 +33,9 @@ function forward(inputs, value) {
  * @return {function}
  */
 function take(count) {
-  return build => {
+  return step => {
     return functional.counter((iteration, state, ...inputs) => {
-      return (iteration >= count) ? state : build(state, ...inputs);
+      return (iteration >= count) ? state : step(state, ...inputs);
     });
   };
 }
@@ -42,10 +47,39 @@ function take(count) {
  * @return {function}
  */
 function drop(count) {
-  return build => {
+  return step => {
     return functional.counter((iteration, state, ...inputs) => {
-      return (iteration < count) ? state : build(state, ...inputs);
+      return (iteration < count) ? state : step(state, ...inputs);
     });
+  };
+}
+
+/**
+ * Iterates using an iterable updating state with each result.
+ *
+ * TODO: move to functional
+ *
+ * @param {function} reducer
+ * @param {mixed} accumulator
+ * @param {Iterable} iterable
+ */
+function reduce(reducer, state, iterable) {
+  for (let input of iterable) {
+    state = reducer(state, ...input);
+  }
+
+  return state;
+}
+
+/**
+ * Evaluates iteratee with the initial input.
+ *
+ * @param {function} iteratee
+ * @return {function}
+ */
+function cat(step) {
+  return (state, ...input) => {
+    return reduce(step, state, ...input);
   };
 }
 
@@ -56,9 +90,9 @@ function drop(count) {
  * @return {function}
  */
 function map(iteratee) {
-  return build => {
+  return step => {
     return (state, ...inputs) => {
-      return build(state, ...(forward(inputs, iteratee(...inputs))));
+      return step(state, ...(forward(inputs, iteratee(...inputs))));
     };
   };
 }
@@ -70,9 +104,9 @@ function map(iteratee) {
  * @return {function}
  */
 function filter(predicate) {
-  return build => {
+  return step => {
     return (state, ...inputs) => {
-      return predicate(...inputs) ? build(state, ...inputs) : state;
+      return predicate(...inputs) ? step(state, ...inputs) : state;
     };
   };
 }
@@ -80,6 +114,7 @@ function filter(predicate) {
 module.exports = {
   forward,
   drop,
+  cat,
   filter,
   identity: functional.identity,
   map,
