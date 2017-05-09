@@ -1,3 +1,5 @@
+![tran.d javascript transducers](/asset/logo.png?raw=true "trans.d javascript transducers.")
+
 # trans.d: Transducer Framework for Javascript.
 
 ## About
