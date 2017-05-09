@@ -2,6 +2,9 @@
 
 ## About
 
+A least-suprise, least-configuration, and most-composability transducer library
+for ES6 Javascript.
+
 ## Features
 
   * Container remapping.
