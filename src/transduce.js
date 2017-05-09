@@ -22,17 +22,17 @@ function _accumulate(reducer, state, iterable) {
 
 /**
  * Applies transform to each each element in iterable and runs the result
- * through the reducer passing the current state as the accumulator and 
+ * through the step passing the current state as the accumulator and 
  * the transformed element as input.
  *
  * @param {function} transform
- * @param {function} reducer
+ * @param {function} step
  * @param {Iterable} state
  * @param {Iterable} iterable
  * @return {Iterable}
  */
-function transduce(transform, reducer, state, iterable) {
-  return _accumulate(transform(reducer), state, Iterable.iterator(iterable));
+function transduce(transform, step, state, iterable) {
+  return _accumulate(transform(step), state, Iterable.iterator(iterable));
 }
 
 /**

@@ -1,4 +1,4 @@
-# Transducers in Javascript.
+# trans.d: Transducer Framework for Javascript.
 
 ## About
 
@@ -33,7 +33,7 @@ To install inside a project, run:
 ### transd (root package import)
 
   * transd
-    * `.transduce(transform, build, state, iterable)` transform iterable into state using build
+    * `.transduce(transform, step, state, iterable)` transform iterable into state using step
     * `.into(transform, state, iterable)` transform iterable into state
     * `.sequence(transform, iterable)` transform iterable into a new iterable of iterable type
     * `.transducer (Object)` see transd.transducer
