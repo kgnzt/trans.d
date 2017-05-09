@@ -154,6 +154,57 @@ describe('functional', () => {
     });
 
     describe('when iterable and initial differ in type', () => {
+      describe('iterable string', () => {
+        const xform = functional.compose(
+          transducer.map(x => x + 1)
+        ); 
+
+        let iterable = null;
+        beforeEach(() => {
+          iterable = 'hi';
+        });
+
+        it('correctly appends into an array', () => {
+          const initial = [];
+
+          const result = into(xform, initial, iterable);
+
+          result.should.eql(['h1', 'i1']);
+        });
+
+        it('correctly appends into an object', () => {
+          const initial = {};
+
+          const result = into(xform, initial, iterable);
+
+          result.should.eql({
+            '0': 'h1',
+            '1': 'i1'
+          });
+        });
+
+        it('correctly appends into a Map', () => {
+          const initial = new Map();
+
+          const result = into(xform, initial, iterable);
+
+          result.has(0).should.eql(true);
+          result.get(0).should.eql('h1');
+          result.has(1).should.eql(true);
+          result.get(1).should.eql('i1');
+        });
+
+        it('correctly appends into a Set', () => {
+          const initial = new Set();
+
+          const result = into(xform, initial, iterable);
+
+          result.has('h1').should.eql(true);
+          result.has('i1').should.eql(true);
+          result.size.should.eql(2);
+        });
+      });
+
       describe('iterable array', () => {
         let iterable = null;
         beforeEach(() => {
@@ -169,6 +220,14 @@ describe('functional', () => {
           result.should.have.property('1');
           result['0'].should.eql(2);
           result['1'].should.eql(6);
+        });
+
+        it('correctly appends into a string', () => {
+          const initial = '';
+
+          const result = into(transform, initial, iterable);
+
+          result.should.eql('26');
         });
 
         it('correctly appends into a Map', () => {
@@ -215,6 +274,14 @@ describe('functional', () => {
           const result = into(transform, initial, iterable);
 
           result.should.eql([2, 6]);
+        });
+
+        it('correctly appends into a string', () => {
+          const initial = '';
+
+          const result = into(transform, initial, iterable);
+
+          result.should.eql('26');
         });
 
         it('correctly appends into a Map', () => {
@@ -265,6 +332,14 @@ describe('functional', () => {
           const result = into(transform, initial, iterable);
 
           result.should.eql([2, 6]);
+        });
+
+        it('correctly appends into a string', () => {
+          const initial = '';
+
+          const result = into(transform, initial, iterable);
+
+          result.should.eql('26');
         });
 
         it('correctly appends into an object', () => {

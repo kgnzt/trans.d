@@ -1,6 +1,7 @@
 'use strict';
 
-const functional = require('../functional');
+const functional = require('../functional'),
+      Build = require('./build');
 
 /**
  * Uses the iteration number as the object key for value.
@@ -57,6 +58,29 @@ module.exports = {
 
     /**
      * Set -> Map.
+     */
+    Map () {
+      return functional.counter(mapIterationToMapKey);
+    }
+  },
+
+  String: {
+    /**
+     * String -> Array.
+     */
+    Array () {
+      return Build.Array;
+    },
+
+    /**
+     * String -> Object.
+     */
+    Object () {
+      return functional.counter(mapIterationToObjectKey);
+    },
+
+    /**
+     * String -> Map.
      */
     Map () {
       return functional.counter(mapIterationToMapKey);
