@@ -12,7 +12,7 @@ const Type = require('./type'),
  * @param {mixed} accumulator
  * @param {Iterable} iterable
  */
-function _accumulate(reducer, state, iterable) {
+function _reduce(reducer, state, iterable) {
   for (let input of iterable) {
     state = reducer(state, ...(Iterable.spreadable(input)));
   }
@@ -32,7 +32,7 @@ function _accumulate(reducer, state, iterable) {
  * @return {Iterable}
  */
 function transduce(transform, step, state, iterable) {
-  return _accumulate(transform(step), state, Iterable.iterator(iterable));
+  return _reduce(transform(step), state, Iterable.iterator(iterable));
 }
 
 /**
