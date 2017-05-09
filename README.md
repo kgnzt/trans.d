@@ -96,9 +96,9 @@ Trans.d supports out of box least suprise remapping.
             delta: 5
           };
     
-    const array = into(xform, [], iterable);
-          object = into(xform, {}, iterable);
-          map = into(xform, new Map(), iterable);
+    const object = into(xform, {}, iterable), // alias: for sequence(xform, iterable);
+          array = into(xform, [], iterable),
+          map = into(xform, new Map(), iterable),
           set = into(xform, new Set(), iterable);
 
     console.log(array);  // [2, 6]
@@ -110,15 +110,15 @@ If you export your custom transforms via transform.export(transforms):
 
     const transform = require('./my-transforms'); // see ./example/transform_exports.js
 
-    const resultArray = transform.sequence.example(iterable);
-          resultObject = transform.into({}).example(iterable),
-          resultMap = transform.into(new Map()).example(iterable),
-          resultSet = transform.into(new Set()).example(iterable);
+    const r1 = transform.sequence.example(iterable),
+          r2 = transform.into({}).example(iterable),
+          r3 = transform.into(new Map()).example(iterable),
+          r4 = transform.into(new Set()).example(iterable);
 
-    console.log(resultArray);  // [2, 6]
-    console.log(resultObject); // { '0': 2, '1': 6 }
-    console.log(resultMap);    // Map { 0 => 2, 1 => 6 }
-    console.log(resultSet);    // Set { 2, 6 }
+    console.log(r1); // [2, 6]
+    console.log(r2); // { '0': 2, '1': 6 }
+    console.log(r3); // Map { 0 => 2, 1 => 6 }
+    console.log(r4); // Set { 2, 6 }
 
 ## Testing
 
