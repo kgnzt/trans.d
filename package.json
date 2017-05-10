@@ -12,10 +12,11 @@
   "author": "nicolas feigenbaum",
   "license": "MIT",
   "devDependencies": {
-    "jshint-junit-reporter": "0.2.2",
+    "grunt": "1.0.1",
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-mocha-test": "^0.12.7",
-    "grunt": "1.0.1",
+    "immutable": "^3.8.1",
+    "jshint-junit-reporter": "0.2.2",
     "mocha": "3.3.0",
     "should": "11.2.1",
     "sinon": "2.2.0"
