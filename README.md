@@ -4,7 +4,7 @@
 
 ## About
 
-A least-suprise, least-configuration, and most-composability transducer framework
+A least-suprise, least-configuration, and most-composable transducer framework
 for Javascript.
 
 ## Features
@@ -36,21 +36,21 @@ To install inside a project, run:
 ### transd (root package import)
 
   * transd
-    * `.transduce(transform, step, output, input)` transform input into output by reducing (building) through step
+    * `.transduce(transform, step, output, input)` transform input to output by reducing via step
       * `transform (function)`
       * `step (function)`
-      * `output (Iterable)`
+      * `output (Mixed)`
       * `input (Iterable)`
     * `.into(transform, output, input)` transform input into output
       * `transform (function)`
-      * `output (Iterable)`
+      * `output (Mixed)`
       * `input (Iterable)`
     * `.sequence(transform, input)` transform input into a new input of input's type
       * `transform (function)`
       * `input (Iterable)`
-    * `.defaults(options)` returns reconfigured transd library using options
-      * `options (function)`
-        - `.type (object)` define custom type handling into transd
+    * `.defaults(options = {})` generate a reconfigured transd library
+      * `options (object)`
+        - `.type (object)` define custom type handling
           - `.[YourType] (object)` 
             - `.input (function)` 
             - `.step (object)` 
