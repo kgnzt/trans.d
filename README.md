@@ -20,7 +20,7 @@ for Javascript.
     - Map
     - Set
     - Generator
-  * Fully configurable.
+  * Configurable.
 
 ## Requirements
   - Node.js

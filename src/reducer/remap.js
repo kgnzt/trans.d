@@ -1,6 +1,6 @@
 'use strict';
 
-const functional = require('../functional'),
+const Functional = require('../functional'),
       Build = require('./build');
 
 /**
@@ -34,37 +34,76 @@ function mapIterationToMapKey(iteration, accumulator, value) {
 module.exports = {
   Array: {
     /**
+     * Array -> Array
+     */
+    Array () {
+      return Build.Array;
+    },
+
+    /**
      * Array -> Object.
      */
     Object () {
-      return functional.counter(mapIterationToObjectKey);
+      return Functional.counter(mapIterationToObjectKey);
     },
 
     /**
      * Array -> Map.
      */
     Map () {
-      return functional.counter(mapIterationToMapKey);
+      return Functional.counter(mapIterationToMapKey);
+    }
+  },
+
+  Map: {
+    /**
+     * Map -> Map.
+     */
+    Map () {
+      return Build.Map;
+    }
+  },
+
+  Object:  {
+    /**
+     * Object -> Object.
+     */
+    Object () {
+      return Build.Object;
     }
   },
 
   Set: {
     /**
+     * Set -> Set.
+     */
+    Set () {
+      return Build.Set;
+    },
+
+    /**
      * Set -> Object.
      */
     Object () {
-      return functional.counter(mapIterationToObjectKey);
+      return Functional.counter(mapIterationToObjectKey);
     },
 
     /**
      * Set -> Map.
      */
     Map () {
-      return functional.counter(mapIterationToMapKey);
+      return Functional.counter(mapIterationToMapKey);
     }
   },
 
   String: {
+    /**
+     * String -> String.
+     */
+    String () {
+      return Build.String;
+    },
+
     /**
      * String -> Array.
      */
@@ -76,14 +115,14 @@ module.exports = {
      * String -> Object.
      */
     Object () {
-      return functional.counter(mapIterationToObjectKey);
+      return Functional.counter(mapIterationToObjectKey);
     },
 
     /**
      * String -> Map.
      */
     Map () {
-      return functional.counter(mapIterationToMapKey);
+      return Functional.counter(mapIterationToMapKey);
     }
   }
 };

@@ -51,7 +51,7 @@ describe('functional', () => {
         yield one;
         yield two;
         yield 5;
-      };
+      }
 
       const initial = [];
 
