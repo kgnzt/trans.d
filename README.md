@@ -150,6 +150,38 @@ If you export your custom transforms via transform.export(transforms):
     console.log(r3); // Map { 0 => 2, 1 => 6 }
     console.log(r4); // Set { 2, 6 }
 
+### Configuration
+
+The trans.d framework provides the ability to configure the internals.
+
+    module.exports = require('transd').defaults({
+      type: {
+        MyType: {
+          input (instance) {
+            return {
+              [Symbol.iterator]: function* () { 
+                for (let [key, value] of instance) {
+                  yield [value, key];
+                }
+              }
+            };
+          },
+          step: { 
+            MyType (accumulator, value, key) {
+              return instance.inject(key, value);
+            },
+            Array (accumulator, value, key) {
+              accumulator.push(value);
+              return accumulator;
+            }
+          }
+          output () {
+            return new MyType();
+          }
+        }
+      }
+    });
+
 ## Testing
 
 Testing requires:
