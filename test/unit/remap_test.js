@@ -13,7 +13,7 @@ describe('remap', () => {
       const from = [],
             to = {};
 
-      const result = keyBetween(from , to);
+      const result = keyBetween(from, to);
 
       result.should.eql('Array.Object');
     });
@@ -22,9 +22,18 @@ describe('remap', () => {
       const from = new Map(),
             to = {};
 
-      const result = keyBetween(from , to);
+      const result = keyBetween(from, to);
 
       result.should.eql('Map.Object');
+    });
+
+    it('returns only the type when from and into are equal', () => {
+      const from = new Map(),
+            to = new Map();
+
+      const result = keyBetween(from, to);
+
+      result.should.eql('Map');
     });
   });
 });

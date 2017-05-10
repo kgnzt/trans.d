@@ -1,8 +1,7 @@
 'use strict';
 
-const Type = require('./type'),
-      remap = require('./remap'),
-      build = require('./build'),
+const Type     = require('./type'),
+      Step     = require('./step'),
       Iterable = require('./iterable');
 
 /**
@@ -21,53 +20,76 @@ function _reduce(reducer, state, iterable) {
 }
 
 /**
- * Applies transform to each each element in iterable and runs the result
- * through the step passing the current state as the accumulator and 
+ * Generates a transduce function with an iterator factory.
+ *
+ * @param {function} iterator
+ * @return {function}
+ */
+function _transduce(iterator) {
+  return (transform, step, output, input) => {
+    return _reduce(transform(step), output, iterator(input));
+  };
+}
+
+/**
+ * Generates an into function using a step factory and transduce function.
+ *
+ * @param {function} between
+ * @param {function} transduce
+ * @return {function}
+ */
+function _into(between, transduce) {
+  return (transform, output, input) => {
+    return transduce(transform, between(input, output), output, input);
+  };
+}
+
+/**
+ * Generates a sequence function using an output factory and an into function.
+ *
+ * @param {function} from
+ * @param {function} into
+ * @return {function}
+ */
+function _sequence(from, into) {
+  return (transform, input) => {
+    return into(transform, from(input), input);
+  };
+}
+
+/**
+ * Applies transform to each each element in input and runs the result
+ * through the step passing the current output as the accumulator and 
  * the transformed element as input.
  *
  * @param {function} transform
  * @param {function} step
- * @param {Iterable} state
- * @param {Iterable} iterable
+ * @param {Iterable} output
+ * @param {Iterable} input
  * @return {Iterable}
  */
-function transduce(transform, step, state, iterable) {
-  return _reduce(transform(step), state, Iterable.iterator(iterable));
-}
+const transduce = _transduce(Iterable.iterator);
 
 /**
- * Applies transform to each each element in iterable and appends it
- * to state (collection).
+ * Applies transform to each each element in input and appends it
+ * to output (collection).
  *
  * @param {function} transform
- * @param {Iterable} state
- * @param {Iterable} iterable
+ * @param {Iterable} output
+ * @param {Iterable} input
  * @return {Iterable}
  */
-function into(transform, state, iterable) {
-  // TODO: reduce this into a single call.
-  let step = build.for(state);
-
-  if (Type.differ(state, iterable)) {
-    if (remap.exists(iterable, state)) {
-      step = remap.between(iterable, state);
-    }
-  }
-
-  return transduce(transform, step, state, iterable);
-}
+const into = _into(Step.between, transduce);
 
 /**
- * Applies transform to each each element in iterable and appends it
- * to a new iterable of the same kind as iterable.
+ * Applies transform to each each element in input and appends it
+ * to a new output of the same kind as input.
  *
  * @param {function} transform
- * @param {Iterable} iterable
+ * @param {Iterable} input
  * @return {Iterable}
  */
-function sequence(transform, iterable) {
-  return into(transform, Iterable.from(iterable), iterable);
-}
+const sequence = _sequence(Iterable.from, into);
 
 module.exports = {
   into,

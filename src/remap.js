@@ -1,9 +1,9 @@
 'use strict';
 
 const reducer = require('./reducer/remap'),
-      type = require('./type'),
-      lodash = require('lodash'),
-      helper = require('./helper');
+      Type    = require('./type'),
+      lodash  = require('lodash'),
+      helper  = require('./helper');
 
 /**
  * Given a type a build reducer for that type is returned.
@@ -18,14 +18,21 @@ const factory = helper.factoryFor(reducer, {
 });
 
 /**
- * Given two objects, a remap lookup key is returned.
+ * Given two objects, a step key is returned.
  *
  * @param {mixed} from
  * @param {mixed} into
  * @return {string}
  */
 function keyBetween(from, into) {
-  return `${type.string(from)}.${type.string(into)}`;
+  const fromType = Type.string(from),
+        intoType = Type.string(into);
+
+  if (fromType === intoType) {
+    return fromType;
+  }
+
+  return `${Type.string(from)}.${Type.string(into)}`;
 }
 
 /**
