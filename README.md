@@ -4,8 +4,8 @@
 
 ## About
 
-A least-suprise, least-configuration, and most-composability transducer library
-for ES6 Javascript.
+A least-suprise, least-configuration, and most-composability transducer framework
+for Javascript.
 
 ## Features
 
@@ -13,12 +13,13 @@ for ES6 Javascript.
   * Transform export shorthands.
   * Transform library.
   * Support for n-ary input transforms.
-  * Support for:
+  * Default support for:
     - Array
     - Object
     - String
     - Map
     - Set
+  * Fully configurable.
 
 ## Requirements
   - Node.js
@@ -35,9 +36,26 @@ To install inside a project, run:
 ### transd (root package import)
 
   * transd
-    * `.transduce(transform, step, state, iterable)` transform iterable into state using step
-    * `.into(transform, state, iterable)` transform iterable into state
-    * `.sequence(transform, iterable)` transform iterable into a new iterable of iterable type
+    * `.transduce(transform, step, output, input)` transform input into output by reducing (building) through step
+      * `transform (function)`
+      * `step (function)`
+      * `output (Iterable)`
+      * `input (Iterable)`
+    * `.into(transform, output, input)` transform input into output
+      * `transform (function)`
+      * `output (Iterable)`
+      * `input (Iterable)`
+    * `.sequence(transform, input)` transform input into a new input of input's type
+      * `transform (function)`
+      * `input (Iterable)`
+    * `.defaults(options)` returns reconfigured transd library using options
+      * `options (function)`
+        - `.type (object)` define custom type handling into transd
+          - `.[YourType] (object)` 
+            - `.input (function)` 
+            - `.step (object)` 
+              - `.[OutputType] (function)` 
+            - `.output (function)` 
     * `.transducer (Object)` see transd.transducer
     * `.transform (Object)` see transd.transform
 

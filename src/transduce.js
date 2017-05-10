@@ -5,6 +5,33 @@ const Type     = require('./type'),
       Iterable = require('./iterable');
 
 /**
+ * TODO: try and add a generic output (new value)
+ */
+const options = {
+  type: {
+    WeakMap: {
+      input (map) {
+        return {
+          [Symbol.iterator]: function* () { 
+            for (let [key, value] of map) {
+              yield value;
+            }
+          }
+        };
+      },
+      step (accumulator, value, key) {
+        accumulator.set(value, key);
+
+        return accumulator;
+      },
+      output () {
+        return new WeakMap();
+      }
+    }
+  }
+};
+
+/**
  * Iterates using an iterable updating state with each result.
  *
  * @param {function} reducer
@@ -91,7 +118,32 @@ const into = _into(Step.between, transduce);
  */
 const sequence = _sequence(Iterable.from, into);
 
+/**
+ * Generates transduce, into, and sequence functions using options passed.
+ *
+ * @param {object} options
+ * @return {object} result
+ * @return {object} result.transduce
+ * @return {object} result.into
+ * @return {object} result.sequence
+ */
+function defaults(options = {}) {
+  /*
+  options = Object.assign({}, options);
+  // create iterator
+  // create between
+  // create from
+
+  const trands = _transduce(iterator),
+        intor = _into(between, transduce),
+        seq = _sequence(from, into);
+
+  return { transduce, into, sequence };
+  */
+}
+
 module.exports = {
+  defaults,
   into,
   sequence,
   transduce
