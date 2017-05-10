@@ -19,6 +19,7 @@ for Javascript.
     - String
     - Map
     - Set
+    - Generator
   * Fully configurable.
 
 ## Requirements

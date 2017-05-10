@@ -46,6 +46,20 @@ describe('functional', () => {
       result.should.eql([2, 6]);
     });
 
+    it('supports generators', () => {
+      function* example(one, two) {
+        yield one;
+        yield two;
+        yield 5;
+      };
+
+      const initial = [];
+
+      const result = into(transform, initial, example(1, 2));
+
+      result.should.eql([2, 6]);
+    });
+
     it('supports objects', () => {
       const iterable = { a: 1, b: 2, c: 5 },
             initial = {};
