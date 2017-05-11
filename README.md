@@ -72,6 +72,8 @@ To install inside a project, run:
     * `.filter(predicate)` keep the current value if predicate evaluates to true
       * `predicate (function)` 
     * `.dedupe()` remove duplicates
+    * `.rekey(iteratee)` adjust output keys
+      * `iteratee (function)`
     * `.identity(input)` given input, input is returned
       * `input (mixed)`
     * `.negate(input)` take the complement of the input

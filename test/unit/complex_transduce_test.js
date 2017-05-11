@@ -44,6 +44,16 @@ describe('functional', () => {
       result.should.eql({ e: -2, f: 42, g: 382 });
     });
 
+    it('object rekeying', () => {
+      const xform = functional.compose(transform, transducer.rekey(x => `${x}_test`)),
+            iterable = { a: 1, b: 2, c: 5, d: 8, e: 9, f: 11, g: 21 },
+            initial = {};
+
+      const result = into(xform, initial, iterable);
+
+      result.should.eql({ e_test: -2, f_test: 42, g_test: 382 });
+    });
+
     it('supports Maps', () => {
       const iterable = new Map(),
             initial = new Map();

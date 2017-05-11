@@ -3,7 +3,7 @@
 const should = require('should');
 
 describe('transducer', () => {
-  const transducer = require('../../src/transducer');
+  const transducer = require('../../../src/transducer');
 
   function pickInput (accumulator, input) {
     return input;
@@ -15,6 +15,12 @@ describe('transducer', () => {
     return accumulator;
   }
 
+  function setKey (accumulator, value, key) {
+    accumulator[key] = value;
+
+    return accumulator;
+  }
+
   describe('alias functions tested in functional', () => {
     it('includes identity', () => {
       transducer.should.have.property('identity');
@@ -22,39 +28,6 @@ describe('transducer', () => {
 
     it('includes negate', () => {
       transducer.should.have.property('negate');
-    });
-  });
-
-  describe('forward', () => {
-    const { forward } = transducer;
-
-    const { InputTuple } = require('../../src/iterable');
-
-    it('returns the new value as an array when input length was 1', () => {
-      const inputs = [10],
-            value = 20;
-
-      const result = forward(inputs, value);
-
-      result.should.eql([20]);
-    });
-
-    it('returns new array of spreadable inputs if length was greater than 1', () => {
-      const inputs = [10, 'alpha', 'beta', 22],
-            value = 20;
-
-      const result = forward(inputs, value);
-
-      result.should.eql([20, 'alpha', 'beta', 22]);
-    });
-
-    it('when the value is an InputTuple, the input tuple will be forwarded', () => {
-      const inputs = [1, 'foo'],
-            value = new InputTuple(2, 'fooer');
-
-      const result = forward(inputs, value);
-
-      result.should.equal(value);
     });
   });
 
@@ -174,6 +147,21 @@ describe('transducer', () => {
       const result = transform(accumulator, 2);
 
       result.should.eql([2, 3]);
+    });
+  });
+
+  describe('rekey', () => {
+    const { rekey } = transducer;
+
+    it('returns the result of the iteratee', () => {
+      const iteratee = key => `${key}_append`,
+            accumulator = {},
+            input = 10;
+
+      const transform = rekey(iteratee)(setKey);
+      const result = transform(accumulator, 10, 'key');
+
+      result.should.eql({ key_append: 10 });
     });
   });
 

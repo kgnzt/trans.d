@@ -1,15 +1,16 @@
 'use strict';
 
-const Type     = require('./type'),
+// @todo remove lodash dep
+const lodash   = require('lodash'),
+      Type     = require('./type'),
       Step     = require('./step'),
       Input    = require('./input'),
       Output   = require('./output'),
       Iterable = require('./iterable');
 
-const Remap = require('./reducer/remap');
-const Adjuster = require('./input/adjuster');
-const Initializer = require('./output/initializer');
-const lodash = require('lodash');
+const Remap = require('./reducer/remap'),
+      Adjuster = require('./input/adjuster'),
+      Initializer = require('./output/initializer');
 
 function gather(options, item) {
   return lodash.reduce(options, (accumulator, config, type) => {

@@ -1,9 +1,10 @@
 'use strict';
 
-const lodash = require('lodash'),
-      State = require('./state'),
-      Iterable = require('./iterable'),
-      functional = require('./functional');
+const lodash     = require('lodash'),
+      State      = require('../state'),
+      Helper     = require('../helper'),
+      API        = require('./api'),
+      Functional = require('../functional');
 
 // TODO: consider NOT exporting forward or importing it from another module.
 // TODO: it is not a transducer, its a helper.
@@ -22,25 +23,6 @@ function enumerate() {
 }
 
 /**
- * Correctly forwards inputs with any updated values in a transducer ->
- * transducer chain.
- *
- * TODO: unit-test the Iterable.isInputTuple return.
- *
- * @param {array[mixed]} inputs
- * @param {mixed} value - new initial input (output) for next transducer
- */
-function forward(inputs, value) {
-  if (Iterable.isInputTuple(value)) {
-    return value;
-  } else if (inputs.length > 1) {
-    return [value, ...inputs.slice(1, inputs.length)];
-  }
-
-  return [value];
-}
-
-/**
  * Includes the first N inputs.
  *
  * @param {number} count
@@ -48,7 +30,7 @@ function forward(inputs, value) {
  */
 function take(count) {
   return step => {
-    return functional.counter((iteration, state, ...inputs) => {
+    return Functional.counter((iteration, state, ...inputs) => {
       return (iteration >= count) ? state : step(state, ...inputs);
     });
   };
@@ -62,7 +44,7 @@ function take(count) {
  */
 function drop(count) {
   return step => {
-    return functional.counter((iteration, state, ...inputs) => {
+    return Functional.counter((iteration, state, ...inputs) => {
       return (iteration < count) ? state : step(state, ...inputs);
     });
   };
@@ -107,7 +89,7 @@ function cat(step) {
 function map(iteratee) {
   return step => {
     return (state, ...inputs) => {
-      return step(state, ...(forward(inputs, iteratee(...inputs))));
+      return step(state, ...(API.forward(inputs, iteratee(...inputs))));
     };
   };
 }
@@ -148,28 +130,9 @@ function dedupe() {
 }
 
 /**
- * Stateful transducer that removes duplicate inputs.
+ * Stateful transducer that adds additional input between each output.
  *
- * @return {function} Dedupe transducer.
- */
-function dedupe() {
-  const set = new Set();
-
-  return step => {
-    return (state, ...inputs) => {
-      state = set.has(...inputs) ? state : step(state, ...inputs);
-
-      set.add(...inputs);
-
-      return state;
-    };
-  };
-}
-
-/**
- * Interpose additional input between output.
- *
- * @return {function} Dedupe transducer.
+ * @return {function} Interpose transducer.
  */
 function interpose(...interpose) {
   let iteration = 0;
@@ -187,16 +150,29 @@ function interpose(...interpose) {
   };
 }
 
+/**
+ * Transducer to adjust output keys.
+ *
+ * @return {function} Rekey transducer.
+ */
+function rekey(iteratee) {
+  return step => {
+    return (state, ...inputs) => {
+      return step(state, ...(Helper.swapAdjust(inputs, 0, 1, iteratee)));
+    };
+  };
+}
+
 module.exports = {
-  forward,
+  rekey,
   enumerate,
   dedupe,
   interpose,
   drop,
   cat,
   filter,
-  identity: functional.identity,
+  identity: Functional.identity,
   map,
-  negate: functional.negate,
+  negate: Functional.negate,
   take
 };

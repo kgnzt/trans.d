@@ -1,9 +1,28 @@
 'use strict';
 
+// @todo remove lodash dep
 const functional = require('./functional'),
       lodash = require('lodash');
 
-// TODO: remove lodash dep
+// @todo unit-test
+function swap(array, i1, i2) {
+  const result = Array.from(array);
+
+  const temp = array[i1];
+
+  result[i1] = array[i2];
+  result[i2] = temp;
+
+  return result;
+}
+
+// @todo unit-test
+function swapAdjust(array, i1, i2, iteratee) {
+  array = swap(array, i1, i2);
+  array[i1] = iteratee(...array);
+
+  return swap(array, i1, i2);
+}
 
 /**
  * Generates an object / key based factory.
@@ -34,5 +53,7 @@ function factoryFor(
 }
 
 module.exports = {
-  factoryFor
+  factoryFor,
+  swap,
+  swapAdjust
 };
