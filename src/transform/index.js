@@ -1,30 +1,29 @@
 'use strict';
 
-const transducer = require('./transducer'),
-      transduce = require('./transduce'),
-      math = require('./math'),
-      functional = require('./functional');
-
-const lodash = require('lodash');
+const Transducer = require('../transducer'),
+      Transduce  = require('../transduce'),
+      Functional = require('../functional'),
+      math       = require('../math'),
+      lodash     = require('lodash');
 
 /**
  * Remove odd inputs.
  */
-const removeOdd = transducer.filter(functional.isEven);
+const removeOdd = Transducer.filter(Functional.isEven);
 
 /**
  * Remove even inputs.
  */
-const removeEven = transducer.filter(functional.isOdd);
+const removeEven = Transducer.filter(Functional.isOdd);
 
 /**
  * Remove even inputs.
  */
-const square = transducer.map(x => x - x);
+const square = Transducer.map(x => x - x);
 
 // Create math based transforms for exporting.
 const mathTransforms = lodash.reduce(math, (acc, func, key) => {
-  acc[key] = transducer.map(func);
+  acc[key] = Transducer.map(func);
 
   return acc;
 }, {});
@@ -34,7 +33,7 @@ const mathTransforms = lodash.reduce(math, (acc, func, key) => {
  */
 function intoFor (transform, state) {
   return iterable => {
-    return transduce.into(transform, state, iterable);
+    return Transduce.into(transform, state, iterable);
   };
 }
 
@@ -43,7 +42,7 @@ function intoFor (transform, state) {
  */
 function sequenceFor (transform) {
   return iterable => {
-    return transduce.sequence(transform, iterable);
+    return Transduce.sequence(transform, iterable);
   };
 }
 

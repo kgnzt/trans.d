@@ -20,7 +20,7 @@ function gather(options, item) {
 
     return accumulator;
   }, {});
-};
+}
 
 function typeOptions(adjusters, remaps, initializers) {
   const result = {};

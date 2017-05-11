@@ -27,7 +27,7 @@ function keyBetween(input, output) {
 function existsFor(steps) {
   return (input, output) => {
     return lodash.has(steps, keyBetween(input, output));
-  }
+  };
 }
 
 /**
@@ -63,7 +63,7 @@ function between(steps) {
     }
   
     return factory(key);
-  }
+  };
 }
 
 module.exports = {
