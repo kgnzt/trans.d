@@ -78,80 +78,6 @@ describe('iterable', () => {
     });
   });
 
-  describe('iterator', () => {
-    const { iterator } = iterable;
-
-    function assertInputs (expected, ...inputs) {
-      expected.forEach((input, index) => {
-        input.should.eql(inputs[index]);
-      });
-    }
-
-    it('produces an inverted input order iteratin for object', () => {
-      const object = { alpha: 1, beta: 2 };
-
-      const result = iterator(object);
-
-      let iteration = 0;
-      for (let value of result) {
-        switch (iteration) {
-          case 2:
-            value.should.be.an.instanceOf(iterable.InputTuple);
-            assertInputs([1, 'alpha'], ...value);
-            break;
-          case 1:
-            value.should.be.an.instanceOf(iterable.InputTuple);
-            assertInputs([2, 'beta'], ...value);
-            break;
-          default:
-            break;
-        }
-
-        iteration++;
-      }
-
-      iteration.should.eql(2);
-    });
-
-    it('produces an inverted argument order iteration for Map', () => {
-      const map = new Map();
-      map.set('alpha', 1);
-      map.set('beta', 2);
-
-      const result = iterator(map);
-
-      let iteration = 0;
-      for (let value of result) {
-        switch (iteration) {
-          case 2:
-            value.should.be.an.instanceOf(iterable.InputTuple);
-            assertInputs([1, 'alpha'], ...value);
-            break;
-          case 1:
-            value.should.be.an.instanceOf(iterable.InputTuple);
-            assertInputs([2, 'beta'], ...value);
-            break;
-          default:
-            break;
-        }
-
-        iteration++;
-      }
-
-      iteration.should.eql(2);
-    });
-
-    it('throws with a non iterable type', () => {
-      class ZooZoo {}
-
-      const instance = new ZooZoo();
-
-      (function () {
-        iterator(instance);
-      }).should.throw('Cannot create the iterator for collection type ZooZoo.');
-    });
-  });
-
   describe('isIterable', () => {
     const { isIterable } = iterable;
 
@@ -181,51 +107,6 @@ describe('iterable', () => {
       const result = isIterable(iterable);
 
       result.should.eql(false);
-    });
-  });
-
-  describe('from', () => {
-    const { from } = iterable;
-
-    it('throws with unknown type', () => {
-      class ZooZoo {}
-
-      (function () {
-        from(new ZooZoo());
-      }).should.throw('Cannot determine the iterator to create for type ZooZoo.');
-    });
-
-    it('handles an Array', () => {
-      const iterable = [];
-
-      const result = from(iterable);
-
-      result.should.be.an.Array();
-    });
-
-    it('handles an Object', () => {
-      const iterable = {};
-
-      const result = from(iterable);
-
-      result.should.be.an.Object();
-      result.should.eql({});
-    });
-
-    it('handles a Map', () => {
-      const iterable = new Map();
-
-      const result = from(iterable);
-
-      result.should.be.an.instanceOf(Map);
-    });
-
-    it('handles a Set', () => {
-      const iterable = new Set();
-
-      const result = from(iterable);
-
-      result.should.be.an.instanceOf(Set);
     });
   });
 });

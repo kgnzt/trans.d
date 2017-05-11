@@ -2,7 +2,16 @@
 
 const Type     = require('./type'),
       Step     = require('./step'),
+      Input    = require('./input'),
+      Output   = require('./output'),
       Iterable = require('./iterable');
+
+const Remap = require('./reducer/remap');
+const Adjuster = require('./input/adjuster');
+const Initializer = require('./output/initializer');
+console.log(Remap);
+console.log(Adjuster);
+console.log(Initializer);
 
 /**
  * TODO: try and add a generic output (new value)
@@ -85,40 +94,6 @@ function _sequence(from, into) {
 }
 
 /**
- * Applies transform to each each element in input and runs the result
- * through the step passing the current output as the accumulator and 
- * the transformed element as input.
- *
- * @param {function} transform
- * @param {function} step
- * @param {Iterable} output
- * @param {Iterable} input
- * @return {Iterable}
- */
-const transduce = _transduce(Iterable.iterator);
-
-/**
- * Applies transform to each each element in input and appends it
- * to output (collection).
- *
- * @param {function} transform
- * @param {Iterable} output
- * @param {Iterable} input
- * @return {Iterable}
- */
-const into = _into(Step.between, transduce);
-
-/**
- * Applies transform to each each element in input and appends it
- * to a new output of the same kind as input.
- *
- * @param {function} transform
- * @param {Iterable} input
- * @return {Iterable}
- */
-const sequence = _sequence(Iterable.from, into);
-
-/**
  * Generates transduce, into, and sequence functions using options passed.
  *
  * @param {object} options
@@ -128,23 +103,19 @@ const sequence = _sequence(Iterable.from, into);
  * @return {object} result.sequence
  */
 function defaults(options = {}) {
-  /*
   options = Object.assign({}, options);
-  // create iterator
-  // create between
-  // create from
 
-  const trands = _transduce(iterator),
-        intor = _into(between, transduce),
-        seq = _sequence(from, into);
+  const adjust = Input.adjust(Adjuster),
+        between = Step.between(Remap),
+        from = Output.from(Initializer);
+
+  const transduce = _transduce(adjust),
+        into = _into(between, transduce),
+        sequence = _sequence(from, into);
 
   return { transduce, into, sequence };
-  */
 }
 
-module.exports = {
-  defaults,
-  into,
-  sequence,
-  transduce
-};
+module.exports = Object.assign({
+  defaults
+}, defaults({}));

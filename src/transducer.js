@@ -1,11 +1,25 @@
 'use strict';
 
 const lodash = require('lodash'),
+      State = require('./state'),
       Iterable = require('./iterable'),
       functional = require('./functional');
 
 // TODO: consider NOT exporting forward or importing it from another module.
 // TODO: it is not a transducer, its a helper.
+
+function enumerate() {
+  return step => {
+    return (state, ...inputs) => {
+      let iteration = State.init(state).with(0);
+      console.log(iteration);
+
+      state = State.unwrap(state);
+
+      return State.wrap(step(state, ...inputs), iteration++);
+    };
+  };
+}
 
 /**
  * Correctly forwards inputs with any updated values in a transducer ->
@@ -57,11 +71,12 @@ function drop(count) {
 /**
  * Iterates using an iterable updating state with each result.
  *
- * TODO: move to functional
+ * TODO: move to functional, can we use reduce in tranduce with iterable spread?
  *
  * @param {function} reducer
  * @param {mixed} accumulator
  * @param {Iterable} iterable
+ * @return {Iterable} mixed
  */
 function reduce(reducer, state, iterable) {
   for (let input of iterable) {
@@ -75,7 +90,7 @@ function reduce(reducer, state, iterable) {
  * Evaluates iteratee with the initial input.
  *
  * @param {function} iteratee
- * @return {function}
+ * @return {function} Cat transducer.
  */
 function cat(step) {
   return (state, ...input) => {
@@ -87,7 +102,7 @@ function cat(step) {
  * Evaluates iteratee with the initial input.
  *
  * @param {function} iteratee
- * @return {function}
+ * @return {function} Map transducer.
  */
 function map(iteratee) {
   return step => {
@@ -97,11 +112,13 @@ function map(iteratee) {
   };
 }
 
+// TODO: unit-test to see if step() needs a forward call for filter and dedupe...
+
 /**
  * Includes inputs where the predicate returns true.
  *
  * @param {function} predicate
- * @return {function}
+ * @return {function} Filter transducer.
  */
 function filter(predicate) {
   return step => {
@@ -111,8 +128,70 @@ function filter(predicate) {
   };
 }
 
+/**
+ * Stateful transducer that removes duplicate inputs.
+ *
+ * @return {function} Dedupe transducer.
+ */
+function dedupe() {
+  const set = new Set();
+
+  return step => {
+    return (state, ...inputs) => {
+      state = set.has(...inputs) ? state : step(state, ...inputs);
+
+      set.add(...inputs);
+
+      return state;
+    };
+  };
+}
+
+/**
+ * Stateful transducer that removes duplicate inputs.
+ *
+ * @return {function} Dedupe transducer.
+ */
+function dedupe() {
+  const set = new Set();
+
+  return step => {
+    return (state, ...inputs) => {
+      state = set.has(...inputs) ? state : step(state, ...inputs);
+
+      set.add(...inputs);
+
+      return state;
+    };
+  };
+}
+
+/**
+ * Interpose additional input between output.
+ *
+ * @return {function} Dedupe transducer.
+ */
+function interpose(...interpose) {
+  let iteration = 0;
+
+  return step => {
+    return (state, ...inputs) => {
+      if (iteration !== 0) {
+        state = step(state, ...interpose);
+      }
+
+      iteration += 1;
+
+      return step(state, ...inputs);
+    };
+  };
+}
+
 module.exports = {
   forward,
+  enumerate,
+  dedupe,
+  interpose,
   drop,
   cat,
   filter,

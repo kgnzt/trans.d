@@ -60,6 +60,36 @@ describe('functional', () => {
       result.should.eql([2, 6]);
     });
 
+/*
+    it('test', () => {
+      const xform = functional.compose(
+        transducer.interpose('lala')
+      ); 
+
+      const iterable = [1, 2, 3, 4],
+            initial = [];
+
+      const result = into(xform, initial, iterable);
+
+      result.should.eql([1, 2]);
+    });
+    */
+
+/*
+    it('test', () => {
+      const xform = functional.compose(
+        transducer.enumerate()
+      ); 
+
+      const iterable = [1, 2, 3, 4],
+            initial = [];
+
+      const result = into(xform, initial, iterable);
+
+      result.should.eql([1, 2]);
+    });
+    */
+
     it('supports objects', () => {
       const iterable = { a: 1, b: 2, c: 5 },
             initial = {};

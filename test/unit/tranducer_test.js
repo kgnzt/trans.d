@@ -9,6 +9,12 @@ describe('transducer', () => {
     return input;
   }
 
+  function appendArray (accumulator, input) {
+    accumulator.push(input);
+
+    return accumulator;
+  }
+
   describe('alias functions tested in functional', () => {
     it('includes identity', () => {
       transducer.should.have.property('identity');
@@ -151,6 +157,23 @@ describe('transducer', () => {
       const result = transform(accumulator, input);
 
       result.should.eql(input);
+    });
+  });
+
+  describe('dedupe', () => {
+    const { dedupe } = transducer;
+
+    it('returns the result of the iteratee', () => {
+      const accumulator = [];
+
+      const transform = dedupe()(appendArray);
+
+      transform(accumulator, 2);
+      transform(accumulator, 2);
+      transform(accumulator, 3);
+      const result = transform(accumulator, 2);
+
+      result.should.eql([2, 3]);
     });
   });
 

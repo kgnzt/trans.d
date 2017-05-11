@@ -10,16 +10,16 @@ for Javascript.
 ## Features
 
   * Container remapping.
-  * Transform export shorthands.
+  * Transform shorthands.
   * Transform library.
-  * Support for n-ary input transforms.
+  * N-ary input transforms.
   * Default support for:
     - Array
     - Object
     - String
     - Map
     - Set
-    - Generator
+    - Generator (Iterable)
   * Configurable.
 
 ## Requirements
@@ -71,6 +71,7 @@ To install inside a project, run:
       * `iteratee (function)`
     * `.filter(predicate)` keep the current value if predicate evaluates to true
       * `predicate (function)` 
+    * `.dedupe()` remove duplicates
     * `.identity(input)` given input, input is returned
       * `input (mixed)`
     * `.negate(input)` take the complement of the input
