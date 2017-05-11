@@ -9,18 +9,20 @@ for Javascript.
 
 ## Features
 
-  * Container remapping.
-  * Transform shorthands.
-  * Transform library.
+  * Input type remapping.
   * N-ary input transforms.
-  * Default support for:
+  * Transform library.
+  * Transform shorthand notation.
+  * Configurable. (see transd.defaults)
+    - Custom type support.
+    - Built-in type behavior overriding (transduce, into, sequence).
+  * Support for:
     - Array
     - Object
     - String
     - Map
     - Set
     - Generator (Iterable)
-  * Configurable.
 
 ## Requirements
   - Node.js
