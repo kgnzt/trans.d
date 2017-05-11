@@ -9,35 +9,57 @@ const Type     = require('./type'),
 const Remap = require('./reducer/remap');
 const Adjuster = require('./input/adjuster');
 const Initializer = require('./output/initializer');
-console.log(Remap);
-console.log(Adjuster);
-console.log(Initializer);
+const lodash = require('lodash');
+
+function gather(options, item) {
+  return lodash.reduce(options, (accumulator, config, type) => {
+    if (item in config) {  
+      accumulator[type] = config[item];
+    }
+
+    return accumulator;
+  }, {});
+};
+
+function typeOptions(adjusters, remaps, initializers) {
+  const result = {};
+
+  lodash.reduce(remaps, (accumulator, subtype, type) => {
+    if (!(type in accumulator)) {
+      accumulator[type] = {};
+    }
+
+    accumulator[type].step = subtype;
+
+    return accumulator;
+  }, result);
+
+  lodash.reduce(adjusters, (accumulator, adjuster, type) => {
+    if (!(type in accumulator)) {
+      accumulator[type] = {};
+    }
+
+    accumulator[type].input = adjuster;
+    return accumulator;
+  }, result);
+
+  lodash.reduce(initializers, (accumulator, initializer, type) => {
+    if (!(type in accumulator)) {
+      accumulator[type] = {};
+    }
+
+    accumulator[type].output = initializer;
+    return accumulator;
+  }, result);
+
+  return result;
+}
 
 /**
  * TODO: try and add a generic output (new value)
  */
-const options = {
-  type: {
-    WeakMap: {
-      input (map) {
-        return {
-          [Symbol.iterator]: function* () { 
-            for (let [key, value] of map) {
-              yield value;
-            }
-          }
-        };
-      },
-      step (accumulator, value, key) {
-        accumulator.set(value, key);
-
-        return accumulator;
-      },
-      output () {
-        return new WeakMap();
-      }
-    }
-  }
+const DEFAULT_OPTIONS = {
+  type: typeOptions(Adjuster, Remap, Initializer)
 };
 
 /**
@@ -103,11 +125,11 @@ function _sequence(from, into) {
  * @return {object} result.sequence
  */
 function defaults(options = {}) {
-  options = Object.assign({}, options);
+  options = Object.assign({}, options, DEFAULT_OPTIONS);
 
-  const adjust = Input.adjust(Adjuster),
-        between = Step.between(Remap),
-        from = Output.from(Initializer);
+  const adjust = Input.adjust(gather(options.type, 'input')),
+        between = Step.between(gather(options.type, 'step')),
+        from = Output.from(gather(options.type, 'output'));
 
   const transduce = _transduce(adjust),
         into = _into(between, transduce),
