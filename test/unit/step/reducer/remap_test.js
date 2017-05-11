@@ -4,7 +4,7 @@ const should = require('should'),
       sinon = require('sinon');
 
 describe('reducer/remap', () => {
-  const remap = require('../../../src/reducer/remap');
+  const remap = require('../../../../src/step/reducer/remap');
 
   describe('Array', () => {
     let remapping = remap.Array;

@@ -8,7 +8,7 @@ const lodash   = require('lodash'),
       Output   = require('./output'),
       Iterable = require('./iterable');
 
-const Remap = require('./reducer/remap'),
+const Remap = require('./step/reducer/remap'),
       Adjuster = require('./input/adjuster'),
       Initializer = require('./output/initializer');
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const reducer = require('./reducer');
+const reducer = require('./step/reducer');
 
 /**
  * Determine if the input is even.

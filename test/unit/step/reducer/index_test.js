@@ -3,7 +3,7 @@
 const should = require('should');
 
 describe('reducing', () => {
-  const reducing = require('../../../src/reducer');
+  const reducing = require('../../../../src/step/reducer');
 
   describe('identity', () => {
     const { identity } = reducing;

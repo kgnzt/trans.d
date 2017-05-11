@@ -4,7 +4,7 @@ const should = require('should'),
       sinon = require('sinon');
 
 describe('reducer/build', () => {
-  const build = require('../../../src/reducer/build');
+  const build = require('../../../../src/step/reducer/build');
 
   describe('Array', () => {
     it('calls push on accumulator passing input', () => {

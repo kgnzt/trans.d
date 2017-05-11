@@ -1,7 +1,7 @@
 'use strict';
 
-const Functional = require('../functional'),
-      Build = require('./build');
+const Build      = require('./build'),
+      Functional = require('../../functional');
 
 /**
  * Uses the iteration number as the object key for value.
