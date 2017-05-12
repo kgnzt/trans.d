@@ -3,6 +3,7 @@
 const lodash     = require('lodash'),
       State      = require('../state'),
       Helper     = require('../helper'),
+      Iterable   = require('../iterable'),
       API        = require('./api'),
       Functional = require('../functional');
 
@@ -151,6 +152,32 @@ function interpose(...interpose) {
 }
 
 /**
+ * Stateless transducer that reverses input sequence.
+ *
+ * @param {function} step
+ * @return {function}
+ */
+function reversed(step) {
+  return (state, ...inputs) => {
+    return step(state, ...inputs.reverse());
+  };
+}
+
+/**
+ * Stateless transducer that reverses input sequence.
+ *
+ * @param {function} step
+ * @return {function}
+ */
+function swap(a, b) {
+  return (step) => {
+    return (state, ...inputs) => {
+      return step(state, ...Helper.swap(inputs, a, b));
+    };
+  };
+}
+
+/**
  * Transducer to adjust output keys.
  *
  * @return {function} Rekey transducer.
@@ -165,6 +192,8 @@ function rekey(iteratee) {
 
 module.exports = {
   rekey,
+  reversed,
+  swap,
   enumerate,
   dedupe,
   interpose,

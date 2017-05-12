@@ -65,21 +65,25 @@ To install inside a project, run:
 ### transducer
 
   * transd.transducer
-    * `.take(count)` keep the first count inputs
-      * `count (number)` number of inputs to keep
+    * `.dedupe()` remove duplicates
     * `.drop(count)` remove the first count inputs
       * `count (number)` number of inputs to remove
-    * `.map(iteratee)` evaluate the current value through iteratee
-      * `iteratee (function)`
     * `.filter(predicate)` keep the current value if predicate evaluates to true
       * `predicate (function)` 
-    * `.dedupe()` remove duplicates
-    * `.rekey(iteratee)` adjust output keys
-      * `iteratee (function)`
     * `.identity(input)` given input, input is returned
       * `input (mixed)`
+    * `.map(iteratee)` evaluate the current value through iteratee
+      * `iteratee (function)`
     * `.negate(input)` take the complement of the input
       * `input (boolean)`
+    * `.rekey(iteratee)` adjust output keys
+      * `iteratee (function)`
+    * `.reversed` reverses the inputs order
+    * `.swap(a, b)` swap two inputs (input index start at 0)
+      * `a (number)` input index
+      * `b (number)` input index
+    * `.take(count)` keep the first count inputs
+      * `count (number)` number of inputs to keep
 
 ### transform
 

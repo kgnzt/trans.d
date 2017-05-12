@@ -165,6 +165,31 @@ describe('transducer', () => {
     });
   });
 
+  describe('swap', () => {
+    const { swap } = transducer;
+
+    it('correctly swaps the input', () => {
+      const a = 1,
+            b = 2;
+
+      const transform = swap(a, b)((_, d, b, c, a) => `${d}, ${b}, ${c}, ${a}`);
+      const result = transform([], 'd', 'c', 'b', 'a');
+
+      result.should.eql('d, b, c, a');
+    });
+  });
+
+  describe('reversed', () => {
+    const { reversed } = transducer;
+
+    it('returns the result of the iteratee', () => {
+      const transform = reversed((_, a, b, c) => `${a}, ${b}, ${c}`);
+      const result = transform([], 'c', 'b', 'a');
+
+      result.should.eql('a, b, c');
+    });
+  });
+
   describe('map', () => {
     const { map } = transducer;
 
