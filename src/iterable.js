@@ -60,7 +60,7 @@ function isIterable(object) {
 
 module.exports = {
   InputTuple,
-  spreadable,
   isInputTuple,
-  isIterable
+  isIterable,
+  spreadable
 };
