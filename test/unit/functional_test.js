@@ -6,38 +6,6 @@ const should = require('should'),
 describe('functional', () => {
   const functional = require('../../src/functional');
 
-  describe('isEven', () => {
-    const { isEven } = functional;
-
-    it('returns true if the input is even', () => {
-      const result = isEven(2);
-
-      result.should.eql(true);
-    });
-
-    it('returns false if the input is odd', () => {
-      const result = isEven(3);
-
-      result.should.eql(false);
-    });
-  });
-
-  describe('isOdd', () => {
-    const { isOdd } = functional;
-
-    it('returns true if the input is odd', () => {
-      const result = isOdd(3);
-
-      result.should.eql(true);
-    });
-
-    it('returns false if the input is even', () => {
-      const result = isOdd(2);
-
-      result.should.eql(false);
-    });
-  });
-
   describe('call', () => {
     const { call } = functional;
 

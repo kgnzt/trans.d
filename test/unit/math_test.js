@@ -6,6 +6,39 @@ const should = require('should'),
 describe('math', () => {
   const math = require('../../src/math');
 
+  describe('isEven', () => {
+    const { isEven } = math;
+
+    it('returns true if the input is even', () => {
+      const result = isEven(2);
+
+      result.should.eql(true);
+    });
+
+    it('returns false if the input is odd', () => {
+      const result = isEven(3);
+
+      result.should.eql(false);
+    });
+  });
+
+  describe('isOdd', () => {
+    const { isOdd } = math;
+
+    it('returns true if the input is odd', () => {
+      const result = isOdd(3);
+
+      result.should.eql(true);
+    });
+
+    it('returns false if the input is even', () => {
+      const result = isOdd(2);
+
+      result.should.eql(false);
+    });
+  });
+
+
   describe('square', () => {
     const { square } = math;
 

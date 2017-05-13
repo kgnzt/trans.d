@@ -9,12 +9,12 @@ const Transducer = require('../transducer'),
 /**
  * Remove odd inputs.
  */
-const removeOdd = Transducer.filter(Functional.isEven);
+const removeOdd = Transducer.filter(math.isEven);
 
 /**
  * Remove even inputs.
  */
-const removeEven = Transducer.filter(Functional.isOdd);
+const removeEven = Transducer.filter(math.isOdd);
 
 /**
  * Remove even inputs.

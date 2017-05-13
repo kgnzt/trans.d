@@ -3,22 +3,6 @@
 const reducer = require('./step/reducer');
 
 /**
- * Determine if the input is even.
- *
- * @param {number} input
- * @return {boolean}
- */
-function isEven (x) { return (x % 2) === 0; }
-
-/**
- * Determine if the input is odd.
- *
- * @param {number} input
- * @return {boolean}
- */
-const isOdd = negate(isEven);
-
-/**
  * Calls the passed function returning the result.
  *
  * TODO: consider forwarding rest args
@@ -87,11 +71,9 @@ function compose(...transforms) {
 }
 
 module.exports = {
-  isEven,
-  isOdd,
+  call,
+  compose,
   counter,
   identity,
-  negate,
-  call,
-  compose
+  negate
 };

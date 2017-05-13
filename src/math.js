@@ -1,6 +1,7 @@
 'use strict';
 
-const lodash = require('lodash');
+const lodash = require('lodash'),
+      Functional = require('./functional');
 
 /**
  * Square the input.
@@ -33,6 +34,22 @@ function decrement (x) { return (x - 1); }
  * @return {boolean}
  */
 function reciprical (x) { return (1 / x); }
+
+/**
+ * Determine if input is even.
+ *
+ * @param {number} input
+ * @return {boolean}
+ */
+function isEven (x) { return (x % 2) === 0; }
+
+/**
+ * Determine if input is odd.
+ *
+ * @param {number} input
+ * @return {boolean}
+ */
+const isOdd = Functional.negate(isEven);
 
 const imports = lodash.pick(Math, [
   'abs',
@@ -71,8 +88,10 @@ const imports = lodash.pick(Math, [
 ]);
 
 module.exports = Object.assign({
-  square,
-  increment,
-  reciprical,
   decrement,
+  increment,
+  isEven,
+  isOdd,
+  reciprical,
+  square
 }, imports);
