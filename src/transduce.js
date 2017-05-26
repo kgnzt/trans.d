@@ -2,6 +2,7 @@
 
 // @todo remove lodash dep
 const lodash   = require('lodash'),
+      API      = require('./transducer/api'),
       Type     = require('./type'),
       Step     = require('./step'),
       Input    = require('./input'),
@@ -75,7 +76,7 @@ function _reduce(reducer, state, iterable) {
     state = reducer(state, ...(Iterable.spreadable(input)));
   }
 
-  return state;
+  return API.complete(state);
 }
 
 /**

@@ -107,6 +107,27 @@ describe('transducer', () => {
     });
   });
 
+  describe('enumerate', () => {
+    const { enumerate } = transducer;
+
+    it('', () => {
+      const state = [],
+            reducer = (state, ...inputs) => {
+              state.push(...inputs);
+
+              return state;
+            };
+
+      const transform = enumerate()(reducer);
+
+      const result = transform(state, 5);
+
+      state.should.eql([0, 5]);
+      result.outter.should.equal(state);
+      result.inner.should.eql(1);
+    });
+  });
+
   describe('filter', () => {
     const { filter } = transducer;
 

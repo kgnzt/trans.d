@@ -1,20 +1,26 @@
 'use strict';
 
-const lodash     = require('lodash'),
-      State      = require('../state'),
-      Helper     = require('../helper'),
-      Iterable   = require('../iterable'),
-      API        = require('./api'),
-      Functional = require('../functional');
+const lodash      = require('lodash'),
+      Helper      = require('../helper'),
+      Iterable    = require('../iterable'),
+      Functional  = require('../functional'),
+      { inner,
+        outter,
+        wrap,
+        forward } = require('./api');
 
-// TODO: consider NOT exporting forward or importing it from another module.
-// TODO: it is not a transducer, its a helper.
-
+/**
+ * Stateful transducer that prepends the current iteration to inputs.
+ *
+ * @return {function}
+ */
 function enumerate() {
-  let iteration = 0;
   return step => {
     return (state, ...inputs) => {
-      return step(state, iteration++, ...inputs)
+      const iteration = inner(state, 0),
+            initial = outter(state);
+
+      return wrap(step(initial, iteration, ...inputs), iteration + 1);
     };
   };
 }
@@ -86,7 +92,7 @@ function cat(step) {
 function map(iteratee) {
   return step => {
     return (state, ...inputs) => {
-      return step(state, ...(API.forward(inputs, iteratee(...inputs))));
+      return step(state, ...(forward(inputs, iteratee(...inputs))));
     };
   };
 }
@@ -176,22 +182,23 @@ function repeat(count) {
 }
 
 /**
- * Repeats input.
+ * Transducer to buffer input.
  *
  * @param {function} step
  * @return {function}
  */
-function buffer(size) {
-  let buffer = [],
-      iteration = 0;
+function buffer(size, buffer = []) {
+  let iteration = 0;
 
   return step => {
     return (state, ...inputs) => {
+      // add inputs to buffer when size has not yet been met
       if (iteration < size) {
-        buffer.push([...inputs]);
+        buffer.push(inputs);
         iteration++;
       }
 
+      // if buffer size has been met, call step with buffered inputs
       if (iteration === size) {
         const result = step(state, buffer)
 
@@ -219,24 +226,6 @@ function collect() {
 }
 
 /**
- * Stateful transducer that reverses input sequence.
- *
- * @todo unit-test, export
- *
- * @param {function} step
- * @return {function}
- */
-function count() {
-  const i = 1;
-
-  return step => {
-    return (state, ...inputs) => {
-      return step(state, i++, ...inputs);
-    };
-  };
-}
-
-/**
  * Stateless transducer that reverses input sequence.
  *
  * @param {function} step
@@ -249,7 +238,7 @@ function reversed(step) {
 }
 
 /**
- * Stateless transducer that reverses input sequence.
+ * Stateless transducer that swaps two elements in an input sequence.
  *
  * @param {function} step
  * @return {function}
@@ -263,7 +252,7 @@ function swap(a, b) {
 }
 
 /**
- * Transducer to adjust output keys.
+ * Transducer used to adjust associative container keys.
  *
  * @return {function} Rekey transducer.
  */
@@ -279,7 +268,7 @@ module.exports = {
   rekey,
   reversed,
   swap,
-  get enumerate () { return enumerate(); },
+  enumerate,
   dedupe,
   interpose,
   drop,
