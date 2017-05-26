@@ -67,6 +67,8 @@ To install inside a project, run:
 Contains a collection of transducers for writing transforms. 
 
   * transd.transducer
+    * `.buffer(size)` buffers input sequence to size number of iterations
+    * `.cat()` concat input sequence
     * `.dedupe()` remove duplicates
     * `.drop(count)` remove the first count inputs
       * `count (number)` number of inputs to remove
@@ -79,9 +81,13 @@ Contains a collection of transducers for writing transforms.
       * `iteratee (function)`
     * `.negate(input)` take the complement of the input
       * `input (boolean)`
+    * `.peaks(cutoff)` removes non peak inputs values
+      * `cutoff (number)`
     * `.rekey(iteratee)` adjust output keys
       * `iteratee (function)`
-    * `.reversed` reverses the inputs order
+    * `.repeat(count)` repeat input sequence count times
+      * `count (number)`
+    * `.reverse` reverse input order
     * `.swap(a, b)` swap two inputs (input index start at 0)
       * `a (number)` input index
       * `b (number)` input index
