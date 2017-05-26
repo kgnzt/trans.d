@@ -73,6 +73,15 @@ module.exports = {
     }
   },
 
+  Number: {
+    /**
+     * Number -> Number.
+     */
+    Number () {
+      return Build.Number;
+    }
+  },
+
   Set: {
     /**
      * Set -> Set.

@@ -70,6 +70,17 @@ describe('reducer/build', () => {
     });
   });
 
+  describe('Number', () => {
+    it('adds value to accumulator', () => {
+      const accumulator = 2,
+            input = 13;
+
+      const result = build.Number(accumulator, input);
+
+      result.should.eql(15);
+    });
+  });
+
   describe('String', () => {
     it('concats the accumulator to the input value', () => {
       const accumulator = 'hello ',

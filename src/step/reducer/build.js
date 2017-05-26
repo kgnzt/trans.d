@@ -29,6 +29,17 @@ module.exports = {
   },
 
   /**
+   * Adds input value to accumulator.
+   *
+   * @param {number}
+   * @param {number}
+   * @return {number}
+   */
+  Number (accumulator, value) {
+    return accumulator + value;
+  },
+
+  /**
    * Sets the input key to equal value on accumulator.
    *
    * @param {Object}

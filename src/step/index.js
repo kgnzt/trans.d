@@ -41,7 +41,7 @@ function existsFor(steps) {
 function between(steps) {
   const factory = Helper.factoryFor(steps, {
     error (key) {
-      return `Cannot determine the step reducer to use for ${key}.`;
+      return `Could not determine the reducer to use for: ${key.split('.').join(' -> ')}.`;
     }
   });
   const exists = existsFor(steps);
