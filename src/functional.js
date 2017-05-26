@@ -64,6 +64,24 @@ function counter(func) {
 }
 
 /**
+ * Iterates using an iterable updating state with each result.
+ *
+ * TODO: unit-test
+ *
+ * @param {function} reducer
+ * @param {mixed} accumulator
+ * @param {Iterable} iterable
+ * @return {Iterable} mixed
+ */
+function reduce(reducer, state, iterable) {
+  for (let input of iterable) {
+    state = reducer(state, input);
+  }
+
+  return state;
+}
+
+/**
  * @param {function} iteratee
  * @param {array[]} collection
  * @param {mixed} accumulator
@@ -111,10 +129,11 @@ function curry(func, arity, captured = []) {
 
 module.exports = {
   call,
-  curry,
   compose,
-  times,
   counter,
+  curry,
   identity,
-  negate
+  negate,
+  reduce,
+  times
 };

@@ -59,24 +59,6 @@ function drop(count) {
 }
 
 /**
- * Iterates using an iterable updating state with each result.
- *
- * TODO: move to functional, can we use reduce in tranduce with iterable spread?
- *
- * @param {function} reducer
- * @param {mixed} accumulator
- * @param {Iterable} iterable
- * @return {Iterable} mixed
- */
-function reduce(reducer, state, iterable) {
-  for (let input of iterable) {
-    state = reducer(state, input);
-  }
-
-  return state;
-}
-
-/**
  * Evaluates iteratee with the initial input.
  *
  * @param {function} iteratee
@@ -84,7 +66,7 @@ function reduce(reducer, state, iterable) {
  */
 function cat(step) {
   return (state, ...input) => {
-    return reduce(step, state, ...input);
+    return Functional.reduce(step, state, ...input);
   };
 }
 
@@ -239,19 +221,19 @@ function rekey(iteratee) {
 }
 
 module.exports = {
-  rekey,
-  reversed,
-  swap,
-  enumerate,
-  dedupe,
-  interpose,
-  drop,
-  repeat,
   buffer,
   cat,
+  dedupe,
+  drop,
+  enumerate,
   filter,
   identity: Functional.identity,
+  interpose,
   map,
   negate: Functional.negate,
+  rekey,
+  repeat,
+  reversed,
+  swap,
   take
 };
