@@ -17,6 +17,7 @@
     "grunt-mocha-test": "^0.12.7",
     "immutable": "^3.8.1",
     "jshint-junit-reporter": "0.2.2",
+    "mathjs": "^3.13.1",
     "mocha": "3.3.0",
     "should": "11.2.1",
     "sinon": "2.2.0"

@@ -6,6 +6,68 @@ const should = require('should'),
 describe('functional', () => {
   const functional = require('../../src/functional');
 
+  describe('curry', () => {
+    const { curry } = functional;
+
+    function test(a, b) {
+      return (a + b);
+    }
+
+    it('generates a function', () => {
+      const result = curry(test);
+
+      result.should.be.a.Function();
+    });
+
+    it('calls curried function when all parameters passed', () => {
+      const curried = curry(test);
+
+      const result = curried(1, 9);
+
+      result.should.eql(10);
+    });
+
+    it('delays calling function when not all parameters passed', () => {
+      const curried = curry(test);
+
+      const result = curried(1)(9);
+
+      result.should.eql(10);
+    });
+
+    it('allows custom arity', () => {
+      const callAfter2 = (a, b, c, d, e) => 'alpha';
+
+      const curried = curry(callAfter2, 2);
+
+      const result = curried(1)(2);
+
+      result.should.eql('alpha');
+    });
+  });
+
+  describe('times', () => {
+    const { times } = functional;
+
+    it('calls iteratee count times', () => {
+      const func = sinon.spy();
+
+      times(5, func);
+
+      func.callCount.should.eql(5);
+    });
+
+    it('returns the result of calling iteratee', () => {
+      const func = sinon.stub();
+
+      func.returns('a');
+
+      const result = times(5, func);
+
+      result.should.eql('a');
+    });
+  });
+
   describe('call', () => {
     const { call } = functional;
 

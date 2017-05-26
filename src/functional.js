@@ -3,6 +3,23 @@
 const reducer = require('./step/reducer');
 
 /**
+ * Peforms (calls) iteratee count times.
+ *
+ * @param {number} count
+ * @param {function} func
+ * @return {mixed}
+ */
+function times(count, iteratee) {
+  let result;
+
+  for (let i = 0; i < count; i++) {
+    result = iteratee();
+  }
+
+  return result;
+}
+
+/**
  * Calls the passed function returning the result.
  *
  * TODO: consider forwarding rest args
@@ -70,9 +87,33 @@ function compose(...transforms) {
   return initial => _reduceRight(reducer.func, transforms, initial);
 }
 
+/**
+ * Curry a function.
+ *
+ * @param {function} func
+ * @param {number} arity
+ * @param {array[mixed]} captured
+ * @return {function}
+ */
+function curry(func, arity, captured = []) {
+  arity = arity || func.length;
+
+  return (...args) => {
+    captured.push(...args);
+
+    if (captured.length >= arity) {
+      return func(...captured);
+    }
+
+    return curry(func, arity, captured);
+  };
+}
+
 module.exports = {
   call,
+  curry,
   compose,
+  times,
   counter,
   identity,
   negate

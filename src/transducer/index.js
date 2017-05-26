@@ -11,14 +11,10 @@ const lodash     = require('lodash'),
 // TODO: it is not a transducer, its a helper.
 
 function enumerate() {
+  let iteration = 0;
   return step => {
     return (state, ...inputs) => {
-      let iteration = State.init(state).with(0);
-      console.log(iteration);
-
-      state = State.unwrap(state);
-
-      return State.wrap(step(state, ...inputs), iteration++);
+      return step(state, iteration++, ...inputs)
     };
   };
 }
@@ -63,7 +59,7 @@ function drop(count) {
  */
 function reduce(reducer, state, iterable) {
   for (let input of iterable) {
-    state = reducer(state, ...input);
+    state = reducer(state, input);
   }
 
   return state;
@@ -152,6 +148,95 @@ function interpose(...interpose) {
 }
 
 /**
+ * Stateful transducer that curries extra inputs.
+ *
+ * @todo: unit-test
+ *
+ * @param {function} step
+ * @return {function}
+ */
+function curry(...additional) {
+  return (state, ...inputs) => {
+    return step(state, ...(inputs.concat(additional)));
+  };
+}
+
+/**
+ * Repeats input.
+ *
+ * @param {function} step
+ * @return {function}
+ */
+function repeat(count) {
+  return step => {
+    return (state, ...inputs) => {
+      return Functional.times(count, () => step(state, ...inputs));
+    };
+  };
+}
+
+/**
+ * Repeats input.
+ *
+ * @param {function} step
+ * @return {function}
+ */
+function buffer(size) {
+  let buffer = [],
+      iteration = 0;
+
+  return step => {
+    return (state, ...inputs) => {
+      if (iteration < size) {
+        buffer.push([...inputs]);
+        iteration++;
+      }
+
+      if (iteration === size) {
+        const result = step(state, buffer)
+
+        iteration = 0;
+        buffer = [];
+
+        return result;
+      }
+
+      return state;
+    };
+  };
+}
+
+function collect() {
+  return step => {
+    return (state, ...inputs) => {
+      let d = state[0] || [];
+      d.push(...inputs);
+      state[0] = d;
+
+      return step(state, d);
+    };
+  };
+}
+
+/**
+ * Stateful transducer that reverses input sequence.
+ *
+ * @todo unit-test, export
+ *
+ * @param {function} step
+ * @return {function}
+ */
+function count() {
+  const i = 1;
+
+  return step => {
+    return (state, ...inputs) => {
+      return step(state, i++, ...inputs);
+    };
+  };
+}
+
+/**
  * Stateless transducer that reverses input sequence.
  *
  * @param {function} step
@@ -170,7 +255,7 @@ function reversed(step) {
  * @return {function}
  */
 function swap(a, b) {
-  return (step) => {
+  return step => {
     return (state, ...inputs) => {
       return step(state, ...Helper.swap(inputs, a, b));
     };
@@ -194,10 +279,13 @@ module.exports = {
   rekey,
   reversed,
   swap,
-  enumerate,
+  get enumerate () { return enumerate(); },
   dedupe,
   interpose,
   drop,
+  repeat,
+  collect,
+  buffer,
   cat,
   filter,
   identity: Functional.identity,

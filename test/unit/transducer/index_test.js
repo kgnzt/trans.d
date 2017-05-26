@@ -190,6 +190,16 @@ describe('transducer', () => {
     });
   });
 
+  describe('repeat', () => {
+    const { repeat } = transducer;
+
+    it('returns the result of the iteratee', () => {
+      const result = repeat(3)(appendArray)([], 10);
+
+      result.should.eql([10, 10, 10]);
+    });
+  });
+
   describe('map', () => {
     const { map } = transducer;
 
