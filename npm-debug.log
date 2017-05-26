@@ -1,0 +1,115 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/nicolas/.nvm/versions/node/v7.0.0/bin/node',
+1 verbose cli   '/Users/nicolas/.nvm/versions/node/v7.0.0/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.8
+3 info using node@v7.0.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/nicolas/Desktop/trd',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/nicolas/.npm/trans.d/0.0.0/package.tgz not in flight; packing
+9 verbose correctMkdir /Users/nicolas/.npm correctMkdir not in flight; initializing
+10 info lifecycle trans.d@0.0.0~prepublish: trans.d@0.0.0
+11 silly lifecycle trans.d@0.0.0~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ '/Users/nicolas/.npm/trans.d/0.0.0/package.tgz',
+12 verbose tar pack   '/Users/nicolas/Desktop/trd' ]
+13 verbose tarball /Users/nicolas/.npm/trans.d/0.0.0/package.tgz
+14 verbose folder /Users/nicolas/Desktop/trd
+15 verbose addLocalTarball adding from inside cache /Users/nicolas/.npm/trans.d/0.0.0/package.tgz
+16 verbose correctMkdir /Users/nicolas/.npm correctMkdir not in flight; initializing
+17 silly cache afterAdd trans.d@0.0.0
+18 verbose afterAdd /Users/nicolas/.npm/trans.d/0.0.0/package/package.json not in flight; writing
+19 verbose correctMkdir /Users/nicolas/.npm correctMkdir not in flight; initializing
+20 verbose afterAdd /Users/nicolas/.npm/trans.d/0.0.0/package/package.json written
+21 silly publish { name: 'trans.d',
+21 silly publish   version: '0.0.0',
+21 silly publish   description: 'simple transducers for javascript',
+21 silly publish   main: 'index.js',
+21 silly publish   directories: { test: 'test' },
+21 silly publish   scripts: { test: 'make test' },
+21 silly publish   author: { name: 'nicolas feigenbaum' },
+21 silly publish   license: 'MIT',
+21 silly publish   devDependencies:
+21 silly publish    { grunt: '1.0.1',
+21 silly publish      'grunt-contrib-jshint': '^1.0.0',
+21 silly publish      'grunt-mocha-test': '^0.12.7',
+21 silly publish      immutable: '^3.8.1',
+21 silly publish      'jshint-junit-reporter': '0.2.2',
+21 silly publish      mathjs: '^3.13.1',
+21 silly publish      mocha: '3.3.0',
+21 silly publish      should: '11.2.1',
+21 silly publish      sinon: '2.2.0' },
+21 silly publish   dependencies: { lodash: '^4.17.4' },
+21 silly publish   readme: '![tran.d javascript transducers](/asset/logo.png?raw=true "trans.d javascript transducers.")\n\n# trans.d: Transducer Framework for Javascript.\n\n## About\n\nA least-suprise, least-configuration, transducer framework for Javascript.\n\n## Features\n\n  * Input type remapping.\n  * N-ary input transforms.\n  * Transform library.\n  * Transform shorthand notation.\n  * Configurable. (see transd.defaults)\n    - Custom type support.\n    - Built-in type behavior overriding (transduce, into, sequence).\n  * Support for:\n    - Array\n    - Object\n    - String\n    - Map\n    - Set\n    - Generator (Iterable)\n\n## Requirements\n  - Node.js\n  - NPM\n\n## Installation\n\nTo install inside a project, run:\n\n    npm install trans.d --save\n\n## API\n\n### transd (root package import)\n\n  * transd\n    * `.transduce(transform, step, output, input)` transform input to output by reducing via step\n      * `transform (function)`\n      * `step (function)`\n      * `output (Mixed)`\n      * `input (Iterable)`\n    * `.into(transform, output, input)` transform input into output\n      * `transform (function)`\n      * `output (Mixed)`\n      * `input (Iterable)`\n    * `.sequence(transform, input)` transform input into a new output of input\'s type\n      * `transform (function)`\n      * `input (Iterable)`\n    * `.defaults(options = {})` generate a reconfigured transd library\n      * `options (object)`\n        - `.type (object)` define custom type handling\n          - `.[YourType] (object)` \n            - `.input (function)` \n            - `.step (object)` \n              - `.[OutputType] (function)` \n            - `.output (function)` \n    * `.transducer (Object)` see transd.transducer\n    * `.api (Object)` see transd.api\n    * `.transform (Object)` see transd.transform\n\n### transducer\n\nContains a collection of transducers for writing transforms. \n\n  * transd.transducer\n    * `.buffer(size)` buffers input sequence to size number of iterations\n    * `.cat()` concat input sequence\n    * `.dedupe()` remove duplicates\n    * `.drop(count)` remove the first count inputs\n      * `count (number)` number of inputs to remove\n    * `.enumerate()` prepend current iteration to input sequence\n    * `.filter(predicate)` keep the current value if predicate evaluates to true\n      * `predicate (function)` \n    * `.identity(input)` given input, input is returned\n      * `input (mixed)`\n    * `.map(iteratee)` evaluate the current value through iteratee\n      * `iteratee (function)`\n    * `.negate(input)` take the complement of the input\n      * `input (boolean)`\n    * `.peaks(cutoff)` removes non peak inputs values\n      * `cutoff (number)`\n    * `.rekey(iteratee)` adjust output keys\n      * `iteratee (function)`\n    * `.repeat(count)` repeat input sequence count times\n      * `count (number)`\n    * `.reverse` reverse input order\n    * `.swap(a, b)` swap two inputs (input index start at 0)\n      * `a (number)` input index\n      * `b (number)` input index\n    * `.take(count)` keep the first count inputs\n      * `count (number)` number of inputs to keep\n\n### api\n\nThe transducer API can be used to build additional transducers.\n\n  * transd.api\n    * `.complete(state)` returns the outter state called when chain completes\n    * `.forward(inputs, value)` correctly forwards inputs in transducer chain\n    * `.inner(state, value)` return the inner state\n    * `.isWrapped(state)` determine if state is wrapped\n    * `.outter(state)` return the outter state\n    * `.transducer(transform)` create a transducer given a ternary transform\n      * `transform (function(step, state, ...inputs))`\n    * `.unwrap(state, value)` unwrap state into outter and inner\n    * `.wrap(state, value)` wrap state in state wrapper\n\n### transform\n\nAlso exports all global Math functions as map transforms.\n\n  * transd.transform\n    * `.compose(transducers)`\n      * `transducers (array[function])`\n    * `.export(transforms)`\n      * `transforms (object)`\n    * `.removeOdd(input)`\n      * `input (number)`\n    * `.removeEven(input)`\n      * `input (number)`\n    * `.square(input)`\n      * `input (number)`\n\n## Example\n\nExamples of how to best use the API can be found in ./example.\n\n## Usage\n\nExample:\n\n    const { transform,\n            transducer,\n            sequence,\n            into } = require(\'transd\');\n\n    const xform = transform.compose(\n      transducer.identity,\n      transducer.map(x => x + 1),\n      transducer.map(x => x * 3),\n      transducer.filter(x => (x % 2) === 0)\n    );\n\n    const result = sequence(xform, [10, 9, 41, 3, 8]);\n\n    console.log(result); // [30, 126, 12]\n\n\nTrans.d supports out of box least suprise remapping.\n\n    // ... continued\n    const iterable = {\n            alpha: 1,\n            beta: 2,\n            gamma: 5,\n            delta: 5\n          };\n    \n    const object = into(xform, {}, iterable), // alias: for sequence(xform, iterable);\n          array = into(xform, [], iterable),\n          map = into(xform, new Map(), iterable),\n          set = into(xform, new Set(), iterable);\n\n    console.log(array);  // [2, 6]\n    console.log(object); // { alpha: 2, gamma: 6 }\n    console.log(map);    // Map { alpha => 2, gamma => 6 }\n    console.log(set);    // Set { 2, 6 }\n\nIf you export your custom transforms via transform.export(transforms):\n\n    const transform = require(\'./my-transforms\'); // see ./example/transform_exports.js\n\n    const r1 = transform.sequence.example(iterable),\n          r2 = transform.into({}).example(iterable),\n          r3 = transform.into(new Map()).example(iterable),\n          r4 = transform.into(new Set()).example(iterable);\n\n    console.log(r1); // [2, 6]\n    console.log(r2); // { \'0\': 2, \'1\': 6 }\n    console.log(r3); // Map { 0 => 2, 1 => 6 }\n    console.log(r4); // Set { 2, 6 }\n\n### Configuration\n\nTo reconfigure defaults or provide default custom type support:\n\n    module.exports = require(\'transd\').defaults({\n      type: {\n        MyType: {\n          step: { \n            MyType (accumulator, value, key) {\n              return instance.inject(key, value);\n            },\n            Array (accumulator, value, key) {\n              accumulator.push(value);\n              return accumulator;\n            }\n          },\n          output () {\n            return new MyType();\n          },\n          input (instance) {\n            return {\n              [Symbol.iterator]: function* () { \n                for (let [key, value] of instance) {\n                  yield [value, key];\n                }\n              }\n            };\n          }\n        }\n      }\n    });\n\n## Testing\n\nTesting requires:\n\n  - Make\n  - Grunt\n\nInstall node modules locally by running:\n\n    npm install\n\nThen run a command below based on what test suite you need to run.\n\n### Lint (Syntax)\n\n    make lint\n\n### Unit\n\n    make unit-test\n\n### All\n\n    make test\n\n## Contributing\n\nJust open a PR.\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: '58c7b02261116fd8c1b5fe50d0bd84acd08739f6',
+21 silly publish   _id: 'trans.d@0.0.0',
+21 silly publish   _shasum: '68c20965ca82440e70e51d3363f1648c9a0f34d6',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name trans.d
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'trans.d',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'trans.d',
+26 silly mapToRegistry   name: 'trans.d',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/trans.d
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading /Users/nicolas/.npm/trans.d/0.0.0/package.tgz
+30 verbose request uri https://registry.npmjs.org/trans.d
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 1:21:51 PM
+33 verbose request using bearer token for auth
+34 verbose request id f9008fac28752ccb
+35 http request PUT https://registry.npmjs.org/trans.d
+36 http 403 https://registry.npmjs.org/trans.d
+37 verbose headers { 'content-type': 'application/json',
+37 verbose headers   'cache-control': 'max-age=300',
+37 verbose headers   'content-length': '95',
+37 verbose headers   'accept-ranges': 'bytes',
+37 verbose headers   date: 'Fri, 26 May 2017 20:21:53 GMT',
+37 verbose headers   via: '1.1 varnish',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-served-by': 'cache-sjc3634-SJC',
+37 verbose headers   'x-cache': 'MISS',
+37 verbose headers   'x-cache-hits': '0',
+37 verbose headers   'x-timer': 'S1495830113.369984,VS0,VE371',
+37 verbose headers   vary: 'Accept-Encoding' }
+38 verbose request invalidating /Users/nicolas/.npm/registry.npmjs.org/trans.d on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: "You cannot publish over the previously published version 0.0.0." : trans.d
+40 verbose stack     at makeError (/Users/nicolas/.nvm/versions/node/v7.0.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (/Users/nicolas/.nvm/versions/node/v7.0.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:290:14)
+40 verbose stack     at Request._callback (/Users/nicolas/.nvm/versions/node/v7.0.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+40 verbose stack     at Request.self.callback (/Users/nicolas/.nvm/versions/node/v7.0.0/lib/node_modules/npm/node_modules/request/request.js:187:22)
+40 verbose stack     at emitTwo (events.js:106:13)
+40 verbose stack     at Request.emit (events.js:191:7)
+40 verbose stack     at Request.<anonymous> (/Users/nicolas/.nvm/versions/node/v7.0.0/lib/node_modules/npm/node_modules/request/request.js:1044:10)
+40 verbose stack     at emitOne (events.js:96:13)
+40 verbose stack     at Request.emit (events.js:188:7)
+40 verbose stack     at IncomingMessage.<anonymous> (/Users/nicolas/.nvm/versions/node/v7.0.0/lib/node_modules/npm/node_modules/request/request.js:965:12)
+41 verbose statusCode 403
+42 verbose pkgid trans.d
+43 verbose cwd /Users/nicolas/Desktop/trd
+44 error Darwin 15.0.0
+45 error argv "/Users/nicolas/.nvm/versions/node/v7.0.0/bin/node" "/Users/nicolas/.nvm/versions/node/v7.0.0/bin/npm" "publish"
+46 error node v7.0.0
+47 error npm  v3.10.8
+48 error code E403
+49 error "You cannot publish over the previously published version 0.0.0." : trans.d
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]
