@@ -160,7 +160,7 @@ describe('transducer', () => {
     it('returns the result of the iteratee', () => {
       const accumulator = [];
 
-      const transform = dedupe()(appendArray);
+      const transform = dedupe(appendArray);
 
       transform(accumulator, 2);
       transform(accumulator, 2);
@@ -200,11 +200,11 @@ describe('transducer', () => {
     });
   });
 
-  describe('reversed', () => {
-    const { reversed } = transducer;
+  describe('reverse', () => {
+    const { reverse } = transducer;
 
     it('returns the result of the iteratee', () => {
-      const transform = reversed((_, a, b, c) => `${a}, ${b}, ${c}`);
+      const transform = reverse((_, a, b, c) => `${a}, ${b}, ${c}`);
       const result = transform([], 'c', 'b', 'a');
 
       result.should.eql('a, b, c');

@@ -179,20 +179,11 @@ If you export your custom transforms via transform.export(transforms):
 
 ### Configuration
 
-The trans.d framework provides the ability to configure the internals.
+To reconfigure defaults or provide default custom type support:
 
     module.exports = require('transd').defaults({
       type: {
         MyType: {
-          input (instance) {
-            return {
-              [Symbol.iterator]: function* () { 
-                for (let [key, value] of instance) {
-                  yield [value, key];
-                }
-              }
-            };
-          },
           step: { 
             MyType (accumulator, value, key) {
               return instance.inject(key, value);
@@ -201,9 +192,18 @@ The trans.d framework provides the ability to configure the internals.
               accumulator.push(value);
               return accumulator;
             }
-          }
+          },
           output () {
             return new MyType();
+          },
+          input (instance) {
+            return {
+              [Symbol.iterator]: function* () { 
+                for (let [key, value] of instance) {
+                  yield [value, key];
+                }
+              }
+            };
           }
         }
       }

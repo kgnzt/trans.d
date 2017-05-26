@@ -10,7 +10,7 @@ const lodash      = require('lodash'),
         forward } = require('./api');
 
 /**
- * Stateful transducer that prepends the current iteration to inputs.
+ * Prepends the current iteration to input sequence. Stateful.
  *
  * @return {function}
  */
@@ -23,7 +23,7 @@ function enumerate() {
 };
 
 /**
- * Includes the first N inputs.
+ * Includes the first N inputs. Stateful.
  *
  * @param {number} count
  * @return {function}
@@ -41,7 +41,7 @@ function take(count) {
 }
 
 /**
- * Removes the first N inputs.
+ * Removes the first N inputs. Stateful.
  *
  * @param {number} count
  * @return {function}
@@ -59,22 +59,21 @@ function drop(count) {
 }
 
 /**
- * Evaluates iteratee with the initial input.
+ * Reduce inputs into output state.
  *
- * @param {function} iteratee
- * @return {function} Cat transducer.
+ * @param {function} step
+ * @return {function}
  */
-function cat(step) {
-  return (state, ...input) => {
-    return Functional.reduce(step, state, ...input);
-  };
-}
+const cat = transducer((step, state, ...inputs) => {
+  return Functional.reduce(step, state, ...inputs);
+});
 
 /**
- * Evaluates iteratee with the initial input.
+ * Evaluate iteratee using inputs and returs result as the next input for
+ * the transducer chain..
  *
  * @param {function} iteratee
- * @return {function} Map transducer.
+ * @return {function}
  */
 function map(iteratee) {
   return transducer((step, state, ...inputs) => {
@@ -83,10 +82,10 @@ function map(iteratee) {
 }
 
 /**
- * Includes inputs where the predicate returns true.
+ * Include inputs where predicate evaluates to true.
  *
  * @param {function} predicate
- * @return {function} Filter transducer.
+ * @return {function}
  */
 function filter(predicate) {
   return transducer((step, state, ...inputs) => {
@@ -95,28 +94,27 @@ function filter(predicate) {
 }
 
 /**
- * Stateful transducer that removes duplicate inputs.
+ * Removes duplicate inputs. Stateful.
  *
- * @return {function} Dedupe transducer.
+ * @param {function} step
+ * @return {function}
  */
-function dedupe() {
-  const set = new Set();
+const dedupe = transducer((step, state, ...inputs) => {
+  const [ outter, set ] = unwrap(state, new Set()); // TODO: avoid init by making unwrap take a callback...
 
-  return step => {
-    return (state, ...inputs) => {
-      state = set.has(...inputs) ? state : step(state, ...inputs);
+  if (set.has(...inputs)) {
+    return wrap(outter, set);
+  }
 
-      set.add(...inputs);
+  set.add(...inputs);
 
-      return state;
-    };
-  };
-}
+  return wrap(step(outter, ...inputs), set);
+});
 
 /**
- * Stateful transducer that adds additional inputs between each output.
+ * Adds additional inputs between each output. Stateful.
  *
- * @param {...mixed}
+ * @param {...mixed} interpose
  * @return {function}
  */
 function interpose(...interpose) {
@@ -132,23 +130,23 @@ function interpose(...interpose) {
 }
 
 /**
- * Stateful transducer that curries extra inputs.
+ * Curry extra inputs into the input sequence.
  *
  * @todo: unit-test
  *
- * @param {function} step
+ * @param {...mixed} additional
  * @return {function}
  */
 function curry(...additional) {
-  return (state, ...inputs) => {
+  return transducer((step, state, ...inputs) => {
     return step(state, ...(inputs.concat(additional)));
-  };
+  });
 }
 
 /**
  * Repeats input.
  *
- * @param {function} step
+ * @param {number} count
  * @return {function}
  */
 function repeat(count) {
@@ -158,9 +156,9 @@ function repeat(count) {
 }
 
 /**
- * Transducer to buffer input.
+ * Buffer input sequences. Stateful.
  *
- * @param {function} step
+ * @param {number} size
  * @return {function}
  */
 function buffer(size) {
@@ -186,21 +184,20 @@ function buffer(size) {
 }
 
 /**
- * Stateless transducer that reverses input sequence.
+ * Reverse input sequence.
  *
  * @param {function} step
  * @return {function}
  */
-function reversed(step) {
-  return (state, ...inputs) => {
-    return step(state, ...inputs.reverse());
-  };
-}
+const reverse = transducer((step, state, ...inputs) => {
+  return step(state, ...inputs.reverse());
+});
 
 /**
- * Stateless transducer that swaps two elements in an input sequence.
+ * Swap two elements in the input sequence.
  *
- * @param {function} step
+ * @param {number} a
+ * @param {number} b
  * @return {function}
  */
 function swap(a, b) {
@@ -210,9 +207,10 @@ function swap(a, b) {
 }
 
 /**
- * Transducer used to adjust associative container keys.
+ * Adjust associative container keys.
  *
- * @return {function} Rekey transducer.
+ * @return {function} iteratee
+ * @return {function}
  */
 function rekey(iteratee) {
   return transducer((step, state, ...inputs) => {
@@ -233,7 +231,7 @@ module.exports = {
   negate: Functional.negate,
   rekey,
   repeat,
-  reversed,
+  reverse,
   swap,
   take
 };

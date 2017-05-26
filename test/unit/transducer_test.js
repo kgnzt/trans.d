@@ -84,6 +84,19 @@ describe('transducer tests (using transduce)', () => {
     });
   });
 
+  describe('dedupe', () => {
+    const { dedupe } = transducer;
+
+    it('correctly removes duplicates', () => {
+      const input = [1, 2, 2, 3, 4, 5, 5],
+            output = [];
+
+      const result = transduce(dedupe, buildArray, output, input);
+
+      result.should.eql([1, 2, 3, 4, 5]);
+    });
+  });
+
   describe('swap', () => {
     const { swap } = transducer;
 
