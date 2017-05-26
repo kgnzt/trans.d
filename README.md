@@ -47,7 +47,7 @@ To install inside a project, run:
       * `transform (function)`
       * `output (Mixed)`
       * `input (Iterable)`
-    * `.sequence(transform, input)` transform input into a new input of input's type
+    * `.sequence(transform, input)` transform input into a new output of input's type
       * `transform (function)`
       * `input (Iterable)`
     * `.defaults(options = {})` generate a reconfigured transd library
