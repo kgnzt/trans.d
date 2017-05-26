@@ -95,14 +95,10 @@ function cat(step) {
  * @return {function} Map transducer.
  */
 function map(iteratee) {
-  return step => {
-    return (state, ...inputs) => {
-      return step(state, ...(forward(inputs, iteratee(...inputs))));
-    };
-  };
+  return transducer((step, state, ...inputs) => {
+    return step(state, ...(forward(inputs, iteratee(...inputs))));
+  });
 }
-
-// TODO: unit-test to see if step() needs a forward call for filter and dedupe...
 
 /**
  * Includes inputs where the predicate returns true.
@@ -111,11 +107,9 @@ function map(iteratee) {
  * @return {function} Filter transducer.
  */
 function filter(predicate) {
-  return step => {
-    return (state, ...inputs) => {
-      return predicate(...inputs) ? step(state, ...inputs) : state;
-    };
-  };
+  return transducer((step, state, ...inputs) => {
+    return predicate(...inputs) ? step(state, ...inputs) : state;
+  });
 }
 
 /**
@@ -138,24 +132,21 @@ function dedupe() {
 }
 
 /**
- * Stateful transducer that adds additional input between each output.
+ * Stateful transducer that adds additional inputs between each output.
  *
- * @return {function} Interpose transducer.
+ * @param {...mixed}
+ * @return {function}
  */
 function interpose(...interpose) {
-  let iteration = 0;
+  return transducer((step, state, ...inputs) => {
+    let [ outter, iteration ] = unwrap(state, 0);
 
-  return step => {
-    return (state, ...inputs) => {
-      if (iteration !== 0) {
-        state = step(state, ...interpose);
-      }
+    if (iteration !== 0) {
+      outter = step(outter, ...interpose)
+    }
 
-      iteration += 1;
-
-      return step(state, ...inputs);
-    };
-  };
+    return wrap(step(outter, ...inputs), iteration + 1);
+  });
 }
 
 /**
@@ -179,11 +170,9 @@ function curry(...additional) {
  * @return {function}
  */
 function repeat(count) {
-  return step => {
-    return (state, ...inputs) => {
-      return Functional.times(count, () => step(state, ...inputs));
-    };
-  };
+  return transducer((step, state, ...inputs) => {
+    return Functional.times(count + 1, () => step(state, ...inputs));
+  });
 }
 
 /**
@@ -233,11 +222,9 @@ function reversed(step) {
  * @return {function}
  */
 function swap(a, b) {
-  return step => {
-    return (state, ...inputs) => {
-      return step(state, ...Helper.swap(inputs, a, b));
-    };
-  };
+  return transducer((step, state, ...inputs) => {
+    return step(state, ...Helper.swap(inputs, a, b));
+  });
 }
 
 /**
@@ -246,11 +233,9 @@ function swap(a, b) {
  * @return {function} Rekey transducer.
  */
 function rekey(iteratee) {
-  return step => {
-    return (state, ...inputs) => {
-      return step(state, ...(Helper.swapAdjust(inputs, 0, 1, iteratee)));
-    };
-  };
+  return transducer((step, state, ...inputs) => {
+    return step(state, ...(Helper.swapAdjust(inputs, 0, 1, iteratee)));
+  });
 }
 
 module.exports = {
