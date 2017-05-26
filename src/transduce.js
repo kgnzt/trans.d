@@ -76,7 +76,7 @@ function _reduce(reducer, state, iterable) {
     state = reducer(state, ...(Iterable.spreadable(input)));
   }
 
-  return API.complete(state);
+  return API.unwrap(state);
 }
 
 /**

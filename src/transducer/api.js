@@ -2,19 +2,42 @@
 
 const Iterable = require('../iterable');
 
+/**
+ * State wrapper used for stateful transducers.
+ */
 class Wrapper {
+  /**
+   * @param {mixed} outter
+   * @param {mixed} inner
+   */
   constructor(outter, inner) {
     this.outter = outter;
     this.inner = inner;
   }
 }
 
-function isWrapper(state) {
+/**
+ * Determine if a state is wrapped.
+ *
+ * @param {mixed} state
+ * @return {boolean}
+ */
+function isWrapped(state) {
   return (state instanceof Wrapper);
 }
 
+/**
+ * Wrap state.
+ *
+ * Wraps the state using state as outter and value as inner state if not wrapped.
+ * Updates wrapper inner if already wrapped.
+ *
+ * @param {mixed} state
+ * @param {mixed} state
+ * @return {Wrapper}
+ */
 function wrap(state, value) {
-  if (isWrapper(state)) {
+  if (isWrapped(state)) {
     state.inner = value;
 
     return state;
@@ -23,24 +46,46 @@ function wrap(state, value) {
   return new Wrapper(state, value);
 }
 
+/**
+ * Return transducer's inner state.
+ *
+ * @param {mixed} state
+ * @param {mixed} state
+ * @return {mixed}
+ */
 function inner(state, value) {
-  if (isWrapper(state)) {
+  if (isWrapped(state)) {
     return state.inner;
   }
 
   return value;
 }
 
+/**
+ * Return transducer's outter state.
+ *
+ * @param {mixed} state
+ * @return {mixed}
+ */
 function outter(state) {
-  if (isWrapper(state)) {
+  if (isWrapped(state)) {
     return state.outter;
   }
 
   return state;
 }
 
-function complete(state) {
-  if (isWrapper(state)) {
+/**
+ * Return unwrapped state.
+ *
+ * If wrapped the outter state is returned.
+ * If not wrapped state is returned as is.
+ *
+ * @param {mixed} state
+ * @return {mixed}
+ */
+function unwrap(state) {
+  if (isWrapped(state)) {
     return state.outter;
   }
 
@@ -70,7 +115,7 @@ module.exports = {
   forward,
   inner,
   wrap,
-  isWrapper,
-  complete,
+  isWrapped,
+  unwrap,
   outter
 };
