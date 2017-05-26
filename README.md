@@ -19,9 +19,10 @@ A least-suprise, least-configuration, transducer framework for Javascript.
     - Array
     - Object
     - String
+    - Number
     - Map
     - Set
-    - Generator (Iterable)
+    - Generator (Iterator)
 
 ## Requirements
   - Node.js
