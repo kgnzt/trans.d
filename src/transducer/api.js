@@ -6,7 +6,8 @@ const Iterable = require('../iterable');
  * Transducer chain actions.
  */
 const Action = {
-  terminate: Symbol('terminate')
+  terminate: Symbol('terminate'),
+  repeat: Symbol('repeat')
 };
 
 /**
@@ -27,6 +28,11 @@ class Wrapper {
 // todo: unit-test
 function shouldTerminate(state) {
   return (state.action === Action.terminate);
+}
+
+// todo: unit-test
+function shouldRepeat(state) {
+  return (state.action === Action.repeat);
 }
 
 /**
@@ -157,6 +163,7 @@ module.exports = {
   inner,
   isWrapped,
   shouldTerminate,
+  shouldRepeat,
   outter,
   transducer,
   unwrap,

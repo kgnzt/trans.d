@@ -164,10 +164,10 @@ const maxima = transducer((step, state, input) => {
   const [ outter, [anteprev, prev] ] = unwrap(state, []);
 
   if (_isMaxima(anteprev, prev, input)) {
-    return wrap(step(outter, prev), [prev, input]);
+    return wrap(step(outter, prev), [prev, input], Action.repeat);
   }
 
-  return wrap(state, [prev, input]);
+  return wrap(state, [prev, input], Action.repeat);
 });
 
 /**
@@ -247,6 +247,8 @@ function take(count) {
 function _isMaxima(previous, current, next) {
   if (previous === undefined) {
     return (current > next);
+  } else if (next === undefined) {
+    return (current > previous);
   }
 
   return (current > previous) && (next < current);

@@ -28,9 +28,7 @@ describe('transducer tests (using transduce)', () => {
 
       const result = transduce(maxima, buildArray, output, input);
 
-      // TODO: how does one capture last maxima in a series of unknown length.
-
-      result.should.eql([5, 8, 7]);
+      result.should.eql([5, 8, 7, 8]);
     });
   });
 

@@ -80,6 +80,10 @@ function _reduce(reducer, state, iterable) {
     }
   }
 
+  if (API.shouldRepeat(state)) {
+    state = reducer(state, undefined);
+  }
+
   return API.complete(state);
 }
 
