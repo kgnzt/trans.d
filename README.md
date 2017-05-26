@@ -70,6 +70,7 @@ Contains a collection of transducers for writing transforms.
     * `.dedupe()` remove duplicates
     * `.drop(count)` remove the first count inputs
       * `count (number)` number of inputs to remove
+    * `.enumerate()` prepend current iteration to input sequence
     * `.filter(predicate)` keep the current value if predicate evaluates to true
       * `predicate (function)` 
     * `.identity(input)` given input, input is returned

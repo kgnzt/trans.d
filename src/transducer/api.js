@@ -28,7 +28,7 @@ function transducer(transform) {
       return transform(step, ...inputs);
     };
   };
-};
+}
 
 /**
  * Unwrap wrapper into contintuent parts.
