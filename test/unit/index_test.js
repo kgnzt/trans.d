@@ -37,6 +37,10 @@ describe('functional', () => {
       transd.should.have.property('transform');
     });
 
+    it('exports api at root of package', () => {
+      transd.should.have.property('api');
+    });
+
     describe('transform', () => {
       const { transform } = transd;
 
@@ -50,6 +54,25 @@ describe('functional', () => {
         ].forEach(property => {
           transform.should.have.property(property);
         });
+      });
+    });
+  });
+
+  describe('transduce', () => {
+    const { api } = transd;
+
+    it('exports transducer api methods', () => {
+      [
+       'complete',
+       'forward',
+       'inner',
+       'isWrapped',
+       'outter',
+       'transducer',
+       'unwrap',
+       'wrap'
+      ].forEach(property => {
+        api.should.have.property(property);
       });
     });
   });

@@ -17,6 +17,31 @@ class Wrapper {
 }
 
 /**
+ * Generates a transducer.
+ *
+ * @param {function}
+ * @return {function}
+ */
+function transducer(transform) {
+  return step => {
+    return (...inputs) => {
+      return transform(step, ...inputs);
+    };
+  };
+};
+
+/**
+ * Unwrap wrapper into contintuent parts.
+ *
+ * @param {mixed} state
+ * @param {mixed} state
+ * @return {array[mixed, mixed]}
+ */
+function unwrap(state, value) {
+  return [outter(state), inner(state, value)];
+}
+
+/**
  * Determine if a state is wrapped.
  *
  * @param {mixed} state
@@ -76,7 +101,7 @@ function outter(state) {
 }
 
 /**
- * Return unwrapped state.
+ * Return outter state.
  *
  * If wrapped the outter state is returned.
  * If not wrapped state is returned as is.
@@ -84,7 +109,7 @@ function outter(state) {
  * @param {mixed} state
  * @return {mixed}
  */
-function unwrap(state) {
+function complete(state) {
   if (isWrapped(state)) {
     return state.outter;
   }
@@ -112,10 +137,12 @@ function forward(inputs, value) {
 }
 
 module.exports = {
+  complete,
   forward,
   inner,
-  wrap,
   isWrapped,
+  outter,
+  transducer,
   unwrap,
-  outter
+  wrap
 };

@@ -60,6 +60,7 @@ To install inside a project, run:
               - `.[OutputType] (function)` 
             - `.output (function)` 
     * `.transducer (Object)` see transd.transducer
+    * `.api (Object)` see transd.api
     * `.transform (Object)` see transd.transform
 
 ### transducer
@@ -84,6 +85,20 @@ To install inside a project, run:
       * `b (number)` input index
     * `.take(count)` keep the first count inputs
       * `count (number)` number of inputs to keep
+
+### api
+
+Transducer API methods that can be used to build additional transducers.
+
+  * transd.api
+    * `.complete()` returns the outter state called when chain completes
+    * `.forward()` correctly forwards inputs in transducer chain
+    * `.inner(state, value)` return the inner state
+    * `.isWrapped(state)` determine if state is wrapped
+    * `.outter(state)` return the outter state
+    * `.transducer()` create a transducer given a ternary transform
+    * `.unwrap()` unwrap state into outter and inner
+    * `.wrap()` wrap state in state wrapper
 
 ### transform
 

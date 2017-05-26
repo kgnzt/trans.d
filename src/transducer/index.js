@@ -4,9 +4,9 @@ const lodash      = require('lodash'),
       Helper      = require('../helper'),
       Iterable    = require('../iterable'),
       Functional  = require('../functional'),
-      { inner,
-        outter,
-        wrap,
+      { wrap,
+        unwrap,
+        transducer,
         forward } = require('./api');
 
 /**
@@ -15,15 +15,12 @@ const lodash      = require('lodash'),
  * @return {function}
  */
 function enumerate() {
-  return step => {
-    return (state, ...inputs) => {
-      const iteration = inner(state, 0),
-            initial = outter(state);
-
-      return wrap(step(initial, iteration, ...inputs), iteration + 1);
-    };
-  };
-}
+  return transducer((step, state, ...inputs) => {
+    const [ output, iteration ] = unwrap(state, 0);
+  
+    return wrap(step(output, iteration, ...inputs), iteration + 1);
+  });
+};
 
 /**
  * Includes the first N inputs.
@@ -32,11 +29,15 @@ function enumerate() {
  * @return {function}
  */
 function take(count) {
-  return step => {
-    return Functional.counter((iteration, state, ...inputs) => {
-      return (iteration >= count) ? state : step(state, ...inputs);
-    });
-  };
+  return transducer((step, state, ...inputs) => {
+    const [ output, iteration ] = unwrap(state, 0);
+
+    if (iteration >= count) {
+      return wrap(state, iteration + 1);
+    }
+
+    return wrap(step(output, ...inputs), iteration + 1);
+  });
 }
 
 /**
@@ -46,11 +47,15 @@ function take(count) {
  * @return {function}
  */
 function drop(count) {
-  return step => {
-    return Functional.counter((iteration, state, ...inputs) => {
-      return (iteration < count) ? state : step(state, ...inputs);
-    });
-  };
+  return transducer((step, state, ...inputs) => {
+    const [ output, iteration ] = unwrap(state, 0);
+
+    if (iteration < count) {
+      return wrap(state, iteration + 1);
+    }
+
+    return wrap(step(output, ...inputs), iteration + 1);
+  });
 }
 
 /**
@@ -187,42 +192,26 @@ function repeat(count) {
  * @param {function} step
  * @return {function}
  */
-function buffer(size, buffer = []) {
-  let iteration = 0;
-
-  return step => {
-    return (state, ...inputs) => {
-      // add inputs to buffer when size has not yet been met
-      if (iteration < size) {
-        buffer.push(inputs);
-        iteration++;
-      }
-
-      // if buffer size has been met, call step with buffered inputs
-      if (iteration === size) {
-        const result = step(state, buffer)
-
-        iteration = 0;
-        buffer = [];
-
-        return result;
-      }
-
-      return state;
-    };
-  };
-}
-
-function collect() {
-  return step => {
-    return (state, ...inputs) => {
-      let d = state[0] || [];
-      d.push(...inputs);
-      state[0] = d;
-
-      return step(state, d);
-    };
-  };
+function buffer(size) {
+  return transducer((step, state, ...inputs) => {
+    const [ output, { iteration, buffer } ] = unwrap(state, {
+      iteration: 0,
+      buffer: []
+    });
+  
+    if (iteration < size) {
+      buffer.push(inputs);
+    }
+  
+    if (iteration === size - 1) {
+      return wrap(step(output, buffer), {
+        iteration: 0,
+        buffer: []
+      });
+    }
+  
+    return wrap(output, { buffer: buffer, iteration: iteration + 1 });
+  });
 }
 
 /**
@@ -273,7 +262,6 @@ module.exports = {
   interpose,
   drop,
   repeat,
-  collect,
   buffer,
   cat,
   filter,
