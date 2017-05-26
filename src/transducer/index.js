@@ -171,15 +171,17 @@ const maxima = transducer((step, state, input) => {
 });
 
 /**
- * Adjust associative container keys.
+ * Map associative container keys.
  *
  * @return {function} iteratee
  * @return {function}
  */
 function rekey(iteratee) {
-  return transducer((step, state, ...inputs) => {
-    return step(state, ...(Helper.swapAdjust(inputs, 0, 1, iteratee)));
-  });
+  return Functional.compose(
+    swap(0, 1),
+    map(iteratee),
+    swap(0, 1)
+  );
 }
 
 /**
