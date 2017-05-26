@@ -4,8 +4,7 @@
 
 ## About
 
-A least-suprise, least-configuration, and most-composable transducer framework
-for Javascript.
+A least-suprise, least-configuration, transducer framework for Javascript.
 
 ## Features
 
@@ -99,6 +98,7 @@ The transducer API can be used to build additional transducers.
     * `.isWrapped(state)` determine if state is wrapped
     * `.outter(state)` return the outter state
     * `.transducer(transform)` create a transducer given a ternary transform
+      * `transform (function(step, state, ...inputs))`
     * `.unwrap(state, value)` unwrap state into outter and inner
     * `.wrap(state, value)` wrap state in state wrapper
 
