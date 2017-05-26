@@ -74,6 +74,10 @@ const DEFAULT_OPTIONS = {
 function _reduce(reducer, state, iterable) {
   for (let input of iterable) {
     state = reducer(state, ...(Iterable.spreadable(input)));
+
+    if (API.shouldTerminate(state)) {
+      break;
+    }
   }
 
   return API.complete(state);

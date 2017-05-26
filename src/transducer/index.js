@@ -4,7 +4,8 @@ const lodash      = require('lodash'),
       Helper      = require('../helper'),
       Iterable    = require('../iterable'),
       Functional  = require('../functional'),
-      { wrap,
+      { Action,
+        wrap,
         unwrap,
         transducer,
         forward } = require('./api');
@@ -154,22 +155,20 @@ function map(iteratee) {
 }
 
 /**
- * Filter input sequence down to it's peaks.
+ * Filter input sequence down to it's maxima.
  *
- * @param {mixed} cutoff
+ * @param {function} step
  * @return {function}
  */
-function peaks(cutoff = 0) {
-  return transducer((step, state, input) => {
-    const [ outter, [anteprev, prev] ] = unwrap(state, []);
+const maxima = transducer((step, state, input) => {
+  const [ outter, [anteprev, prev] ] = unwrap(state, []);
 
-    if (_isPeak(anteprev, prev, input, cutoff)) {
-      return wrap(step(outter, prev), [prev, input]);
-    }
+  if (_isMaxima(anteprev, prev, input)) {
+    return wrap(step(outter, prev), [prev, input]);
+  }
 
-    return wrap(state, [prev, input]);
-  });
-}
+  return wrap(state, [prev, input]);
+});
 
 /**
  * Adjust associative container keys.
@@ -229,7 +228,7 @@ function take(count) {
     const [ output, iteration ] = unwrap(state, 0);
 
     if (iteration >= count) {
-      return wrap(state, iteration + 1);
+      return wrap(state, iteration + 1, Action.terminate);
     }
 
     return wrap(step(output, ...inputs), iteration + 1);
@@ -245,8 +244,12 @@ function take(count) {
  * @param {mixed}
  * @return {boolean}
  */
-function _isPeak(previous, current, next, cutoff = 0) {
-  return (current > previous) && (next < current) && (current >= cutoff);
+function _isMaxima(previous, current, next) {
+  if (previous === undefined) {
+    return (current > next);
+  }
+
+  return (current > previous) && (next < current);
 }
 
 module.exports = {
@@ -261,7 +264,7 @@ module.exports = {
   interpose,
   map,
   negate: Functional.negate,
-  peaks,
+  maxima,
   rekey,
   repeat,
   reverse,

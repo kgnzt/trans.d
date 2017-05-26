@@ -3,6 +3,13 @@
 const Iterable = require('../iterable');
 
 /**
+ * Transducer chain actions.
+ */
+const Action = {
+  terminate: Symbol('terminate')
+};
+
+/**
  * State wrapper used for stateful transducers.
  */
 class Wrapper {
@@ -10,10 +17,16 @@ class Wrapper {
    * @param {mixed} outter
    * @param {mixed} inner
    */
-  constructor(outter, inner) {
+  constructor(outter, inner, action) {
     this.outter = outter;
     this.inner = inner;
+    this.action = action;
   }
+}
+
+// todo: unit-test
+function shouldTerminate(state) {
+  return (state.action === Action.terminate);
 }
 
 /**
@@ -61,14 +74,15 @@ function isWrapped(state) {
  * @param {mixed} state
  * @return {Wrapper}
  */
-function wrap(state, value) {
+function wrap(state, value, action) {
   if (isWrapped(state)) {
     state.inner = value;
+    state.action = action;
 
     return state;
   }
 
-  return new Wrapper(state, value);
+  return new Wrapper(state, value, action);
 }
 
 /**
@@ -137,10 +151,12 @@ function forward(inputs, value) {
 }
 
 module.exports = {
+  Action,
   complete,
   forward,
   inner,
   isWrapped,
+  shouldTerminate,
   outter,
   transducer,
   unwrap,

@@ -5,6 +5,15 @@ const should = require('should');
 describe('transducer/helper', () => {
   const helper = require('../../../src/transducer/api');
 
+  describe('Action', () => {
+    const { Action } = helper;
+
+    it('defines terminate', () => {
+      Action.should.have.property('terminate');
+      (typeof Action.terminate).should.eql('symbol');
+    });
+  });
+
   describe('forward', () => {
     const { forward } = helper;
 
