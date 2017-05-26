@@ -65,6 +65,8 @@ To install inside a project, run:
 
 ### transducer
 
+Contains a collection of transducers for writing transforms. 
+
   * transd.transducer
     * `.dedupe()` remove duplicates
     * `.drop(count)` remove the first count inputs
@@ -88,17 +90,17 @@ To install inside a project, run:
 
 ### api
 
-Transducer API methods that can be used to build additional transducers.
+The transducer API can be used to build additional transducers.
 
   * transd.api
-    * `.complete()` returns the outter state called when chain completes
-    * `.forward()` correctly forwards inputs in transducer chain
+    * `.complete(state)` returns the outter state called when chain completes
+    * `.forward(inputs, value)` correctly forwards inputs in transducer chain
     * `.inner(state, value)` return the inner state
     * `.isWrapped(state)` determine if state is wrapped
     * `.outter(state)` return the outter state
-    * `.transducer()` create a transducer given a ternary transform
-    * `.unwrap()` unwrap state into outter and inner
-    * `.wrap()` wrap state in state wrapper
+    * `.transducer(transform)` create a transducer given a ternary transform
+    * `.unwrap(state, value)` unwrap state into outter and inner
+    * `.wrap(state, value)` wrap state in state wrapper
 
 ### transform
 
