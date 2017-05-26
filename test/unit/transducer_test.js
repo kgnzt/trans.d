@@ -19,6 +19,28 @@ describe('transducer tests (using transduce)', () => {
     return state;
   }
 
+  describe('peaks', () => {
+    const { peaks } = transducer;
+
+    it('has correct peak picking behavior', () => {
+      const input = [1, 8, 3, 4, 5, 7, 3, -1, -2, -1, 8],
+            output = [];
+
+      const result = transduce(peaks(), buildArray, output, input);
+
+      result.should.eql([8, 7]);
+    });
+
+    it('allows for custom cutoff', () => {
+      const input = [2, 3, 4, 8, 0, 1, 0, 3, 2],
+            output = [];
+
+      const result = transduce(peaks(2), buildArray, output, input);
+
+      result.should.eql([8, 3]);
+    });
+  });
+
   describe('enumerate', () => {
     const { enumerate } = transducer;
 

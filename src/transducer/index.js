@@ -218,11 +218,43 @@ function rekey(iteratee) {
   });
 }
 
+/**
+ * Determine if a current value in a sequence is considered a peak.
+ *
+ * @param {mixed}
+ * @param {mixed}
+ * @param {mixed}
+ * @param {mixed}
+ * @return {boolean}
+ */
+function _isPeak(previous, current, next, cutoff = 0) {
+  return (current > previous) && (next < current) && (current >= cutoff);
+}
+
+/**
+ * Filter input sequence down to it's peaks.
+ *
+ * @param {mixed} cutoff
+ * @return {function}
+ */
+function peaks(cutoff = 0) {
+  return transducer((step, state, input) => {
+    const [ outter, [anteprev, prev] ] = unwrap(state, []);
+
+    if (_isPeak(anteprev, prev, input, cutoff)) {
+      return wrap(step(outter, prev), [prev, input]);
+    }
+
+    return wrap(state, [prev, input]);
+  });
+}
+
 module.exports = {
   buffer,
   cat,
   dedupe,
   drop,
+  peaks,
   enumerate,
   filter,
   identity: Functional.identity,
