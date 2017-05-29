@@ -79,6 +79,12 @@ Contains a collection of transducers for writing transforms.
       * `predicate (function)` 
     * `.identity(input)` given input, input is returned
       * `input (mixed)`
+    * `.interpose(...inputs)` interpose additional inputs between each iteration
+      * `inputs (...array)`
+    * `.lense(path, transform)` transform a portion of the input
+      * `path (path)` path to subsection to apply transform to for input
+        * Supports: Object, Array
+      * `transform (function)` transform subsection of input
     * `.map(iteratee)` evaluate the current value through iteratee
       * `iteratee (function)`
     * `.negate(input)` take the complement of the input

@@ -124,6 +124,24 @@ function filter(predicate) {
   });
 }
 
+/**
+ * Adds additional inputs between each output. Stateful.
+ *
+ * @param {...mixed} interpose
+ * @return {function}
+ */
+function interpose(...interpose) {
+  return transducer((step, state, ...inputs) => {
+    let [ outter, iteration ] = unwrap(state, 0);
+
+    if (iteration !== 0) {
+      outter = step(outter, ...interpose);
+    }
+
+    return wrap(step(outter, ...inputs), iteration + 1);
+  });
+}
+
 // should be injectable, default customizable
 const lensFor = Lens.make(Lens.Lens);
 
@@ -143,24 +161,6 @@ function lens(path, transform) {
       Transduce.sequence(transform, Lens.view(lens, input)),
       input
     ));
-  });
-}
-
-/**
- * Adds additional inputs between each output. Stateful.
- *
- * @param {...mixed} interpose
- * @return {function}
- */
-function interpose(...interpose) {
-  return transducer((step, state, ...inputs) => {
-    let [ outter, iteration ] = unwrap(state, 0);
-
-    if (iteration !== 0) {
-      outter = step(outter, ...interpose);
-    }
-
-    return wrap(step(outter, ...inputs), iteration + 1);
   });
 }
 
