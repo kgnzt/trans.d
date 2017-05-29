@@ -3,6 +3,8 @@
 const lodash      = require('lodash'),
       Helper      = require('../helper'),
       Iterable    = require('../iterable'),
+      Lens        = require('../lens'),
+      Transduce   = require('../transduce'),
       Functional  = require('../functional'),
       { Action,
         wrap,
@@ -124,13 +126,17 @@ function filter(predicate) {
 }
 
 // todo: test
-function lens(lens, transform, step, output) {
+function lens(lens, transform) {
   return transducer((step, state, input) => {
+    /*
     if (isNumber(lens) || isString(lens)) {
       lens = lensFor(input);
     }
+    */
 
-    const result = transduce(transform, step, output, Lens.view(lens, input));
+    const result = Lens.set(lens, Transduce.sequence(transform, Lens.view(lens, input)), input);
+
+    return step(state, result);
   });
 }
 
@@ -277,6 +283,7 @@ module.exports = {
   filter,
   identity: Functional.identity,
   interpose,
+  lens,
   map,
   negate: Functional.negate,
   maxima,

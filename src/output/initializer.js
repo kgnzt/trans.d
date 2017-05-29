@@ -14,6 +14,13 @@ module.exports = {
   },
 
   /**
+   * @return {Number}
+   */
+  Number () {
+    return 0;
+  },
+
+  /**
    * @return {object}
    */
   Object () {

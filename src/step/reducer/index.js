@@ -19,6 +19,7 @@ function identity(accumulator, input) {
  * @param {mixed}
  */
 function func(accumulator, input, ...rest) {
+  //console.log(arguments);
   return input(accumulator, ...rest);
 }
 

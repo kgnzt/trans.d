@@ -3,6 +3,14 @@
 const { InputTuple } = require('../iterable');
 
 module.exports = {
+  Number (number) {
+    return {
+      [Symbol.iterator]: function* () { 
+        yield number;
+      }
+    };
+  },
+
   /**
    * Generates an iterable Map.
    *

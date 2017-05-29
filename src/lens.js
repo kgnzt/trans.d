@@ -2,6 +2,7 @@
 
 const Helper = require('./helper'),
       Type = require('./type'),
+      Combinator = require('./combinator'),
       { map,
         extractValue,
         Identity,
@@ -103,7 +104,17 @@ function over(lens, iteratee, subject) {
   return pipe(lens(pipe(iteratee, Identity)), extractValue)(subject);
 }
 
-function set() {
+// TODO: unit-test
+/**
+ * Set lens for subject with value.
+ *
+ * @param {function}
+ * @param {mixed}
+ * @param {mixed}
+ * @return {mixed}
+ */
+function set(lens, value, subject) {
+  return over(lens, Combinator.K(value), subject);
 }
 
 module.exports = {

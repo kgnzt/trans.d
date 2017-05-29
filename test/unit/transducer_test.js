@@ -4,8 +4,10 @@ const should = require('should');
 
 describe('transducer tests (using transduce)', () => {
   const { transduce } = require('../../src/transduce'),
+        Lens = require('../../src/lens'),
         transducer = require('../../src/transducer'),
-        functional = require('../../src/functional');
+        functional = require('../../src/functional'),
+        { compose } = functional;
 
   function buildArray(state, ...inputs) {
     state.push(...inputs);
@@ -18,6 +20,33 @@ describe('transducer tests (using transduce)', () => {
 
     return state;
   }
+
+  describe('lens', () => {
+    const { lens } = transducer;
+
+    it('correctly transforms a portion of a complex data structure', () => {
+      const input = [{
+              name: 'john',
+              size: 1
+            }, {
+              name: 'alice',
+              size: 2
+            }],
+            output = [];
+
+      const lens = Lens.Lens.Object('size');
+
+      const result = transduce(compose(
+        transducer.lens(lens, compose(
+          transducer.map(x => x + 1),
+          transducer.map(x => x * 10)
+        )),
+        transducer.filter(x => x.name === 'alice')
+      ), buildArray, output, input);
+
+      result.should.eql([{ name: 'alice', size: 30 }]);
+    });
+  });
 
   describe('maxima', () => {
     const { maxima } = transducer;
