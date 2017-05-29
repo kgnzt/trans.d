@@ -5,8 +5,9 @@ const should = require('should');
 describe('lenses', () => {
   const lens = require('../../src/lens'),
         { view, over, set } = lens,
-        { Identity,
-          Constant } = require('../../src/functor');
+        { extractValue,
+          Identity,
+          Constant } = require('../../src/category/functor');
 
   describe('Lens', () => {
     const { Lens } = lens;
@@ -22,16 +23,12 @@ describe('lenses', () => {
         const two = Lens.Object('foo', Constant);
 
         two.should.be.a.Function();
-
-        const result = two({foo: 'bar', ping: 'pong'});
-
-        result.value.should.eql('bar');
       });
 
       it('works as expected', () => {
         const result = Lens.Object('foo', Constant, {foo: 'bar', ping: 'pong'});
 
-        result.value.should.eql('bar');
+        extractValue(result).should.eql('bar');
       });
 
       it('works with view', () => {
@@ -52,6 +49,17 @@ describe('lenses', () => {
           ping: 'pong'
         });
       });
+
+      it('works with set', () => {
+        const lens = Lens.Object('foo');
+
+        const result = set(lens, 'ok', {foo: 'bar', ping: 'pong'});
+
+        result.should.eql({
+          foo: 'ok',
+          ping: 'pong'
+        });
+      });
     });
 
     describe('Array', () => {
@@ -65,16 +73,12 @@ describe('lenses', () => {
         const two = Lens.Object(1, Constant);
 
         two.should.be.a.Function();
-
-        const result = two(['alpha', 'beta']);
-
-        result.value.should.eql('beta');
       });
 
       it('works as expected', () => {
         const result = Lens.Object(1, Constant, ['alpha', 'beta']);
 
-        result.value.should.eql('beta');
+        extractValue(result).should.eql('beta');
       });
 
       it('works with view', () => {
@@ -94,6 +98,14 @@ describe('lenses', () => {
           'alpha',
           'beta_append'
         ]);
+      });
+
+      it('works with set', () => {
+        const lens = Lens.Array(1);
+
+        const result = set(lens, 'ok', ['foo', 'bar']);
+
+        result.should.eql(['foo', 'ok']);
       });
     });
   });
