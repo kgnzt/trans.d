@@ -1,13 +1,14 @@
 'use strict';
 
 // @todo remove lodash dep
-const lodash   = require('lodash'),
-      API      = require('./transducer/api'),
-      Type     = require('./type'),
-      Step     = require('./step'),
-      Input    = require('./input'),
-      Output   = require('./output'),
-      Iterable = require('./iterable');
+const lodash     = require('lodash'),
+      API        = require('./transducer/api'),
+      Type       = require('./type'),
+      Step       = require('./step'),
+      Input      = require('./input'),
+      Output     = require('./output'),
+      Functional = require('./functional'), // need to replace lodash with reduce
+      Iterable   = require('./iterable');
 
 const Remap = require('./step/reducer/remap'),
       Adjuster = require('./input/adjuster'),

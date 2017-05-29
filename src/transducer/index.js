@@ -1,7 +1,6 @@
 'use strict';
 
-const lodash      = require('lodash'),
-      Helper      = require('../helper'),
+const Helper      = require('../helper'),
       Iterable    = require('../iterable'),
       Lens        = require('../lens'),
       Transduce   = require('../transduce'),
