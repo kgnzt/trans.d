@@ -1,6 +1,8 @@
 'use strict';
 
-const { map,
+const Helper = require('./helper'),
+      Type = require('./type'),
+      { map,
         extractValue,
         Identity,
         Constant } = require('./functor'),
@@ -48,7 +50,7 @@ function lens(lens) {
 
     return factory(key);
   };
-};
+}
 
 /**
  * Type based lenses.

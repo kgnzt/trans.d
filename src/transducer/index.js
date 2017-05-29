@@ -124,8 +124,13 @@ function filter(predicate) {
 }
 
 // todo: test
-function lens(lens, transducer) {
-  return transducer((step, state, ...inputs) => {
+function lens(lens, transform, step, output) {
+  return transducer((step, state, input) => {
+    if (isNumber(lens) || isString(lens)) {
+      lens = lensFor(input);
+    }
+
+    const result = transduce(transform, step, output, Lens.view(lens, input));
   });
 }
 
