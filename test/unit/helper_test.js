@@ -6,10 +6,10 @@ const should = require('should'),
 describe('helper', () => {
   const helper = require('../../src/helper');
 
-  describe('createFactory', () => {
-    const { createFactory } = helper;
+  describe('factoryFor', () => {
+    const { factoryFor } = helper;
 
-    function createFactoryObject () {
+    function factoryForObject () {
       return {
         alpha () {
           return 'beta';
@@ -18,9 +18,9 @@ describe('helper', () => {
     }
 
     it('returns a function with the correct signature', () => {
-      const object = createFactoryObject();
+      const object = factoryForObject();
 
-      const result = createFactory(object);
+      const result = factoryFor(object);
 
       result.should.be.a.Function();
       result.length.should.eql(1);
@@ -28,9 +28,9 @@ describe('helper', () => {
 
     describe('default', () => {
       it('correctly calls the object key returning result', () => {
-        const object = createFactoryObject();
+        const object = factoryForObject();
   
-        const factory = createFactory(object);
+        const factory = factoryFor(object);
 
         const result = factory('alpha');
 
@@ -38,9 +38,9 @@ describe('helper', () => {
       });
 
       it('throws the correct error when key not in object', () => {
-        const object = createFactoryObject();
+        const object = factoryForObject();
   
-        const factory = createFactory(object);
+        const factory = factoryFor(object);
 
         (function () {
           factory('zoozoo');
@@ -50,9 +50,9 @@ describe('helper', () => {
 
     describe('custom', () => {
       it('allows for a custom error', () => {
-        const object = createFactoryObject();
+        const object = factoryForObject();
   
-        const factory = createFactory(object, {
+        const factory = factoryFor(object, {
           error (key) {
             return `${key} is an issue.`;
           }

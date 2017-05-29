@@ -28,4 +28,48 @@ describe('type', () => {
       string(new Set()).should.eql('Set');
     });
   });
+
+  describe('areSame', () => {
+    const { areSame } = type;
+
+    it('returns true when types are the same', () => {
+      const left = [],
+            right = [1, 2];
+
+      const result = areSame(left, right);
+
+      result.should.eql(true);
+    });
+
+    it('returns false when types differ', () => {
+      const left = [],
+            right = {foo: 'bar'};
+
+      const result = areSame(left, right);
+
+      result.should.eql(false);
+    });
+  });
+
+  describe('differ', () => {
+    const { differ } = type;
+
+    it('returns false when types are the same', () => {
+      const left = [],
+            right = [1, 2];
+
+      const result = differ(left, right);
+
+      result.should.eql(false);
+    });
+
+    it('returns true when types differ', () => {
+      const left = [],
+            right = {foo: 'bar'};
+
+      const result = differ(left, right);
+
+      result.should.eql(true);
+    });
+  });
 });

@@ -6,53 +6,75 @@ const should = require('should'),
 describe('iterable', () => {
   const iterable = require('../../src/iterable');
 
-  describe('iterator', () => {
-    const { iterator } = iterable;
+  describe('InputTuple', () => {
+    const { InputTuple } = iterable;
 
-    it('works with an object', () => {
-      const object = { alpha: 1, beta: 2 };
-
-      const result = iterator(object);
-
-      let iteration = 0;
-      for (let value of result) {
-        switch (iteration) {
-          case 2:
-            value.should.eql([1, 'alpha']);
-            break;
-          case 1:
-            value.should.eql([2, 'beta']);
-            break;
-          default:
-            break;
-        };
-
-        iteration++;
-      }
+    it('can construct', () => {
+      (function () {
+        new InputTuple('a', 1);
+      }).should.not.throw();
     });
 
-    it('produces an inverted argument order iteration for Map', () => {
-      const map = new Map();
-      map.set('alpha', 1);
-      map.set('beta', 2);
-
-      const result = iterator(map);
-
-      let iteration = 0;
-      for (let value of result) {
-        switch (iteration) {
-          case 2:
-            value.should.eql([1, 'alpha']);
-            break;
-          case 1:
-            value.should.eql([2, 'beta']);
-            break;
-          default:
-            break;
-        };
-
-        iteration++;
+    it('can be spread', () => {
+      function test(one, two) {
+        return (one + two);
       }
+
+      const tuple = new InputTuple(3, 10);
+
+      const result = test(...tuple);
+
+      result.should.eql(13);
+    });
+
+    it('will default to an empty array', () => {
+      function test(input) {
+        return input;
+      }
+
+      const tuple = new InputTuple();
+
+      tuple._inputs.should.eql([]);
+    });
+  });
+
+  describe('spreadable', () => {
+    const { spreadable } = iterable;
+
+    it('returns an array of passed object when not InputTuple', () => {
+      const input = 'alpha';
+
+      const result = spreadable(input);
+
+      result.should.eql(['alpha']);
+    });
+
+    it('simply returns the input when already an InputTuple', () => {
+      const input = new iterable.InputTuple([1, 2]);
+
+      const result = spreadable(input);
+
+      result.should.equal(input);
+    });
+  });
+
+  describe('isInputTuple', () => {
+    const { isInputTuple } = iterable;
+
+    it('returns true when tuple instance passed', () => {
+      const object = new iterable.InputTuple([1, 2]);
+
+      const result = isInputTuple(object);
+
+      result.should.eql(true);
+    });
+
+    it('returns false when non tuple instance passed', () => {
+      const object = {foo: 'bar'};
+
+      const result = isInputTuple(object);
+
+      result.should.eql(false);
     });
   });
 
@@ -70,7 +92,7 @@ describe('iterable', () => {
     it('works with custom iterable objects', () => {
       const iterable = {
         [Symbol.iterator]: function* () {
-          yield 2
+          yield 2;
         }
       };
 
@@ -85,51 +107,6 @@ describe('iterable', () => {
       const result = isIterable(iterable);
 
       result.should.eql(false);
-    });
-  });
-
-  describe('from', () => {
-    const { from } = iterable;
-
-    it('throws with unknown type', () => {
-      class ZooZoo {};
-
-      (function () {
-        from(new ZooZoo());
-      }).should.throw('Cannot determine the iterator to create for type ZooZoo.');
-    });
-
-    it('handles an Array', () => {
-      const iterable = [];
-
-      const result = from(iterable);
-
-      result.should.be.an.Array();
-    });
-
-    it('handles an Object', () => {
-      const iterable = {};
-
-      const result = from(iterable);
-
-      result.should.be.an.Object();
-      result.should.eql({});
-    });
-
-    it('handles a Map', () => {
-      const iterable = new Map()
-
-      const result = from(iterable);
-
-      result.should.be.an.instanceOf(Map);
-    });
-
-    it('handles a Set', () => {
-      const iterable = new Set()
-
-      const result = from(iterable);
-
-      result.should.be.an.instanceOf(Set);
     });
   });
 });

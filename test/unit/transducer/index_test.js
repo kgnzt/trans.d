@@ -3,10 +3,22 @@
 const should = require('should');
 
 describe('transducer', () => {
-  const transducer = require('../../src/transducer');
+  const transducer = require('../../../src/transducer');
 
   function pickInput (accumulator, input) {
     return input;
+  }
+
+  function appendArray (accumulator, input) {
+    accumulator.push(input);
+
+    return accumulator;
+  }
+
+  function setKey (accumulator, value, key) {
+    accumulator[key] = value;
+
+    return accumulator;
   }
 
   describe('alias functions tested in functional', () => {
@@ -95,29 +107,24 @@ describe('transducer', () => {
     });
   });
 
-  describe('remove', () => {
-    const { remove } = transducer;
+  describe('enumerate', () => {
+    const { enumerate } = transducer;
 
-    it('returns the input if the predicate evaluates to false', () => {
-      const predicate = (x) => x === 5,
-            accumulator = [],
-            input = 10;
+    it('', () => {
+      const state = [],
+            reducer = (state, ...inputs) => {
+              state.push(...inputs);
 
-      const transform = remove(predicate, pickInput);
-      const result = transform(accumulator, input);
+              return state;
+            };
 
-      result.should.eql(input);
-    });
+      const transform = enumerate()(reducer);
 
-    it('returns the accumulator if the predicate evaluates to true', () => {
-      const predicate = (x) => x === 5,
-            accumulator = [],
-            input = 5;
+      const result = transform(state, 5);
 
-      const transform = remove(predicate, pickInput);
-      const result = transform(accumulator, input);
-
-      result.should.eql(accumulator);
+      state.should.eql([0, 5]);
+      result.outter.should.equal(state);
+      result.inner.should.eql(1);
     });
   });
 
@@ -129,7 +136,7 @@ describe('transducer', () => {
             accumulator = [],
             input = 10;
 
-      const transform = filter(predicate, pickInput);
+      const transform = filter(predicate)(pickInput);
       const result = transform(accumulator, input);
 
       result.should.eql(accumulator);
@@ -140,10 +147,77 @@ describe('transducer', () => {
             accumulator = [],
             input = 5;
 
-      const transform = filter(predicate, pickInput);
+      const transform = filter(predicate)(pickInput);
       const result = transform(accumulator, input);
 
       result.should.eql(input);
+    });
+  });
+
+  describe('dedupe', () => {
+    const { dedupe } = transducer;
+
+    it('returns the result of the iteratee', () => {
+      const accumulator = [];
+
+      const transform = dedupe(appendArray);
+
+      transform(accumulator, 2);
+      transform(accumulator, 2);
+      transform(accumulator, 3);
+      const result = transform(accumulator, 2);
+
+      result.should.eql([2, 3]);
+    });
+  });
+
+  describe('rekey', () => {
+    const { rekey } = transducer;
+
+    it('returns the result of the iteratee', () => {
+      const iteratee = key => `${key}_append`,
+            accumulator = {},
+            input = 10;
+
+      const transform = rekey(iteratee)(setKey);
+      const result = transform(accumulator, 10, 'key');
+
+      result.should.eql({ key_append: 10 });
+    });
+  });
+
+  describe('swap', () => {
+    const { swap } = transducer;
+
+    it('correctly swaps the input', () => {
+      const a = 1,
+            b = 2;
+
+      const transform = swap(a, b)((_, d, b, c, a) => `${d}, ${b}, ${c}, ${a}`);
+      const result = transform([], 'd', 'c', 'b', 'a');
+
+      result.should.eql('d, b, c, a');
+    });
+  });
+
+  describe('reverse', () => {
+    const { reverse } = transducer;
+
+    it('returns the result of the iteratee', () => {
+      const transform = reverse((_, a, b, c) => `${a}, ${b}, ${c}`);
+      const result = transform([], 'c', 'b', 'a');
+
+      result.should.eql('a, b, c');
+    });
+  });
+
+  describe('repeat', () => {
+    const { repeat } = transducer;
+
+    it('returns the result of the iteratee', () => {
+      const result = repeat(3)(appendArray)([], 10);
+
+      result.should.eql([10, 10, 10, 10]);
     });
   });
 
@@ -155,10 +229,27 @@ describe('transducer', () => {
             accumulator = [],
             input = 10;
 
-      const transform = map(iteratee, pickInput);
+      const transform = map(iteratee)(pickInput);
       const result = transform(accumulator, input);
 
       result.should.eql(13);
+    });
+  });
+
+  describe('cat', () => {
+    const { cat } = transducer;
+
+    it('correctly reduces', () => {
+      const step = (state, input) => {
+              state.push(input);
+              return state;
+            },
+            state = [],
+            iterable = [[1], [2]];
+
+      const result = cat(step)(state, iterable);
+
+      result.should.eql([1, 2]);
     });
   });
 });

@@ -6,6 +6,68 @@ const should = require('should'),
 describe('functional', () => {
   const functional = require('../../src/functional');
 
+  describe('curry', () => {
+    const { curry } = functional;
+
+    function test(a, b) {
+      return (a + b);
+    }
+
+    it('generates a function', () => {
+      const result = curry(test);
+
+      result.should.be.a.Function();
+    });
+
+    it('calls curried function when all parameters passed', () => {
+      const curried = curry(test);
+
+      const result = curried(1, 9);
+
+      result.should.eql(10);
+    });
+
+    it('delays calling function when not all parameters passed', () => {
+      const curried = curry(test);
+
+      const result = curried(1)(9);
+
+      result.should.eql(10);
+    });
+
+    it('allows custom arity', () => {
+      const callAfter2 = (a, b, c, d, e) => 'alpha';
+
+      const curried = curry(callAfter2, 2);
+
+      const result = curried(1)(2);
+
+      result.should.eql('alpha');
+    });
+  });
+
+  describe('times', () => {
+    const { times } = functional;
+
+    it('calls iteratee count times', () => {
+      const func = sinon.spy();
+
+      times(5, func);
+
+      func.callCount.should.eql(5);
+    });
+
+    it('returns the result of calling iteratee', () => {
+      const func = sinon.stub();
+
+      func.returns('a');
+
+      const result = times(5, func);
+
+      result.should.eql('a');
+    });
+  });
+
   describe('call', () => {
     const { call } = functional;
 
@@ -119,39 +181,16 @@ describe('functional', () => {
 
       value.should.eql(6);
     });
-  });
 
-  describe('accumulate', () => {
-    const { accumulate } = functional;
+    it('passes the number of functions composed as the last argument', () => {
+      const f = (x, _, count) => x + count,
+            g = (x, _, count) => x * count;
 
-    it('correctly accumulates a result', () => {
-      const reducer = (accumulator, input) => {
-              return accumulator += input;
-            },
-            accumulator = 0,
-            iterator = [1, 4, 5];
+      const result = compose(f, g);
 
-      const result = accumulate(reducer, accumulator, iterator);
+      const value = result(10);
 
-      result.should.eql(10);
-    });
-
-    it('can handle custom iterators', () => {
-      const reducer = (accumulator, input) => {
-              return accumulator += input;
-            },
-            accumulator = 0,
-            iterator = {
-              [Symbol.iterator]: function* () {
-                yield 1;
-                yield 4;
-                yield 5;
-              }
-            };
-
-      const result = accumulate(reducer, accumulator, iterator);
-
-      result.should.eql(10);
+      value.should.eql(22);
     });
   });
 });

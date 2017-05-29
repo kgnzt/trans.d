@@ -1,11 +1,30 @@
 'use strict';
 
-const reducer = require('./reducer');
+const reducer = require('./step/reducer');
 
 /**
- * Generates a function that returns the complement of predicate..
+ * Peforms (calls) iteratee count times.
  *
- * @param {mixed} input
+ * @param {number} count
+ * @param {function} func
+ * @return {mixed}
+ */
+function times(count, iteratee) {
+  let result;
+
+  for (let i = 0; i < count; i++) {
+    result = iteratee();
+  }
+
+  return result;
+}
+
+/**
+ * Calls the passed function returning the result.
+ *
+ * TODO: consider forwarding rest args
+ *
+ * @param {function} func
  * @return {mixed}
  */
 function call(func) {
@@ -13,7 +32,7 @@ function call(func) {
 }
 
 /**
- * Generates a function that returns the complement of predicate..
+ * Generates a function that returns the complement of predicate.
  *
  * @param {mixed} input
  * @return {mixed}
@@ -42,7 +61,25 @@ function counter(func) {
   let iteration = 0;
 
   return (...args) => func(iteration++, ...args);
-};
+}
+
+/**
+ * Iterates using an iterable updating state with each result.
+ *
+ * TODO: unit-test
+ *
+ * @param {function} reducer
+ * @param {mixed} accumulator
+ * @param {Iterable} iterable
+ * @return {Iterable} mixed
+ */
+function reduce(reducer, state, iterable) {
+  for (let input of iterable) {
+    state = reducer(state, input);
+  }
+
+  return state;
+}
 
 /**
  * @param {function} iteratee
@@ -52,7 +89,7 @@ function counter(func) {
  */
 function _reduceRight(iteratee, collection, accumulator) {
   for (let i = (collection.length - 1); i >= 0; i--) {
-    accumulator = iteratee(accumulator, collection[i]);
+    accumulator = iteratee(accumulator, collection[i], i, collection.length);
   }
 
   return accumulator;
@@ -61,6 +98,9 @@ function _reduceRight(iteratee, collection, accumulator) {
 /**
  * Generates a single function given N functions.
  *
+ * TODO: compose vs composeRight? compose export via transduce should be
+ * renamed from composeright to compose.
+ *
  * @param {array[function]} transforms
  * @return {function}
  */
@@ -68,26 +108,45 @@ function compose(...transforms) {
   return initial => _reduceRight(reducer.func, transforms, initial);
 }
 
-/**
- * Iterates using an iterator updating state with each result.
- *
- * @param {function} reducer
- * @param {mixed} accumulator
- * @param {Iterable} iterator
- */
-function accumulate(reducer, accumulator, iterator) {
-  for (let value of iterator) {
-    accumulator = reducer(accumulator, value);
-  }
-
-  return accumulator;
+function pipe(...transforms) {
+  return initial => reduce(reducer.func, initial, transforms);
 }
 
+/**
+ * Curry a function.
+ *
+ * @param {function} func
+ * @param {number} arity
+ * @param {array[mixed]} captured
+ * @return {function}
+ */
+/*
+function curry(func, arity, captured = []) {
+  arity = arity || func.length;
+
+  return (...args) => {
+    captured.push(...args);
+
+    if (captured.length >= arity) {
+      return func(...captured);
+    }
+
+    return curry(func, arity, captured);
+  };
+}
+*/
+const curry = (f, ...args) => (f.length <= args.length) ? 
+  f(...args) : 
+    (...more) => curry(f, ...args, ...more);
+
 module.exports = {
-  accumulate,
+  call,
+  compose,
+  pipe,
   counter,
+  curry,
   identity,
   negate,
-  call,
-  compose
+  reduce,
+  times
 };
