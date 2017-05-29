@@ -108,6 +108,10 @@ function compose(...transforms) {
   return initial => _reduceRight(reducer.func, transforms, initial);
 }
 
+function pipe(...transforms) {
+  return initial => reduce(reducer.func, initial, transforms);
+}
+
 /**
  * Curry a function.
  *
@@ -116,6 +120,7 @@ function compose(...transforms) {
  * @param {array[mixed]} captured
  * @return {function}
  */
+/*
 function curry(func, arity, captured = []) {
   arity = arity || func.length;
 
@@ -129,10 +134,15 @@ function curry(func, arity, captured = []) {
     return curry(func, arity, captured);
   };
 }
+*/
+const curry = (f, ...args) => (f.length <= args.length) ? 
+  f(...args) : 
+    (...more) => curry(f, ...args, ...more);
 
 module.exports = {
   call,
   compose,
+  pipe,
   counter,
   curry,
   identity,

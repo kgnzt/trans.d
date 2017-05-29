@@ -123,6 +123,12 @@ function filter(predicate) {
   });
 }
 
+// todo: test
+function lens(lens, transducer) {
+  return transducer((step, state, ...inputs) => {
+  });
+}
+
 /**
  * Adds additional inputs between each output. Stateful.
  *

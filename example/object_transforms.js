@@ -5,7 +5,10 @@ const transd = require('../');
 const transform = transd.compose(
         transd.map(x => x + 1),
         transd.filter(x => x % 2 === 0),
-        transd.rekey(key => `${key}_update`)
+        transd.rekey(key => `${key}_update`),
+        transd.lens('beta', compose(
+          transd.map(x => x + 1)
+        ))
       ),
       input = {
         alpha: 1,

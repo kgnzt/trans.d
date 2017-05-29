@@ -10,6 +10,7 @@ A least-suprise, least-configuration, transducer framework for Javascript.
 
   * Input type remapping.
   * N-ary input transforms.
+  * Early termination.
   * Transform library.
   * Transform shorthand notation.
   * Configurable. (see transd.defaults)
@@ -187,7 +188,7 @@ If you export your custom transforms via transform.export(transforms):
 
 ### Configuration
 
-To reconfigure defaults or provide default custom type support:
+To reconfigure defaults or provide default support for custom types:
 
     module.exports = require('transd').defaults({
       type: {
