@@ -24,7 +24,7 @@ describe('transducer tests (using transduce)', () => {
   describe('lens', () => {
     const { lens } = transducer;
 
-    it('correctly transforms a portion of a complex data structure', () => {
+    it('correctly transforms object based complex data structure', () => {
       const input = [{
               name: 'john',
               size: 1
@@ -34,10 +34,8 @@ describe('transducer tests (using transduce)', () => {
             }],
             output = [];
 
-      const lens = Lens.Lens.Object('size');
-
       const result = transduce(compose(
-        transducer.lens(lens, compose(
+        transducer.lens('size', compose(
           transducer.map(x => x + 1),
           transducer.map(x => x * 10)
         )),
@@ -45,6 +43,21 @@ describe('transducer tests (using transduce)', () => {
       ), buildArray, output, input);
 
       result.should.eql([{ name: 'alice', size: 30 }]);
+    });
+
+    it('correctly transforms array based complex data structure', () => {
+      const input = [[1, 2, 3], [2, 3, 4]],
+            output = [];
+
+      const result = transduce(compose(
+        transducer.lens(1, compose(
+          transducer.map(x => x + 1)
+        )),
+        transducer.cat,
+        transducer.filter(x => x === 3)
+      ), buildArray, output, input);
+
+      result.should.eql([3, 3]);
     });
   });
 

@@ -1,7 +1,7 @@
 'use strict';
 
 // @todo remove lodash dep
-const functional = require('./functional'),
+const Functional = require('./functional'),
       lodash = require('lodash');
 
 // @todo unit-test
@@ -36,7 +36,7 @@ function factoryFor(
   options = {}
 ) {
   options = Object.assign({}, {
-    create: functional.call,
+    create: Functional.call, // default create identity
     error (key) {
       return `Could not find ${key} in factory object.`;
     }

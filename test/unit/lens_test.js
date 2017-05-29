@@ -9,6 +9,54 @@ describe('lenses', () => {
           Identity,
           Constant } = require('../../src/category/functor');
 
+  describe('make', () => {
+    class Alpha {}
+
+    const { make } = lens;
+
+    it('correctly returns the lens constructor', () => {
+      const factory = make({
+        Alpha () {
+          return 'test';
+        }
+      });
+
+      factory.should.be.a.Function();
+
+      const result = factory(new Alpha())(); // call lens constructor
+
+      result.should.eql('test');
+    });
+
+    describe('with built-in lens types', () => {
+      const factory = make(lens.Lens);
+
+      it('works with Array', () => {
+        const input = [1, 2, 3],
+              constructor = factory(input);
+
+        const result = constructor(1, Identity, input);
+
+        extractValue(result).should.eql([1, 2, 3]);
+      });
+
+      it('works with Object', () => {
+        const input = { 
+          foo: 'bar',
+          king: 'kong'
+        };
+
+        const constructor = factory(input),
+              result = constructor('foo', Identity, input);
+
+        extractValue(result).should.eql({
+          foo: 'bar',
+          king: 'kong'
+        });
+      });
+    });
+  });
+
   describe('Lens', () => {
     const { Lens } = lens;
 

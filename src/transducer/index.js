@@ -124,18 +124,25 @@ function filter(predicate) {
   });
 }
 
-// todo: test
-function lens(lens, transform) {
+// should be injectable, default customizable
+const lensFor = Lens.make(Lens.Lens);
+
+/**
+ * Subtransform input using a lens.
+ *
+ * @param {mixed} path
+ * @param {function} transform
+ * @return {function}
+ */
+function lens(path, transform) {
   return transducer((step, state, input) => {
-    /*
-    if (isNumber(lens) || isString(lens)) {
-      lens = lensFor(input);
-    }
-    */
+    lens = lensFor(input)(path);
 
-    const result = Lens.set(lens, Transduce.sequence(transform, Lens.view(lens, input)), input);
-
-    return step(state, result);
+    return step(state, Lens.set(
+      lens,
+      Transduce.sequence(transform, Lens.view(lens, input)),
+      input
+    ));
   });
 }
 

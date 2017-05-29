@@ -1,20 +1,31 @@
 'use strict';
 
-const Helper = require('./helper'),
-      Type = require('./type'),
-      Combinator = require('./combinator'),
+const Helper       = require('./helper'),
+      Type         = require('./type'),
+      Combinator   = require('./combinator'),
+      Functional   = require('./functional'),
       { map,
         extractValue,
         Identity,
         Constant } = require('./category/functor'),
       { curry,
-        pipe } = require('./functional');
+        pipe }     = require('./functional');
 
-function getIndex(subject, index) {
+/**
+ * Use access operator to return value.
+ *
+ * @param {array|object} subject - must be able to use access operator
+ * @return {mixed} index
+ */
+function access(subject, index) {
   return subject[index];
 }
 
-// deep clone?
+/**
+ * Type specific putters.
+ *
+ * TODO: deep clone concerns?
+ */
 const Put = {
   Object: curry((subject, key, value) => {
     subject = Object.assign({}, subject);
@@ -33,14 +44,24 @@ const Put = {
   })
 };
 
+/**
+ * Type specific getters.
+ */
 const Get = {
-  Object: getIndex,
+  Object: access,
 
-  Array: getIndex
+  Array: access
 };
 
-function lens(lens) {
-  const factory = Helper.factoryFor(lens, {
+/**
+ * Generates a type based lens factory.
+ *
+ * @param {object} lenses
+ * @return {function}
+ */
+function make(lenses) {
+  const factory = Helper.factoryFor(lenses, {
+    create: Functional.identity,
     error (key) {
       return `Could not determine the lens type to use for: ${key}.`;
     }
@@ -58,7 +79,7 @@ function lens(lens) {
  */
 const Lens = {
   /**
-   * Create object lens.
+   * Object lens.
    *
    * @param {string} key
    * @param {function} toFunctor
@@ -70,7 +91,7 @@ const Lens = {
   }),
 
   /**
-   * Create array lens.
+   * Array lens.
    *
    * @param {number} index
    * @param {function} toFunctor
@@ -104,7 +125,6 @@ function over(lens, iteratee, subject) {
   return pipe(lens(pipe(iteratee, Identity)), extractValue)(subject);
 }
 
-// TODO: unit-test
 /**
  * Set lens for subject with value.
  *
@@ -119,8 +139,8 @@ function set(lens, value, subject) {
 
 module.exports = {
   Lens,
-  lens,
-  view,
+  make,
   over,
-  set
+  set,
+  view
 };
