@@ -1,13 +1,12 @@
 'use strict';
 
-const should = require('should'),
-      sinon  = require('sinon');
+const should = require('should');
 
 describe('functor', () => {
-  const functor = require('../../src/functor'),
+  const functor = require('../../../src/category/functor'),
         { map,
           extractValue } = functor,
-        { compose } = require('../../src/functional');
+        { compose } = require('../../../src/functional');
 
   const id = x => x,
         inc = x => x + 1,

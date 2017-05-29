@@ -1,6 +1,6 @@
 'use strict';
 
-const Functional = require('./functional');
+const Functional = require('../functional');
 
 /**
  * Functor interface.

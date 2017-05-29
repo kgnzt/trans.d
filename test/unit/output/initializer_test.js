@@ -1,7 +1,6 @@
 'use strict';
 
-const should = require('should'),
-      sinon = require('sinon');
+const should = require('should');
 
 describe('output/initializer', () => {
   const Initializer = require('../../../src/output/initializer');

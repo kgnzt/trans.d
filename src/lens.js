@@ -6,7 +6,7 @@ const Helper = require('./helper'),
       { map,
         extractValue,
         Identity,
-        Constant } = require('./functor'),
+        Constant } = require('./category/functor'),
       { curry,
         pipe } = require('./functional');
 

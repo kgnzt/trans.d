@@ -1,7 +1,6 @@
 'use strict';
 
-const should = require('should'),
-      sinon = require('sinon');
+const should = require('should');
 
 describe('iterable', () => {
   const iterable = require('../../src/iterable');
