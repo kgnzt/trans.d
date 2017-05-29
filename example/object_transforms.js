@@ -2,20 +2,27 @@
 
 const transd = require('../');
 
+const scoreAdjust = transd.compose(
+  transd.map(x => x + 5),
+  transd.map(x => x / 2)
+); 
 const transform = transd.compose(
-        transd.map(x => x + 1),
-        transd.filter(x => x % 2 === 0),
-        transd.rekey(key => `${key}_update`),
-        transd.lens('beta', compose(
-          transd.map(x => x + 1)
-        ))
+        transd.lens('score', scoreAdjust),
+        transd.filter(x => x.score > 15)
       ),
-      input = {
-        alpha: 1,
-        beta: 2,
-        gamma: 5,
-        delta: 5
-      };
+      input = [{
+        name: 'john',
+        score: 23
+      }, {
+        name: 'alice',
+        score: 72
+      }, {
+        name: 'greg',
+        score: 34
+      }, {
+        name: 'candy',
+        score: 18
+      }];
 
 const array  = transd.into(transform, [], input),
       object = transd.into(transform, {}, input),
