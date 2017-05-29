@@ -3,10 +3,11 @@
 const Functional = require('./functional');
 
 /**
- * Functor's must implement interface.
+ * Functor interface.
  */
 const Interface = {
-  map: Symbol('map')
+  map: Symbol('map'),
+  value: Symbol('value')
 };
 
 /**
@@ -27,7 +28,7 @@ const map = Functional.curry((morphism, functor) => {
  * @return {mixed}
  */
 function extractValue(functor) {
-  return functor.value;
+  return functor[Interface.value];
 }
 
 /**
@@ -35,7 +36,7 @@ function extractValue(functor) {
  */
 function Identity(value) {
   return {
-    value,
+    [Interface.value]: value,
     [Interface.map]: function(morphism) {
       return Identity(morphism(value));
     }
@@ -47,7 +48,7 @@ function Identity(value) {
  */
 function Constant(value) {
   return {
-    value,
+    [Interface.value]: value,
     [Interface.map]: function(morphism) {
       return Constant(value);
     }

@@ -5,12 +5,25 @@ const should = require('should'),
 
 describe('functor', () => {
   const functor = require('../../src/functor'),
-        { map } = functor,
+        { map,
+          extractValue } = functor,
         { compose } = require('../../src/functional');
 
   const id = x => x,
         inc = x => x + 1,
         times2 = x => x * 2;
+
+  describe('Interface', () => {
+    const { Interface } = functor;
+
+    it('defines map', () => {
+      Interface.should.have.property('map');
+    });
+
+    it('defines value', () => {
+      Interface.should.have.property('value');
+    });
+  });
 
   describe('Identity', () => {
     const { Identity } = functor;
@@ -18,13 +31,13 @@ describe('functor', () => {
     it('constructs correctly', () => {
       const result = map(x => x + 1, Identity(10));
 
-      result.value.should.eql(11);
+      extractValue(result).should.eql(11);
     });
 
     it('obeys identity functor law', () => {
       const result = map(id, Identity(10));
 
-      result.value.should.equal(Identity(10).value);
+      extractValue(result).should.equal(extractValue(Identity(10)));
     });
 
     it('obeys compose functor law', () => {
@@ -41,7 +54,7 @@ describe('functor', () => {
     it('constructs correctly', () => {
       const result = map(x => x + 1, Constant(10));
 
-      result.value.should.eql(10);
+      extractValue(result).should.eql(10);
     });
 
     it('obeys identity functor law', () => {
@@ -70,15 +83,15 @@ describe('functor', () => {
     it('correctly aplies the morphism to the functor', () => {
       const result = map(x => x + 1, Identity(10));
 
-      result.value.should.eql(11);
+      extractValue(result).should.eql(11);
     });
   });
 
   describe('extractValue', () => {
-    const { extractValue } = functor;
+    const { extractValue, Interface } = functor;
 
     it('returns value', () => {
-      const result = extractValue({ value: 'foo' });
+      const result = extractValue({ [Interface.value]: 'foo' });
 
       result.should.eql('foo');
     });
