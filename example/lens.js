@@ -3,10 +3,6 @@
 const transd = require('../'),
       Functional = require('../src/functional'); // export via transd
 
-const prop = Functional.curry((name, subject) => {
-  return subject[name];
-});
-
 /**
  * Convert string to uppercase.
  *
@@ -24,9 +20,6 @@ const adjustScore = transd.compose(
   transd.map(x => x + 5),
   transd.map(x => x / 2)
 ); 
-
-//const dork = Functional.greaterThan(15);
-//console.log(dork(16));
 
 const transform = transd.compose(
         transd.lens('score', adjustScore),
