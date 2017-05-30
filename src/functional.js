@@ -146,9 +146,7 @@ function pipe(...transforms) {
  * @param {mixed} right
  * @return {boolean}
  */
-const isNotIdentical = curry((right, left) => {
-  return left != right;
-});
+const isIdentical = curry((right, left) => left === right);
 
 /**
  * Determine if left is equal to right.
@@ -157,9 +155,25 @@ const isNotIdentical = curry((right, left) => {
  * @param {mixed} right
  * @return {boolean}
  */
-const isNotEqual = curry((right, left) => {
-  return left != right;
-});
+const isEqual = curry((right, left) => left == right);
+
+/**
+ * Determine if left is not identical to right.
+ *
+ * @param {mixed} left
+ * @param {mixed} right
+ * @return {boolean}
+ */
+const isNotIdentical = curry((right, left) => left != right);
+
+/**
+ * Determine if left is not equal to right.
+ *
+ * @param {mixed} left
+ * @param {mixed} right
+ * @return {boolean}
+ */
+const isNotEqual = curry((right, left) => left != right);
 
 /**
  * Determine if left is greater than right.
@@ -168,9 +182,7 @@ const isNotEqual = curry((right, left) => {
  * @param {mixed} right
  * @return {boolean}
  */
-const greaterThan = curry((right, left) => {
-  return left > right;
-});
+const greaterThan = curry((right, left) => left > right);
 
 /**
  * Determine if left is greater than or equal to right.
@@ -179,9 +191,7 @@ const greaterThan = curry((right, left) => {
  * @param {mixed} right
  * @return {boolean}
  */
-const greaterThanOrEqualTo = curry((right, left) => {
-  return left >= right;
-});
+const greaterThanOrEqualTo = curry((right, left) => left >= right);
 
 /**
  * Determine if left is less than right.
@@ -190,9 +200,7 @@ const greaterThanOrEqualTo = curry((right, left) => {
  * @param {mixed} right
  * @return {boolean}
  */
-const lessThan = curry((right, left) => {
-  return left < right;
-});
+const lessThan = curry((right, left) => left < right);
 
 /**
  * Determine if left is less than or equal to right.
@@ -201,9 +209,7 @@ const lessThan = curry((right, left) => {
  * @param {mixed} right
  * @return {boolean}
  */
-const lessThanOrEqualTo = curry((right, left) => {
-  return left <= right;
-});
+const lessThanOrEqualTo = curry((right, left) => left <= right);
 
 module.exports = {
   call,
@@ -211,6 +217,8 @@ module.exports = {
   pipe,
   counter,
   curry,
+  isIdentical,
+  isEqual,
   isNotIdentical,
   isNotEqual,
   lessThanOrEqualTo,

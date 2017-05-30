@@ -6,6 +6,42 @@ const should = require('should'),
 describe('functional', () => {
   const functional = require('../../src/functional');
 
+  describe('isIdentical', () => {
+    const { isIdentical } = functional;
+
+    it('is curried', () => {
+      const curried = isIdentical(10);
+
+      curried(100).should.eql(false);
+    });
+
+    it('returns true when right is identical to left', () => {
+      isIdentical(100, 100).should.eql(true);
+    });
+
+    it('returns false when right is not identical to left', () => {
+      isIdentical(0, false).should.eql(false);
+    });
+  });
+
+  describe('isEqual', () => {
+    const { isEqual } = functional;
+
+    it('is curried', () => {
+      const curried = isEqual(10);
+
+      curried(10).should.eql(true);
+    });
+
+    it('returns true when right is equal to left', () => {
+      isEqual(0, false).should.eql(true);
+    });
+
+    it('returns false when right is not equal to left', () => {
+      isEqual(0, 's').should.eql(false);
+    });
+  });
+
   describe('isNotIdentical', () => {
     const { isNotIdentical } = functional;
 
