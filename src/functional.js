@@ -140,6 +140,28 @@ function pipe(...transforms) {
 }
 
 /**
+ * Determine if left is identical to right.
+ *
+ * @param {mixed} left
+ * @param {mixed} right
+ * @return {boolean}
+ */
+const isNotIdentical = curry((right, left) => {
+  return left != right;
+});
+
+/**
+ * Determine if left is equal to right.
+ *
+ * @param {mixed} left
+ * @param {mixed} right
+ * @return {boolean}
+ */
+const isNotEqual = curry((right, left) => {
+  return left != right;
+});
+
+/**
  * Determine if left is greater than right.
  *
  * @param {mixed} left
@@ -189,6 +211,8 @@ module.exports = {
   pipe,
   counter,
   curry,
+  isNotIdentical,
+  isNotEqual,
   lessThanOrEqualTo,
   lessThan,
   greaterThan,

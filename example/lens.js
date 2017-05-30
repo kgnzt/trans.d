@@ -1,6 +1,7 @@
 'use strict';
 
-const transd = require('../');
+const transd = require('../'),
+      Functional = require('../src/functional'); // export via transd
 
 /**
  * Convert string to uppercase.
@@ -20,10 +21,13 @@ const adjustScore = transd.compose(
   transd.map(x => x / 2)
 ); 
 
+//const dork = Functional.greaterThan(15);
+//console.log(dork(16));
+
 const transform = transd.compose(
         transd.lens('score', adjustScore),
         transd.lens('name', transd.map(toUpper)),
-        transd.lens('items', transd.filter(x => x !== 'wand')),
+        transd.lens('items', transd.filter(Functional.isNotIdentical('wand'))),
         transd.filter(x => x.score > 15)
       ),
       input = [{
