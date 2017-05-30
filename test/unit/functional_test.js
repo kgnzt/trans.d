@@ -6,6 +6,32 @@ const should = require('should'),
 describe('functional', () => {
   const functional = require('../../src/functional');
 
+  describe('access', () => {
+    const { access } = functional;
+
+    it('is curried', () => {
+      const accessFoo = access('foo');
+
+      const resultOne = accessFoo({foo: 'bar', ping: 'pong'});
+      resultOne.should.eql('bar');
+
+      const resultTwo = accessFoo({foo: 'lala', ping: 'zoozoo'});
+      resultTwo.should.eql('lala');
+    });
+
+    it('works with arrays', () => {
+      const result = access(2, [1, 2, 3, 4]);
+
+      result.should.eql(3);
+    });
+
+    it('works with objects', () => {
+      const result = access('alpha', {alpha: 'beta', ping: 'pong'});
+
+      result.should.eql('beta');
+    });
+  });
+
   describe('isIdentical', () => {
     const { isIdentical } = functional;
 

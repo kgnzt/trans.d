@@ -30,6 +30,16 @@ const curry = (f, ...args) => (f.length <= args.length) ?
     (...more) => curry(f, ...args, ...more);
 
 /**
+ * Use access operator to return value.
+ *
+ * @param {array|object} subject - must be able to use access operator
+ * @return {mixed} index
+ */
+const access = curry((path, subject) => {
+  return subject[path];
+});
+
+/**
  * Peforms (calls) iteratee count times.
  *
  * @param {number} count
@@ -212,6 +222,7 @@ const lessThan = curry((right, left) => left < right);
 const lessThanOrEqualTo = curry((right, left) => left <= right);
 
 module.exports = {
+  access,
   call,
   compose,
   pipe,

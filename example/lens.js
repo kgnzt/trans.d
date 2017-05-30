@@ -3,6 +3,10 @@
 const transd = require('../'),
       Functional = require('../src/functional'); // export via transd
 
+const prop = Functional.curry((name, subject) => {
+  return subject[name];
+});
+
 /**
  * Convert string to uppercase.
  *
@@ -28,7 +32,7 @@ const transform = transd.compose(
         transd.lens('score', adjustScore),
         transd.lens('name', transd.map(toUpper)),
         transd.lens('items', transd.filter(Functional.isNotIdentical('wand'))),
-        transd.filter(x => x.score > 15)
+        transd.filter(Functional.pipe(Functional.access('score'), Functional.greaterThan(15)))
       ),
       input = [{
         name: 'john',
@@ -48,16 +52,6 @@ const transform = transd.compose(
         items: ['hat', 'wand', 'shoe']
       }];
 
-const array  = transd.into(transform, [], input),
-      object = transd.into(transform, {}, input),
-      map    = transd.into(transform, new Map(), input),
-      set    = transd.into(transform, new Set(), input),
-      string = transd.into(transform, '', input),
-      number = transd.into(transform, 0, input);
+const output = transd.sequence(transform, input);
 
-console.log('Array:  ', array);
-console.log('Object: ', object);
-console.log('Map:    ', map);
-console.log('Set:    ', set);
-console.log('String: ', string);
-console.log('Number: ', number);
+console.log(output);

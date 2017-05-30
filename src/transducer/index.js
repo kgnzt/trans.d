@@ -164,6 +164,18 @@ function lens(path, transform) {
   });
 }
 
+function lensOver(path, transform) {
+  return transducer((step, state, input) => {
+    const lens = lensFor(input)(path);
+
+    return step(state, ...Lens.set(
+      lens,
+      input,
+      [Transduce.sequence(transform, Lens.view(lens, input))]
+    ));
+  });
+}
+
 /**
  * Evaluate iteratee using inputs and returs result as the next input for
  * the transducer chain..
@@ -290,6 +302,7 @@ module.exports = {
   identity: Functional.identity,
   interpose,
   lens,
+  lensOver,
   map,
   negate: Functional.negate,
   maxima,

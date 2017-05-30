@@ -12,16 +12,6 @@ const Helper       = require('./helper'),
         pipe }     = require('./functional');
 
 /**
- * Use access operator to return value.
- *
- * @param {array|object} subject - must be able to use access operator
- * @return {mixed} index
- */
-function access(subject, index) {
-  return subject[index];
-}
-
-/**
  * Type specific putters.
  *
  * TODO: deep clone concerns?
@@ -48,9 +38,9 @@ const Put = {
  * Type specific getters.
  */
 const Get = {
-  Object: access,
+  Object: Functional.access,
 
-  Array: access
+  Array: Functional.access
 };
 
 /**
@@ -87,7 +77,7 @@ const Lens = {
    * @return {mixed} key
    */
   Object: curry(function (key, toFunctor, subject) {
-    return map(Put.Object(subject, key), toFunctor(Get.Object(subject, key)));
+    return map(Put.Object(subject, key), toFunctor(Get.Object(key, subject)));
   }),
 
   /**
@@ -99,7 +89,7 @@ const Lens = {
    * @return {mixed} key
    */
   Array: curry(function (index, toFunctor, subject) {
-    return map(Put.Array(subject, index), toFunctor(Get.Array(subject, index)));
+    return map(Put.Array(subject, index), toFunctor(Get.Array(index, subject)));
   })
 };
 

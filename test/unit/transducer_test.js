@@ -21,6 +21,28 @@ describe('transducer tests (using transduce)', () => {
     return state;
   }
 
+  describe('lensOver', () => {
+    const { lensOver } = transducer;
+
+    it('correctly transforms object based complex data structure', () => {
+      const input = [{
+              name: 'john',
+              size: 1
+            }, {
+              name: 'alice',
+              size: 2
+            }],
+            output = [];
+
+      const result = transduce(compose(
+        transducer.lensOver('size', transducer.filter(x => x === 2))
+      ), buildArray, output, input);
+      //console.log(result);
+
+      result.should.eql([{ name: 'alice', size: 30 }]);
+    });
+  });
+
   describe('lens', () => {
     const { lens } = transducer;
 
