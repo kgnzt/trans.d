@@ -154,7 +154,7 @@ const lensFor = Lens.make(Lens.Lens);
  */
 function lens(path, transform) {
   return transducer((step, state, input) => {
-    lens = lensFor(input)(path);
+    const lens = lensFor(input)(path);
 
     return step(state, Lens.set(
       lens,
