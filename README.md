@@ -4,7 +4,8 @@
 
 ## About
 
-A least-suprise, least-configuration, transducer framework for Javascript.
+A least-suprise, least-configuration, transducer framework for Javascript with an
+eye towards real-world use cases.
 
 ## Features
 
