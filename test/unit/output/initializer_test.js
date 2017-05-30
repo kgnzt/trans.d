@@ -44,4 +44,12 @@ describe('output/initializer', () => {
       result.should.eql(new Set());
     });
   });
+
+  describe('String', () => {
+    it('returns an empty string', () => {
+      const result = Initializer.String();
+
+      result.should.eql('');
+    });
+  });
 });

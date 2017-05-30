@@ -1,6 +1,6 @@
 {
   "name": "trans.d",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "simple transducers for javascript",
   "main": "index.js",
   "directories": {

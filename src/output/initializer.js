@@ -32,5 +32,12 @@ module.exports = {
    */
   Set () {
     return new Set();
+  },
+
+  /**
+   * @return {string}
+   */
+  String () {
+    return '';
   }
 };
