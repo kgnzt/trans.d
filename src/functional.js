@@ -3,6 +3,33 @@
 const reducer = require('./step/reducer');
 
 /**
+ * Curry a function.
+ *
+ * @param {function} func
+ * @param {number} arity
+ * @param {array[mixed]} captured
+ * @return {function}
+ */
+/*
+function curry(func, arity, captured = []) {
+  arity = arity || func.length;
+
+  return (...args) => {
+    captured.push(...args);
+
+    if (captured.length >= arity) {
+      return func(...captured);
+    }
+
+    return curry(func, arity, captured);
+  };
+}
+*/
+const curry = (f, ...args) => (f.length <= args.length) ? 
+  f(...args) : 
+    (...more) => curry(f, ...args, ...more);
+
+/**
  * Peforms (calls) iteratee count times.
  *
  * @param {number} count
@@ -113,31 +140,48 @@ function pipe(...transforms) {
 }
 
 /**
- * Curry a function.
+ * Determine if left is greater than right.
  *
- * @param {function} func
- * @param {number} arity
- * @param {array[mixed]} captured
- * @return {function}
+ * @param {mixed} left
+ * @param {mixed} right
+ * @return {boolean}
  */
-/*
-function curry(func, arity, captured = []) {
-  arity = arity || func.length;
+const greaterThan = curry((right, left) => {
+  return left > right;
+});
 
-  return (...args) => {
-    captured.push(...args);
+/**
+ * Determine if left is greater than or equal to right.
+ *
+ * @param {mixed} left
+ * @param {mixed} right
+ * @return {boolean}
+ */
+const greaterThanOrEqualTo = curry((right, left) => {
+  return left >= right;
+});
 
-    if (captured.length >= arity) {
-      return func(...captured);
-    }
+/**
+ * Determine if left is less than right.
+ *
+ * @param {mixed} left
+ * @param {mixed} right
+ * @return {boolean}
+ */
+const lessThan = curry((right, left) => {
+  return left < right;
+});
 
-    return curry(func, arity, captured);
-  };
-}
-*/
-const curry = (f, ...args) => (f.length <= args.length) ? 
-  f(...args) : 
-    (...more) => curry(f, ...args, ...more);
+/**
+ * Determine if left is less than or equal to right.
+ *
+ * @param {mixed} left
+ * @param {mixed} right
+ * @return {boolean}
+ */
+const lessThanOrEqualTo = curry((right, left) => {
+  return left <= right;
+});
 
 module.exports = {
   call,
@@ -145,6 +189,10 @@ module.exports = {
   pipe,
   counter,
   curry,
+  lessThanOrEqualTo,
+  lessThan,
+  greaterThan,
+  greaterThanOrEqualTo,
   identity,
   negate,
   reduce,

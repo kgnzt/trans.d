@@ -6,6 +6,94 @@ const should = require('should'),
 describe('functional', () => {
   const functional = require('../../src/functional');
 
+  describe('lessThan', () => {
+    const { lessThan } = functional;
+
+    it('is curried', () => {
+      const curried = lessThan(2);
+
+      curried(1).should.eql(true);
+    });
+
+    it('returns true when left is less than right', () => {
+      lessThan(20, 10).should.eql(true);
+    });
+
+    it('returns false when left is equal to right', () => {
+      lessThan(10, 10).should.eql(false);
+    });
+
+    it('returns false when left is greater than right', () => {
+      lessThan(5, 10).should.eql(false);
+    });
+  });
+
+  describe('lessThanOrEqualTo', () => {
+    const { lessThanOrEqualTo } = functional;
+
+    it('is curried', () => {
+      const curried = lessThanOrEqualTo(2);
+
+      curried(1).should.eql(true);
+    });
+
+    it('returns true when left is less than right', () => {
+      lessThanOrEqualTo(20, 10).should.eql(true);
+    });
+
+    it('returns true when left is equal to right', () => {
+      lessThanOrEqualTo(10, 10).should.eql(true);
+    });
+
+    it('returns false when left is greater than right', () => {
+      lessThanOrEqualTo(5, 10).should.eql(false);
+    });
+  });
+
+  describe('greaterThan', () => {
+    const { greaterThan } = functional;
+
+    it('is curried', () => {
+      const curried = greaterThan(2);
+
+      curried(3).should.eql(true);
+    });
+
+    it('returns true when left is greater than right', () => {
+      greaterThan(5, 10).should.eql(true);
+    });
+
+    it('returns false when left is equal to right', () => {
+      greaterThan(10, 10).should.eql(false);
+    });
+
+    it('returns false when left is less than right', () => {
+      greaterThan(10, 5).should.eql(false);
+    });
+  });
+
+  describe('greaterThanOrEqualTo', () => {
+    const { greaterThanOrEqualTo } = functional;
+
+    it('is curried', () => {
+      const curried = greaterThanOrEqualTo(2);
+
+      curried(3).should.eql(true);
+    });
+
+    it('returns true when left is greater than right', () => {
+      greaterThanOrEqualTo(5, 10).should.eql(true);
+    });
+
+    it('returns true when left is equal to right', () => {
+      greaterThanOrEqualTo(10, 10).should.eql(true);
+    });
+
+    it('returns false when left is less than right', () => {
+      greaterThanOrEqualTo(10, 5).should.eql(false);
+    });
+  });
+
   describe('curry', () => {
     const { curry } = functional;
 
