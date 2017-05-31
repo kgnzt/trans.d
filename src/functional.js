@@ -133,10 +133,7 @@ function _reduceRight(iteratee, collection, accumulator) {
 }
 
 /**
- * Generates a single function given N functions.
- *
- * TODO: compose vs composeRight? compose export via transduce should be
- * renamed from composeright to compose.
+ * Generates a single function given N functions. Right to left.
  *
  * @param {array[function]} transforms
  * @return {function}
@@ -145,6 +142,12 @@ function compose(...transforms) {
   return initial => _reduceRight(reducer.func, transforms, initial);
 }
 
+/**
+ * Generates a single function given N functions. Left to right.
+ *
+ * @param {array[function]} transforms
+ * @return {function}
+ */
 function pipe(...transforms) {
   return initial => reduce(reducer.func, initial, transforms);
 }

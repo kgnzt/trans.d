@@ -2,7 +2,7 @@
 
 const should = require('should');
 
-describe('functor', () => {
+describe('category/functor', () => {
   const functor = require('../../../src/category/functor'),
         { map,
           extractValue } = functor,
