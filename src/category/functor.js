@@ -33,6 +33,9 @@ function extractValue(functor) {
 
 /**
  * Identity functor.
+ *
+ * @param {mixed}
+ * @return {object}
  */
 function Identity(value) {
   return {
@@ -45,6 +48,9 @@ function Identity(value) {
 
 /**
  * Constant functor.
+ *
+ * @param {mixed}
+ * @return {object}
  */
 function Constant(value) {
   return {
@@ -55,10 +61,21 @@ function Constant(value) {
   };
 }
 
+/**
+ * Determines if the passed object is a functor.
+ *
+ * @param {mixed}
+ * @return {boolean}
+ */
+function isFunctor(functor) {
+  return (Interface.value in functor && Interface.map in functor);
+}
+
 module.exports = {
   Constant,
   Identity,
   Interface,
   extractValue,
+  isFunctor,
   map
 };

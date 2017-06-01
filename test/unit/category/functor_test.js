@@ -95,4 +95,39 @@ describe('category/functor', () => {
       result.should.eql('foo');
     });
   });
+
+  describe('isFunctor', () => {
+    const { isFunctor, Interface } = functor;
+
+    it('returns true when functor', () => {
+      const instance = {
+        [Interface.map]: () => {},
+        [Interface.value]: true
+      };
+
+      const result = isFunctor(instance);
+
+      result.should.eql(true);
+    });
+
+    it('returns false if missing map', () => {
+      const instance = {
+        [Interface.value]: true
+      };
+
+      const result = isFunctor(instance);
+
+      result.should.eql(false);
+    });
+
+    it('returns false if missing a value', () => {
+      const instance = {
+        [Interface.map]: () => {}
+      };
+
+      const result = isFunctor(instance);
+
+      result.should.eql(false);
+    });
+  });
 });
